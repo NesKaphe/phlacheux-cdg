@@ -139,7 +139,6 @@ public abstract class ObjetGeometrique {
 	
 	public void setCentre(Point2D centre) {
 		this.centre = centre;
-		this.generateShape();
 	}
 	
 	public void setDimensions(Dimension size){

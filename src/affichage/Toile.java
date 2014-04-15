@@ -6,19 +6,18 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
-
 import formes.ObjetGeometrique;
+
 
 public class Toile extends JPanel {
 
 	// Buffers utilisés pour le page flipping
-	private Image backBuffer;
-	private Image primarySurface;
+	//private Image backBuffer;//obsolète
+	//private Image primarySurface;//obsolète
 	
-	private ArrayList<ObjetGeometrique> liste;
-	private boolean flag;
+	private ArrayList<ObjetGeometrique> liste;//liste d'objets géometrique à dessiner
+	private boolean flag;//obsolète
 	
 	/**
 	 * @param dim : La dimension de la toile
@@ -26,21 +25,48 @@ public class Toile extends JPanel {
 	public Toile(Dimension dim) {
 		super();
 		this.setDoubleBuffered(true);
-		this.setPreferredSize(dim);	
-		this.liste = new ArrayList<ObjetGeometrique>();
+		this.setPreferredSize(dim);
+		this.setSize(dim);
+		this.liste = new ArrayList<ObjetGeometrique>();//TODO : (down)
+		/*modifier en conteneur Set (ou autre) pour pouvoir empècher 
+		 * les doublons et retirer certaines valeurs
+		 */
 		this.flag = false;
 	}
 	
-	/**
-	 * Echange les deux buffers, pour permettre d'alterner le dessin et l'affichage
-	 */
-	protected void switchBuffers() {
-		Image temp = this.backBuffer;
+	public void paintComponent(Graphics g) {
 		
-		this.backBuffer = this.primarySurface;
-		this.primarySurface = temp;
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setColor(Color.white);
+		g2.fillRect(0, 0, this.getSize().width, this.getSize().height);
+		
+		//dessin de la liste des formes géometriques
+		for(int i = 0; i < this.liste.size(); i++) {
+			g2.setColor(liste.get(i).getStrokeColor());
+			g2.draw(liste.get(i).getShape());
+			
+			if(this.liste.get(i).getFillColor() != null) {
+				g2.setColor(this.liste.get(i).getFillColor());
+				g2.fill(this.liste.get(i).getShape());
+			}
+		}
+		
 	}
 	
+	public void addObjet(ObjetGeometrique geo) {
+		this.liste.add(geo);
+	}
+	
+	public void demanderViderListe() {
+		this.flag = true;
+	}
+	
+	private void viderListe() {
+		this.liste.clear();
+	}
+	
+	/*
+	 ancienne version et pas correct avec les buffered Images 
 	public void paintComponent(Graphics g) {
 		//Initialisation des buffers
 		if(this.backBuffer == null) {
@@ -63,6 +89,7 @@ public class Toile extends JPanel {
 		for(int i = 0; i < this.liste.size(); i++) {
 			g2dImage.setColor(liste.get(i).getStrokeColor());
 			g2dImage.draw(liste.get(i).getShape());
+			System.out.println("draw!!"+i+"  parent :"+this.getParent()+"\nshape ="+liste.get(i).getShape());//DEBUG
 			
 			if(this.liste.get(i).getFillColor() != null) {
 				g2dImage.setColor(this.liste.get(i).getFillColor());
@@ -77,16 +104,13 @@ public class Toile extends JPanel {
 		if(this.flag)
 			this.liste.clear();
 	}
-	
-	public void addObjet(ObjetGeometrique geo) {
-		this.liste.add(geo);
+	 //Echange les deux buffers, pour permettre d'alterner le dessin et l'affichage
+	 
+	protected void switchBuffers() {
+		Image temp = this.backBuffer;
+		
+		this.backBuffer = this.primarySurface;
+		this.primarySurface = temp;
 	}
-	
-	public void demanderViderListe() {
-		this.flag = true;
-	}
-	
-	private void viderListe() {
-		this.liste.clear();
-	}
+	*/
 }
