@@ -32,8 +32,7 @@ public class Main implements Runnable {
 		
 
 		//Triangle :
-		Triangle tr = new Triangle(new Point2D.Double(150,150),100);//centre bidon
-		t.addObjet(tr);
+		Triangle tr = new Triangle(new Point2D.Double(150,150),60);
 
 		//Cercle :
 		Cercle c = new Cercle("moncercle", new Point2D.Double((int)(Math.random()*301), (int)(Math.random()*301)), 30);
@@ -62,6 +61,7 @@ public class Main implements Runnable {
 		carre.setFillColor(Color.orange);
 		
 		
+		t.addObjet(tr);
 		t.addObjet(c);
 		t.addObjet(seg);
 		t.addObjet(rect);
