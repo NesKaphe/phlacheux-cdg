@@ -87,6 +87,7 @@ public class Toile extends JPanel {
 		
 		//Ici le dessin sur le backBuffer
 		for(int i = 0; i < this.liste.size(); i++) {
+			g2dImage.setStroke(liste.get(i).getStroke());
 			g2dImage.setColor(liste.get(i).getStrokeColor());
 			g2dImage.draw(liste.get(i).getShape());
 			System.out.println("draw!!"+i+"  parent :"+this.getParent()+"\nshape ="+liste.get(i).getShape());//DEBUG

@@ -3,31 +3,47 @@ package formes;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-public class Cercle extends ObjetGeometrique {
+public class Rectangle extends ObjetGeometrique {
 
-	protected double rayon;
+	double width;
+	double height;
 	
-	public Cercle(String nom, Point2D centre, double rayon) {
-		super(nom, centre, Color.black, Color.red);
-		this.setRayon(rayon);
+	public Rectangle(String nom, Point2D centre, double width, double height) {
+		super(nom, centre, null, Color.black);
+		this.setWidth(width);
+		this.setHeight(height);
 		this.generateShape();
 	}
 	
+	private void setWidth(double width) {
+		if(width > 0) {
+			this.width = width;
+		}
+	}
+	
+	private void setHeight(double height) {
+		if(height > 0) {
+			this.height = height;
+		}
+		
+	}
+
 	public Point2D getCoord() {
-		return new Point2D.Double(this.centre.getX() - this.rayon, this.centre.getY() - this. rayon);
+		Point2D p = new Point2D.Double(this.centre.getX() - this.width/2, this.centre.getY() - this.height/2);
+		return p;
 	}
-	
+
 	public void dessineGraphics(Graphics2D g) {
-		//Ca ne devrait pas etre a la forme de se dessiner mais a la toile de demander la forme de l'objet
+		
 	}
-	
+
 	public void generateShape() {
 		Point2D p = this.getCoord();
-		this.forme = new Ellipse2D.Double(p.getX(), p.getY(), rayon, rayon);
+		this.forme = new Rectangle2D.Double(p.getX(),p.getY(), this.width, this.height);
 	}
 
 	public void transTranslation(List<Point2D> listePoints, int easingFunction,
@@ -48,13 +64,6 @@ public class Cercle extends ObjetGeometrique {
 	public void transStroke(BasicStroke finalStroke, int easingFunction,
 			int tDepart, int tFin, int tCourant) throws Exception {
 		
-	}
-	
-	public void setRayon(double rayon) {
-		if(rayon > 0)
-			this.rayon = rayon;
-		else
-			this.rayon = 0;
 	}
 
 }
