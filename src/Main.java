@@ -1,10 +1,14 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+
+import formes.Cercle;
 
 import affichage.Toile;
 
@@ -25,13 +29,19 @@ public class Main implements Runnable {
 		frame.pack();
 		frame.setVisible(true);
 		
+		
 		ActionListener actionListener = new ActionListener() {
 		      public void actionPerformed(ActionEvent actionEvent) {
 		    	  //Ici du code pour ajouter des objets a la toile
+		    	  Cercle c = new Cercle("moncercle", new Point2D.Double((int)(Math.random()*301), (int)(Math.random()*301)), 30);
+		    	  c.setFillColor(Color.blue);
+		    	  t.addObjet(c);
+		    	  t.repaint();
+		    	  t.demanderViderListe();
 		      }
 		    };
 		    
-		Timer timer = new Timer(100/60, actionListener);
+		Timer timer = new Timer(1000/10, actionListener); //10 images par seconde
 		timer.start();
 	}
 }

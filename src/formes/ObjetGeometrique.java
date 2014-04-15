@@ -4,29 +4,36 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 public abstract class ObjetGeometrique {
 
 	protected String nom;
-	protected Point centre;
+	protected Point2D centre;
 	protected Dimension size;
 	protected Color fillColor;
 	protected Color strokeColor;
-	protected Shape forme; // ??
+	protected Shape forme;
+	protected AffineTransform trans;
 	
 	/**
 	 * Calcule le point du coin en haut à gauche(pour le dessin)
 	 * @return Point
 	 */
-	public abstract Point getCoord();
+	public abstract Point2D getCoord();
 	
 	/**
 	 * Dessine le graphique dans l'objet dessin
 	 */
 	public abstract void dessineGraphics(Graphics2D g);
+	
+	/**
+	 * Genere la forme de l'objet
+	 */
+	public abstract void generateShape();
 	
 	/**
 	 * @param listePoints : Liste des points a translater
@@ -36,7 +43,7 @@ public abstract class ObjetGeometrique {
 	 * @param tCourant : Instant courant pour récupérer l'état de l'objet
 	 * @throws Exception
 	 */
-	public abstract void transTranslation(List<Point> listePoints, int easingFunction, int tDepart,
+	public abstract void transTranslation(List<Point2D> listePoints, int easingFunction, int tDepart,
 			int tFin, int tCourant) throws Exception; //TODO: Creer une exception
 	
 	/**
@@ -57,7 +64,7 @@ public abstract class ObjetGeometrique {
 	 * @param tFin : Temps de fin de la transformation
 	 * @param tCourant : Instant courant pour récupérer l'état de l'objet
 	 */
-	public abstract void transRotationExt(Point centre, int sens, int easingFunction,
+	public abstract void transRotationExt(Point2D centre, int sens, int easingFunction,
 			int tDepart, int tFin, int tCourant) throws Exception;
 	
 	/**
@@ -77,7 +84,7 @@ public abstract class ObjetGeometrique {
 		return this.nom;
 	}
 	
-	public Point getCentre() {
+	public Point2D getCentre() {
 		return this.centre;
 	}
 	
@@ -101,6 +108,10 @@ public abstract class ObjetGeometrique {
 		return this.strokeColor;
 	}
 	
+	public Shape getShape() {
+		return this.forme;
+	}
+	
 	/*
 	 *  setters
 	 */
@@ -109,12 +120,17 @@ public abstract class ObjetGeometrique {
 		this.nom = nom;
 	}
 	
-	public void setCentre(Point centre) {
+	public void setCentre(Point2D centre) {
 		this.centre = centre;
+		this.generateShape();
 	}
 	
 	public void setDimensions(Dimension size){
 		this.size = size;
+	}
+	
+	public void setDimensions(int x, int y) {
+		this.size = new Dimension(x,y);
 	}
 	
 	public void setWidth(int width) {
