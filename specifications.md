@@ -11,7 +11,7 @@ correspond au dessin de l'objet.
 Les classes filles seront cercle, carré, rond, triangle....
 
 champs :
---------
+--------	
 -String nom :
 	nom de l'objet
 

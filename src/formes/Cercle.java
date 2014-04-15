@@ -14,17 +14,9 @@ public class Cercle extends ObjetGeometrique {
 	protected double rayon;
 	
 	public Cercle(String nom, Point2D centre, double rayon) {
-		this.setNom(nom);
-		this.setCentre(centre);
+		super(nom, centre, Color.black, null);
 		this.setRayon(rayon);
-		this.setDimensions((int)Math.floor(rayon), (int)Math.floor(rayon));
-		this.size = new Dimension((int)Math.floor(rayon), (int)Math.floor(rayon)); //Utilité ?
-		
-		this.strokeColor = Color.black;
-		this.fillColor = null; //Couleur de remplissage par defaut ?
-		
 		this.generateShape();
-		this.trans = new AffineTransform();
 	}
 	
 	public Point2D getCoord() {

@@ -13,11 +13,28 @@ public abstract class ObjetGeometrique {
 
 	protected String nom;
 	protected Point2D centre;
-	protected Dimension size;
+	protected Dimension size;//obsolète pas utilie finalement
 	protected Color fillColor;
 	protected Color strokeColor;
 	protected Shape forme;
 	protected AffineTransform trans;
+	
+	/**
+	 * constructeur ObjetGeometrique
+	 * 
+	 * @param nom
+	 * @param centre
+	 * @param fillColor
+	 * @param strokeColor
+	 */
+	protected ObjetGeometrique(String nom,Point2D centre,Color fillColor,Color strokeColor){
+		this.nom = nom;
+		this.centre = centre;
+		this.fillColor = fillColor;
+		this.strokeColor = strokeColor;
+		this.forme = null;
+		this.trans = null;
+	}
 	
 	/**
 	 * Calcule le point du coin en haut à gauche(pour le dessin)
