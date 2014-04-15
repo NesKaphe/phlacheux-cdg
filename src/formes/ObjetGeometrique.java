@@ -14,6 +14,7 @@ public abstract class ObjetGeometrique {
 	protected String nom;
 	protected Point2D centre;
 	protected Dimension size;//obsolète pas utilie finalement
+	protected BasicStroke stroke;
 	protected Color fillColor;
 	protected Color strokeColor;
 	protected Shape forme;
@@ -30,6 +31,7 @@ public abstract class ObjetGeometrique {
 	protected ObjetGeometrique(String nom,Point2D centre,Color fillColor,Color strokeColor){
 		this.nom = nom;
 		this.centre = centre;
+		this.stroke = new BasicStroke();
 		this.fillColor = fillColor;
 		this.strokeColor = strokeColor;
 		this.forme = null;
@@ -105,16 +107,8 @@ public abstract class ObjetGeometrique {
 		return this.centre;
 	}
 	
-	public Dimension getDimensions() {
-		return this.size;
-	}
-	
-	public int getWidth() {
-		return this.size.width;
-	}
-	
-	public int getHeight() {
-		return this.size.height;
+	public BasicStroke getStroke() {
+		return this.stroke;
 	}
 	
 	public Color getFillColor() {
@@ -146,16 +140,13 @@ public abstract class ObjetGeometrique {
 		this.size = size;
 	}
 	
-	public void setDimensions(int x, int y) {
-		this.size = new Dimension(x,y);
+	public void setStroke(BasicStroke stroke) {
+		this.stroke = stroke;
 	}
 	
-	public void setWidth(int width) {
-		this.size.width = width;
-	}
-	
-	public void setHeight(int height) {
-		this.size.height = height;
+	public void setStrokeWidth(float width) {
+		if(width > 0)
+			this.stroke = new BasicStroke(width);
 	}
 	
 	public void setFillColor(Color c) {
