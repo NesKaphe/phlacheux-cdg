@@ -58,7 +58,7 @@ public class GestionAnimation {
 	/**
 	 * @param tDessin : L'instant t representant l'etat des objets pour le le dessin
 	 */
-	public void dessinerToile(int tDessin) {
+	public void dessinerToile(Double t_courant) {
 		//On va parcourir notre liste de comportements pour demander l'etat de l'objet a l'instant t
 		//On demande ensuite a la toile de dessiner chaque objets dans son buffer puis on appelle repaint()
 		
@@ -68,7 +68,7 @@ public class GestionAnimation {
 		
 		//On dessine les objets dans le buffer
 		for(int i = 0; i < this.Comportements.size(); i++) {
-			t.dessineObjet(this.Comportements.get(i).getEtatObjGeo(tDessin));
+			t.dessineObjet(this.Comportements.get(i).getEtatObjGeo(t_courant));
 		}
 		
 		//On demande le raffraichissement de la toile
