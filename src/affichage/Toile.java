@@ -5,19 +5,29 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import formes.ObjetGeometrique;
 
 
-public class Toile extends JPanel {
+public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 
 	// Buffers utilisés pour le page flipping
 	//private Image backBuffer;//obsolète
 	//private Image primarySurface;//obsolète
 	
+	/**
+	 * ??
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<ObjetGeometrique> liste;//liste d'objets géometrique à dessiner
 	private boolean flag;//obsolète
+	
+	//Position de la sourie
+	private int x, y, ox, oy;
 	
 	/**
 	 * @param dim : La dimension de la toile
@@ -64,6 +74,22 @@ public class Toile extends JPanel {
 	private void viderListe() {
 		this.liste.clear();
 	}
+	
+	public void mousePressed(MouseEvent m) {
+    	ox = m.getX();
+    	oy = m.getY();
+    	addMouseMotionListener((MouseMotionListener) this);
+    }
+    
+    public void mouseReleased(MouseEvent m) {
+    	removeMouseMotionListener((MouseMotionListener) this);
+    }
+	public void mouseEntered(MouseEvent m) { }
+    public void mouseExited(MouseEvent m) { }
+    public void mouseClicked(MouseEvent m) { }
+    
+    public void mouseDragged(MouseEvent e) {}
+    public void mouseMoved(MouseEvent e) { }
 	
 	/*
 	 ancienne version et pas correct avec les buffered Images 

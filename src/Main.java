@@ -1,11 +1,11 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import formes.Carre;
 import formes.Cercle;
 import formes.Triangle;
@@ -19,7 +19,12 @@ public class Main implements Runnable {
 	private Toile t;
 	
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Main());
+		try {
+		    UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+		} catch(Exception e) {
+		    e.printStackTrace();
+		}
+		SwingUtilities.invokeLater(new Visionneuse());
 	}
 
 	public void run() {
