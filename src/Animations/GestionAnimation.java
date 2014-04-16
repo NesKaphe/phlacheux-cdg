@@ -28,7 +28,8 @@ public class GestionAnimation {
 	public Toile getToile() {
 		return this.t;
 	}
-		
+	
+	//TODO : (nom un peux long) mais pensé qu'il faut exclure les objetsGeo en double
 	public void ajouterComportement(ObjetGeometrique geo, Animation anim) {
 		//On va rechercher dans la liste si l'objet est deja present
 		Comportement comp = null;

@@ -72,6 +72,6 @@ public class Main implements Runnable {
 		gest.ajouterComportement(seg,null);
 		gest.ajouterComportement(rect, null);
 		gest.ajouterComportement(carre, null);
-		gest.dessinerToile(5);
+		gest.dessinerToile(5.);
 	}
 }

@@ -17,6 +17,7 @@ public abstract class ObjetGeometrique {
 	protected Color fillColor;
 	protected Color strokeColor;
 	protected Shape forme;
+	//TODO : rajouter un id qui sera donné par GestionAnimation
 	
 	/**
 	 * constructeur ObjetGeometrique
