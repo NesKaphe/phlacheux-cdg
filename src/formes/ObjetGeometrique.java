@@ -18,7 +18,7 @@ public abstract class ObjetGeometrique {
 	protected Color fillColor;
 	protected Color strokeColor;
 	protected Shape forme;
-	protected AffineTransform trans;
+	protected AffineTransform trans;//vas devenir obsolète
 	
 	/**
 	 * constructeur ObjetGeometrique
@@ -39,62 +39,96 @@ public abstract class ObjetGeometrique {
 	}
 	
 	/**
+	 * constructeur par recopie
+	 * @param obj
+	 */
+	protected ObjetGeometrique(ObjetGeometrique obj){
+		this.nom = obj.nom;
+		this.centre = obj.centre;
+		this.stroke = obj.stroke;
+		this.fillColor = obj.fillColor;
+		this.strokeColor = obj.strokeColor;
+		this.forme = obj.forme;
+		this.trans = obj.trans;
+	}
+	
+	/**
+	 * Clone()
+	 * nous retourne une copie de this
+	 */
+	public abstract ObjetGeometrique clone();
+	
+	/**
 	 * Calcule le point du coin en haut à gauche(pour le dessin)
 	 * @return Point
 	 */
 	public abstract Point2D getCoord();
 	
-	/**
-	 * Dessine le graphique dans l'objet dessin
-	 */
-	public abstract void dessineGraphics(Graphics2D g);
 	
 	/**
 	 * Genere la forme de l'objet
 	 */
 	public abstract void generateShape();
 	
+	
 	/**
+	 * 
+	 * prend en paramètre les Animations a appliquer à l'objet
+	 * et retourne un ObjetGéométrique avec les transformations
+	 * On peux changer la couleur principale, la couleur de bordure, la position
+	 * @return
+	 */
+	public ObjetGeometrique AppliqueAnimation(AffineTransform at,Color fillColor, Color strokeColor){
+		ObjetGeometrique objGeo = this.clone();
+		return null;
+	}
+	
+	/*
+	 ================================OBSOLETE =========================================================
+	**
 	 * @param listePoints : Liste des points a translater
 	 * @param easingFunction
 	 * @param tDepart : Temps de debut de la transformation
 	 * @param tFin : Temps de fin de la transformation
 	 * @param tCourant : Instant courant pour récupérer l'état de l'objet
 	 * @throws Exception
-	 */
+	 *
 	public abstract void transTranslation(List<Point2D> listePoints, int easingFunction, int tDepart,
 			int tFin, int tCourant) throws Exception; //TODO: Creer une exception
 	
-	/**
+	**
 	 * @param sens : Le sens de la rotation
 	 * @param easingFunction
 	 * @param tDepart : Temps de debut de la transformation
 	 * @param tFin : Temps de fin de la transformation
 	 * @param tCourant : Instant courant pour récupérer l'état de l'objet
-	 */
+	 *
 	public abstract void transRotationCentrale(int sens, int easingFunction, 
 			int tDepart, int tFin, int tCourant) throws Exception;
 	
-	/**
+	**
 	 * @param centre : Le point autour duquel la rotation aura lieu
 	 * @param sens : Le sens de la rotation
 	 * @param easingFunction
 	 * @param tDepart : Temps de debut de la transformation
 	 * @param tFin : Temps de fin de la transformation
 	 * @param tCourant : Instant courant pour récupérer l'état de l'objet
-	 */
+	 *
 	public abstract void transRotationExt(Point2D centre, int sens, int easingFunction,
 			int tDepart, int tFin, int tCourant) throws Exception;
 	
-	/**
+	**
 	 * @param finalStroke : 
 	 * @param easingFunction
 	 * @param tDepart : Temps de debut de la transformation
 	 * @param tFin : Temps de fin de la transformation
 	 * @param tCourant : Instant courant pour récupérer l'état de l'objet
-	 */
+	 *
 	public abstract void transStroke(BasicStroke finalStroke, int easingFunction, 
 			int tDepart, int tFin, int tCourant) throws Exception;
+	*/
+	
+
 	
 	/*
 	 * getters

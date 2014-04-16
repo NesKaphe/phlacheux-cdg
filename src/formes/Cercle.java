@@ -17,6 +17,16 @@ public class Cercle extends ObjetGeometrique {
 		this.generateShape();
 	}
 	
+	public Cercle(Cercle c){
+		super(c);
+		this.rayon = c.rayon;
+	}
+	
+	@Override
+	public Cercle clone() {
+		return new Cercle(this);
+	}
+	
 	public Point2D getCoord() {
 		return new Point2D.Double(this.centre.getX() - this.rayon, this.centre.getY() - this. rayon);
 	}
@@ -56,5 +66,7 @@ public class Cercle extends ObjetGeometrique {
 		else
 			this.rayon = 0;
 	}
+
+
 
 }

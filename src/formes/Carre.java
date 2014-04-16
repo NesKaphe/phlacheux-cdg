@@ -7,5 +7,12 @@ public class Carre extends Rectangle {
 	public Carre(String nom, Point2D centre, double width) {
 		super(nom, centre, width, width);
 	}
-
+	
+	public Carre(Carre c) {
+		super(c);
+	}
+	
+	public Carre clone(){
+		return new Carre(this);
+	}
 }

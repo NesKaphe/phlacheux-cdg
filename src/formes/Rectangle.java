@@ -9,14 +9,25 @@ import java.util.List;
 
 public class Rectangle extends ObjetGeometrique {
 
-	double width;
-	double height;
+	protected double width;
+	protected double height;
 	
 	public Rectangle(String nom, Point2D centre, double width, double height) {
 		super(nom, centre, null, Color.black);
 		this.setWidth(width);
 		this.setHeight(height);
 		this.generateShape();
+	}
+	
+	public Rectangle(Rectangle r){
+		super(r);
+		this.width = r.width;
+		this.height = r.height;
+	}
+	
+	@Override
+	public Rectangle clone() {
+		return new Rectangle(this);
 	}
 	
 	private void setWidth(double width) {
@@ -65,5 +76,7 @@ public class Rectangle extends ObjetGeometrique {
 			int tDepart, int tFin, int tCourant) throws Exception {
 		
 	}
+
+
 
 }

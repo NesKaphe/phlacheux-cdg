@@ -18,6 +18,17 @@ public class SegmentDroite extends ObjetGeometrique {
 		this.setPoint(p2, 2);
 		this.generateShape();
 	}
+	
+	public SegmentDroite(SegmentDroite sd){
+		super(sd);
+		this.p1 = sd.p1;
+		this.p2 = sd.p2;
+	}
+	
+	@Override
+	public SegmentDroite clone() {
+		return new SegmentDroite(this);
+	}
 
 	private void setPoint(Point2D p, int i) {
 		switch(i) {
@@ -44,32 +55,34 @@ public class SegmentDroite extends ObjetGeometrique {
 		this.forme = new Line2D.Double(this.p1, this.p2);
 	}
 
-	@Override
+	
 	public void transTranslation(List<Point2D> listePoints, int easingFunction,
 			int tDepart, int tFin, int tCourant) throws Exception {
 		// TODO Stub de la méthode généré automatiquement
 
 	}
 
-	@Override
+	
 	public void transRotationCentrale(int sens, int easingFunction,
 			int tDepart, int tFin, int tCourant) throws Exception {
 		// TODO Stub de la méthode généré automatiquement
 
 	}
 
-	@Override
+	
 	public void transRotationExt(Point2D centre, int sens, int easingFunction,
 			int tDepart, int tFin, int tCourant) throws Exception {
 		// TODO Stub de la méthode généré automatiquement
 
 	}
 
-	@Override
+	
 	public void transStroke(BasicStroke finalStroke, int easingFunction,
 			int tDepart, int tFin, int tCourant) throws Exception {
 		// TODO Stub de la méthode généré automatiquement
 
 	}
+
+
 
 }

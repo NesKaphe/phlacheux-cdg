@@ -16,6 +16,7 @@ public class Triangle extends ObjetGeometrique {
 
 	private int taille;//taille d'un coté
 	private Point2D translation_centre;//pour sauvegarder position finale ou va se situer le dessin
+										//TODO : voir si c'est l'endroit approprié
 	
 	
 	//TODO faire une taille minimum de 2 ou 3 sinon probable bug (raison : division entière de 1 par 2 = 0)
@@ -26,17 +27,22 @@ public class Triangle extends ObjetGeometrique {
 		this.taille = taille;
 		this.generateShape();
 	}
-
+	
+	public Triangle(Triangle t) {
+		super(t);
+		this.taille = t.taille;
+		this.translation_centre = t.translation_centre;
+	}
+	
+	@Override
+	public Triangle clone() {
+		return new Triangle(this);
+	}
+	
+	
 	@Override
 	public Point2D getCoord() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void dessineGraphics(Graphics2D g) {
-		// TODO Auto-generated method stub
-
+		return null;//pas de coin haut gauche
 	}
 
 	
@@ -64,34 +70,8 @@ public class Triangle extends ObjetGeometrique {
 		this.forme = tx.createTransformedShape(triangle);
 			
 	}
+
+
 	
-	
-	@Override
-	public void transTranslation(List<Point2D> listePoints, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void transRotationCentrale(int sens, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void transRotationExt(Point2D centre, int sens, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void transStroke(BasicStroke finalStroke, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
 
 }
