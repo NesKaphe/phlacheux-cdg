@@ -11,7 +11,7 @@ public class Cercle extends ObjetGeometrique {
 
 	protected double rayon;
 	
-	public Cercle(String nom, Point2D centre, double rayon) {
+	public Cercle(String nom, Point2D.Double centre, double rayon) {
 		super(nom, centre, Color.black, Color.red);
 		this.setRayon(rayon);
 		this.generateShape();

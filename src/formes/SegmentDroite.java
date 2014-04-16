@@ -9,8 +9,8 @@ import java.util.List;
 
 public class SegmentDroite extends ObjetGeometrique {
 
-	protected Point2D p1;
-	protected Point2D p2;
+	protected Point2D p1;        //TODO : modifier en Point2D.Double
+	protected Point2D p2; //TODO               //
 	
 	public SegmentDroite(String nom, Point2D p1, Point2D p2) {
 		super(nom, new Point2D.Double((p1.getX() + p2.getX())/2, (p1.getY() + p2.getY())/2), null, Color.black);

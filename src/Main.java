@@ -53,14 +53,14 @@ public class Main implements Runnable {
 		seg.setStrokeColor(Color.red);
 		
 		//rectangle
-		Point2D p3 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
+		Point2D.Double p3 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
 		Rectangle rect = new Rectangle("monrectangle", p3, 50, 30);
 		rect.setStrokeWidth(2);
 		rect.setStrokeColor(Color.green);
 		rect.setFillColor(Color.cyan);
 		
 		//Carre
-		Point2D p4 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
+		Point2D.Double p4 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
 		Carre carre = new Carre("moncarre", p4, 10);
 		carre.setStrokeWidth(6);
 		carre.setStrokeColor(Color.green);

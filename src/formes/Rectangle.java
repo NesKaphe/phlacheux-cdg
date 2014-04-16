@@ -12,7 +12,7 @@ public class Rectangle extends ObjetGeometrique {
 	protected double width;
 	protected double height;
 	
-	public Rectangle(String nom, Point2D centre, double width, double height) {
+	public Rectangle(String nom, Point2D.Double centre, double width, double height) {
 		super(nom, centre, null, Color.black);
 		this.setWidth(width);
 		this.setHeight(height);

@@ -15,12 +15,12 @@ import java.awt.Polygon;
 public class Triangle extends ObjetGeometrique {
 
 	private int taille;//taille d'un coté
-	private Point2D translation_centre;//pour sauvegarder position finale ou va se situer le dessin
+	private Point2D.Double translation_centre;//pour sauvegarder position finale ou va se situer le dessin
 										//TODO : voir si c'est l'endroit approprié
 	
 	
 	//TODO faire une taille minimum de 2 ou 3 sinon probable bug (raison : division entière de 1 par 2 = 0)
-	public Triangle(Point2D centre,int taille) {
+	public Triangle(Point2D.Double centre,int taille) {
 		super("triangle", null, Color.yellow, Color.black);
 		this.translation_centre = centre;//impossible de positionner le centre directement
 										 //cette opération est faite dans generateShape()
@@ -53,7 +53,7 @@ public class Triangle extends ObjetGeometrique {
 		int h = (int)Math.round((this.taille*Math.sqrt(3.0))/2.0);
 		
 		//ici on donne le vrai centre (isobarycentre) de la figure :
-		Point2D recentre = new Point2D.Double(-((h*2)/3),-(this.taille/2));
+		Point2D.Double recentre = new Point2D.Double(-((h*2)/3),-(this.taille/2));
 		//Point2D recentre = new Point2D.Double(0,0);
 		this.setCentre(recentre);
 		
@@ -68,6 +68,7 @@ public class Triangle extends ObjetGeometrique {
 		AffineTransform tx = new AffineTransform();
 		tx.translate(centre.getX()+translation_centre.getX(),centre.getY()+translation_centre.getY());
 		this.forme = tx.createTransformedShape(triangle);
+		this.setCentre(translation_centre);
 			
 	}
 

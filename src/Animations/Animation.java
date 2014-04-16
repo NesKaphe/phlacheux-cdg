@@ -1,5 +1,6 @@
 package Animations;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import formes.Rectangle;
 import formes.Triangle;
 
 import affichage.Toile;//juste pour le teste
@@ -183,12 +185,12 @@ class CompositeAnimation extends Animation{
 class Rotation extends Animation{
 
 	private Double angle;//sens de rotation en radian
-	
+	private Point2D.Double centre;//centre de rotation
 
-	public Rotation(Double t_debut, Double t_fin, int easing,Double angle) {
+	public Rotation(Double t_debut, Double t_fin, int easing,Double angle,Point2D.Double centre) {
 		super(t_debut, t_fin, easing, "rotation");
 		this.angle = angle;
-		
+		this.centre = centre;
 	}
 
 	@Override
@@ -200,7 +202,8 @@ class Rotation extends Animation{
 		Double a_courrant = this.angle * pu;//TODO : plustard utiliser les easing functions( ajouter : *easing)
 		System.out.println("angle vaux ="+Math.toDegrees(a_courrant));//info dev pour le teste
 		AffineTransform at = new AffineTransform();
-		at.setToRotation(a_courrant);
+		at.setToRotation(a_courrant,centre.x,centre.y);
+		//at.setToRotation(a_courrant);
 		return at;
 	}
 	
@@ -226,8 +229,8 @@ class teste{
 		
 		CompositeAnimation ca = new CompositeAnimation(0., 30., 0);
 		CompositeAnimation ca2 = new CompositeAnimation(2., 5., 0);
-		Rotation r1 = new Rotation(0., 30., 0, Math.toRadians(30.0));
-		Rotation r2 = new Rotation(3., 25., 0, Math.toRadians(30.0));
+		Rotation r1 = new Rotation(0., 30., 0, Math.toRadians(30.0),new Point2D.Double(0,0));
+		Rotation r2 = new Rotation(3., 25., 0, Math.toRadians(30.0),new Point2D.Double(0,0));
 		//teste affichage
 		System.out.println("ca :"+ca+"\nr1"+r1+"\nr2"+r2+"\n\n\n");
 		
@@ -246,12 +249,17 @@ class teste{
 		System.out.println("2---r1 parent="+r1.getParent()+"\nca.remove(r1)="+ca.remove(r1));
 		
 		//teste d'une rotation toute seule :
-		Rotation r3 = new Rotation(0., 100., 0, Math.toRadians(180.0));//temps_debut = 0% temps_fin = 100%
+		Rotation r3 = new Rotation(0., 100., 0, Math.toRadians(180.0),new Point2D.Double(0,0));//temps_debut = 0% temps_fin = 100%
 		//teste d'un affine transforme qui marche pas :
 		r3.getAffineTransform(101.);
 		//teste d'un affine transforme qui marche ça doit afficher 45.0°
 		r3.getAffineTransform(25.);//45°
 		r3.getAffineTransform(50.);//90°
+		
+		
+		
+		
+		
 		
 		//teste visuel de la rotation :
 		System.out.println("\n\n\nconsole :\n");
@@ -262,11 +270,21 @@ class teste{
 		frame.pack();
 		frame.setVisible(true);
 		GestionAnimation gest = new GestionAnimation(t);
-
+		
+		
+		//ajout d'un triangle
 		Triangle tr = new Triangle(new Point2D.Double(150,150),60);
-		//gest.ajouterComportement(tr, null);
-		Rotation rtr = new Rotation(0., 100., 0, Math.toRadians(-50.0));
+		Rotation rtr = new Rotation(0., 100., 0, Math.toRadians(360),tr.getCentre());
 		gest.ajouterComportement(tr, rtr);
+
+		//ajout d'un rectangle :
+		Rectangle rect = new Rectangle("monrectangle", new Point2D.Double(100,200), 70, 40);
+		rect.setStrokeWidth(2);
+		rect.setStrokeColor(Color.green);
+		rect.setFillColor(Color.cyan);
+		Rotation rr = new Rotation(0., 100., 0, Math.toRadians(-110),rect.getCentre());
+		gest.ajouterComportement(rect, rr);
+		
 		for(int j=0;j<10;j++)
 		{
 			for(double i=0.;i<100.;i+=0.01)

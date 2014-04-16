@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class ObjetGeometrique {
 
 	protected String nom;
-	protected Point2D centre;
+	protected Point2D.Double centre;
 	protected BasicStroke stroke;
 	protected Color fillColor;
 	protected Color strokeColor;
@@ -27,7 +27,7 @@ public abstract class ObjetGeometrique {
 	 * @param fillColor
 	 * @param strokeColor
 	 */
-	protected ObjetGeometrique(String nom,Point2D centre,Color fillColor,Color strokeColor){
+	protected ObjetGeometrique(String nom,Point2D.Double centre,Color fillColor,Color strokeColor){
 		this.nom = nom;
 		this.centre = centre;
 		this.stroke = new BasicStroke();
@@ -147,7 +147,7 @@ public abstract class ObjetGeometrique {
 		return this.nom;
 	}
 	
-	public Point2D getCentre() {
+	public Point2D.Double getCentre() {
 		return this.centre;
 	}
 	
@@ -175,7 +175,7 @@ public abstract class ObjetGeometrique {
 		this.nom = nom;
 	}
 	
-	public void setCentre(Point2D centre) {
+	public void setCentre(Point2D.Double centre) {
 		this.centre = centre;
 	}
 	
