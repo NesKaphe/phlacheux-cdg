@@ -39,11 +39,11 @@ Une animation composé sera composé de plusieurs animations simple.
 
 champs:
 -------
--int t_start :
+-int t_debut :
 	temps de départ de l'animation.
 	(réfléchir : Une animation fille pointe sur le t_start parent)
 	
--int t_départ :
+-int t_fin :
 	temps de fin de l'animation
 	
 -Easing e :
