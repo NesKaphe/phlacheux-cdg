@@ -13,12 +13,10 @@ public abstract class ObjetGeometrique {
 
 	protected String nom;
 	protected Point2D centre;
-	protected Dimension size;//obsolète pas utilie finalement
 	protected BasicStroke stroke;
 	protected Color fillColor;
 	protected Color strokeColor;
 	protected Shape forme;
-	protected AffineTransform trans;//vas devenir obsolète
 	
 	/**
 	 * constructeur ObjetGeometrique
@@ -35,7 +33,7 @@ public abstract class ObjetGeometrique {
 		this.fillColor = fillColor;
 		this.strokeColor = strokeColor;
 		this.forme = null;
-		this.trans = null;
+
 	}
 	
 	/**
@@ -49,12 +47,12 @@ public abstract class ObjetGeometrique {
 		this.fillColor = obj.fillColor;
 		this.strokeColor = obj.strokeColor;
 		this.forme = obj.forme;
-		this.trans = obj.trans;
+
 	}
 	
 	/**
 	 * Clone()
-	 * nous retourne une copie de this
+	 * nous retourne une copie de this avec le bon typage
 	 */
 	public abstract ObjetGeometrique clone();
 	
@@ -74,13 +72,24 @@ public abstract class ObjetGeometrique {
 	/**
 	 * 
 	 * prend en paramètre les Animations a appliquer à l'objet
-	 * et retourne un ObjetGéométrique avec les transformations
-	 * On peux changer la couleur principale, la couleur de bordure, la position
+	 * et retourne une copie de l'ObjetGéométrique avec les transformations
+	 * On peux changer la couleur principale, la couleur de bordure, la position,la taille de bordure.
+	 * Si il n'y a pas de transformation spécifique pour un paramètre on peux mettre null
+	 * @param at 
+	 * @param fillColor
+	 * @param strokeColor
+	 * @param stroke
 	 * @return
 	 */
-	public ObjetGeometrique AppliqueAnimation(AffineTransform at,Color fillColor, Color strokeColor){
-		ObjetGeometrique objGeo = this.clone();
-		return null;
+	public ObjetGeometrique AppliqueAnimation(AffineTransform at,Color fillColor, Color strokeColor,BasicStroke stroke){
+		ObjetGeometrique objGeo = this.clone();//pour avoir concretement une copie de l'objet
+		if (at != null)
+			objGeo.forme = at.createTransformedShape(this.forme);
+		if (fillColor != null)
+			objGeo.fillColor = fillColor;
+		if (strokeColor != null)
+			objGeo.strokeColor = strokeColor;
+		return objGeo;
 	}
 	
 	/*
@@ -167,10 +176,6 @@ public abstract class ObjetGeometrique {
 	
 	public void setCentre(Point2D centre) {
 		this.centre = centre;
-	}
-	
-	public void setDimensions(Dimension size){
-		this.size = size;
 	}
 	
 	public void setStroke(BasicStroke stroke) {
