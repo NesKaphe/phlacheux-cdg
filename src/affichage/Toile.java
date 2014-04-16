@@ -84,12 +84,11 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     public void mouseReleased(MouseEvent m) {
     	removeMouseMotionListener((MouseMotionListener) this);
     }
-	public void mouseEntered(MouseEvent m) { }
-    public void mouseExited(MouseEvent m) { }
-    public void mouseClicked(MouseEvent m) { }
-    
+	public void mouseEntered(MouseEvent m) {}
+    public void mouseExited(MouseEvent m) {}
+    public void mouseClicked(MouseEvent m) {}
     public void mouseDragged(MouseEvent e) {}
-    public void mouseMoved(MouseEvent e) { }
+    public void mouseMoved(MouseEvent e) {}
 	
 	/*
 	 ancienne version et pas correct avec les buffered Images 
