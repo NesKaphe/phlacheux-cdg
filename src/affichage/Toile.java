@@ -5,19 +5,31 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import formes.ObjetGeometrique;
 
 
-public class Toile extends JPanel {
+public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 
-	// Buffers utilisés pour le page flipping
-	//private Image backBuffer;//obsolète
-	//private Image primarySurface;//obsolète
+	// Buffer utilisé pour le dessin des formes par le gestionnaire d'animation
+	private Image backBuffer;
 	
+	//private Image primarySurface;//obsolète //TODO:virer ce buffer
+	
+	/**
+	 * ??
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<ObjetGeometrique> liste;//liste d'objets géometrique à dessiner
 	private boolean flag;//obsolète
+	
+	//Position de la souris
+	private int x, y, ox, oy;
 	
 	/**
 	 * @param dim : La dimension de la toile
@@ -35,22 +47,8 @@ public class Toile extends JPanel {
 	}
 	
 	public void paintComponent(Graphics g) {
-		
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(Color.white);
-		g2.fillRect(0, 0, this.getSize().width, this.getSize().height);
-		
-		//dessin de la liste des formes géometriques
-		for(int i = 0; i < this.liste.size(); i++) {
-			g2.setColor(liste.get(i).getStrokeColor());
-			g2.draw(liste.get(i).getShape());
-			
-			if(this.liste.get(i).getFillColor() != null) {
-				g2.setColor(this.liste.get(i).getFillColor());
-				g2.fill(this.liste.get(i).getShape());
-			}
-		}
-		
+		Graphics2D g2 = (Graphics2D) g;
+		g2.drawImage((BufferedImage)this.backBuffer, null, 0, 0);
 	}
 	
 	public void addObjet(ObjetGeometrique geo) {
@@ -63,6 +61,47 @@ public class Toile extends JPanel {
 	
 	private void viderListe() {
 		this.liste.clear();
+	}
+	
+	public void mousePressed(MouseEvent m) {
+    	ox = m.getX();
+    	oy = m.getY();
+    	addMouseMotionListener((MouseMotionListener) this);
+    }
+    
+    public void mouseReleased(MouseEvent m) {
+    	removeMouseMotionListener((MouseMotionListener) this);
+    }
+	public void mouseEntered(MouseEvent m) {}
+    public void mouseExited(MouseEvent m) {}
+    public void mouseClicked(MouseEvent m) {}
+    public void mouseDragged(MouseEvent e) {}
+    public void mouseMoved(MouseEvent e) { }
+
+	public void dessineObjet(ObjetGeometrique geo) {		
+		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
+				
+		g.setStroke(geo.getStroke());
+		g.setColor(geo.getStrokeColor());
+		g.draw(geo.getShape());
+		if(geo.getFillColor() != null) {
+			g.setColor(geo.getFillColor());
+			g.fill(geo.getShape());
+		}
+		
+	}
+	
+	public void initBuffer() {
+		
+		if(this.backBuffer == null) {
+			this.backBuffer = this.createImage(this.getWidth(), this.getHeight());
+			this.initBuffer();
+		}
+		
+		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
+		
+		g.setColor(this.getBackground());
+		g.fillRect(0, 0, this.getSize().width, this.getSize().height);
 	}
 	
 	/*

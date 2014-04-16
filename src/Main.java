@@ -1,16 +1,17 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import formes.Carre;
 import formes.Cercle;
 import formes.Triangle;
 import formes.SegmentDroite;
 import formes.Rectangle;
+import Animations.GestionAnimation;
 import affichage.Toile;
 
 
@@ -19,6 +20,11 @@ public class Main implements Runnable {
 	private Toile t;
 	
 	public static void main(String[] args) {
+		try {
+		    UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+		} catch(Exception e) {
+		    e.printStackTrace();
+		}
 		SwingUtilities.invokeLater(new Main());
 	}
 
@@ -29,7 +35,7 @@ public class Main implements Runnable {
 		frame.getContentPane().add(t);
 		frame.pack();
 		frame.setVisible(true);
-		
+		GestionAnimation gest = new GestionAnimation(t);
 
 		//Triangle :
 		Triangle tr = new Triangle(new Point2D.Double(150,150),60);
@@ -48,7 +54,7 @@ public class Main implements Runnable {
 		
 		//rectangle
 		Point2D p3 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
-		Rectangle rect = new Rectangle("monrectangle", p3, 10, 30);
+		Rectangle rect = new Rectangle("monrectangle", p3, 50, 30);
 		rect.setStrokeWidth(2);
 		rect.setStrokeColor(Color.green);
 		rect.setFillColor(Color.cyan);
@@ -61,12 +67,11 @@ public class Main implements Runnable {
 		carre.setFillColor(Color.orange);
 		
 		
-		t.addObjet(tr);
-		t.addObjet(c);
-		t.addObjet(seg);
-		t.addObjet(rect);
-		t.addObjet(carre);
-		t.repaint();
-
+		gest.ajouterComportement(tr, null);
+		gest.ajouterComportement(c,null);
+		gest.ajouterComportement(seg,null);
+		gest.ajouterComportement(rect, null);
+		gest.ajouterComportement(carre, null);
+		gest.dessinerToile(5);
 	}
 }
