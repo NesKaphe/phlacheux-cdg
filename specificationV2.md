@@ -77,6 +77,8 @@ methodes:
 	retourne vrai si nous somme un parent racine (this = pas de parent)
 	Utile pour t_start et t_stop. Une Annimation fille fait référence 
 	à son parent pour t_start et t_stop.
+	Version 2 : haveOneParent():
+		pour savoir si nous avons un parent racine (le parent racine n'a pas de t_start et de t_end)
 	
 
 	
