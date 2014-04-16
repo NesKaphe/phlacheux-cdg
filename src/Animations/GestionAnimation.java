@@ -1,10 +1,13 @@
 package Animations;
-import Animations.Comportement;
+
 import java.util.ArrayList;
+import affichage.Toile;
+import Animations.Comportement;
+
 
 public class GestionAnimation {
-	Arraylist<Comportement> Comportements;
-	
+	private ArrayList<Comportement> Comportements;
+	private Toile t;
 	
 	public GestionAnimation() {
 		// TODO Auto-generated constructor stub
