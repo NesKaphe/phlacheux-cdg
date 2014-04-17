@@ -167,6 +167,17 @@ public abstract class ObjetGeometrique {
 		return this.forme;
 	}
 	
+	public String getInfos() {
+		Class<?> enclosingClass = getClass().getEnclosingClass();
+		String nomclass;
+		if (enclosingClass != null) {
+		  nomclass = enclosingClass.getSimpleName();
+		} else {
+		  nomclass = getClass().getSimpleName();
+		}
+		return ""+this.getNom()+"@"+nomclass;
+	}
+	
 	/*
 	 *  setters
 	 */

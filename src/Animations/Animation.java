@@ -284,7 +284,6 @@ class teste{
 		rect.setFillColor(Color.cyan);
 		Rotation rr = new Rotation(0., 100., 0, Math.toRadians(-110),rect.getCentre());
 		gest.ajouterComportement(rect, rr);
-		
 		for(int j=0;j<10;j++)
 		{
 			for(double i=0.;i<100.;i+=0.01)

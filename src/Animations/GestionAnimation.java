@@ -3,22 +3,26 @@ import Animations.Comportement;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import formes.ObjetGeometrique;
 
 import affichage.Toile;
 
 public class GestionAnimation {
-	private ArrayList<Comportement> Comportements;
+	private HashMap<Integer, Comportement> Comportements;
 	private Toile t;
+	private int idComportement; //un comportement par objet
 	
 	public GestionAnimation(Toile t) {
-		this.Comportements = new ArrayList<Comportement>();
+		this.Comportements = new HashMap<Integer, Comportement>();
 		this.setToile(t);
+		this.idComportement = 0;
 	}
 	
 	public void viderComportements() {
 		this.Comportements.clear();
+		this.idComportement = 0;
 	}
 	
 	public void setToile(Toile t) {
@@ -29,7 +33,13 @@ public class GestionAnimation {
 		return this.t;
 	}
 	
-	//TODO : (nom un peux long) mais pensé qu'il faut exclure les objetsGeo en double
+	public HashMap<Integer, ObjetGeometrique> getAllObjects() {
+		HashMap<Integer, ObjetGeometrique> objets = new HashMap<Integer, ObjetGeometrique>();
+		//Ici on va extraire tous les objets des comportements
+		return objets;
+	}
+	
+	//TODO : (nom un peux long)
 	public void ajouterComportement(ObjetGeometrique geo, Animation anim) {
 		//On va rechercher dans la liste si l'objet est deja present
 		Comportement comp = null;
@@ -42,17 +52,23 @@ public class GestionAnimation {
 			i++;
 		}
 		
-		if(comp != null) { //s'il y avait deja un comportement pour l'objet
-			//On va mettre a jour le comportement de l'objet
-			//Pouvoir recup l'animation de comportement + lui demander d'ajouter l'animation
-			//Si exception on le fera dans un try catch
-			this.Comportements.set(i, comp); //On remplace l'ancien comportement par le nouveau
+		//Si on n'a pas trouvé l'objet geometrique, on l'ajoute
+		if(comp == null) {
+			comp = new Comportement(geo, anim);
+			this.Comportements.put(this.idComportement, comp);
+			this.idComportement++;
 		}
-		else {
-			comp = new Comportement(geo,anim);
-			//Opérations pour generer le comportement
-			// ...
-			this.Comportements.add(comp);
+	}
+	
+	public void supprimerComportement(int cle) {
+		this.Comportements.remove(cle);
+	}
+	
+	public void modifierObjetComportement(int cle, ObjetGeometrique geo) {
+		Comportement comp = this.Comportements.get(cle);
+		if(comp != null) {
+			comp.setObjGeo(geo);
+			//Decider de si on remet a 0 les animations ou non
 		}
 	}
 	
@@ -69,6 +85,8 @@ public class GestionAnimation {
 		
 		//On dessine les objets dans le buffer
 		for(int i = 0; i < this.Comportements.size(); i++) {
+			//t.dessineObjet(this.Comportements.get(i).getEtatObjGeo(t_courant));
+			System.out.println(this.Comportements.get(i));
 			t.dessineObjet(this.Comportements.get(i).getEtatObjGeo(t_courant));
 		}
 		
