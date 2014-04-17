@@ -14,7 +14,7 @@ import formes.SegmentDroite;
  * @author clement
  *Animation simple : Rotation
  */
-class Rotation extends Animation{
+public class Rotation extends Animation{
 
 	private Double angle;//sens de rotation en radian
 	private Point2D.Double centre;//centre de rotation
