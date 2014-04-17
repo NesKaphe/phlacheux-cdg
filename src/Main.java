@@ -25,7 +25,7 @@ public class Main implements Runnable {
 		} catch(Exception e) {
 		    e.printStackTrace();
 		}
-		SwingUtilities.invokeLater(new Main());
+		SwingUtilities.invokeLater(new Visionneuse());
 	}
 
 	public void run() {
@@ -46,8 +46,8 @@ public class Main implements Runnable {
 		c.setStrokeWidth(5);
 		
 		//Ligne
-		Point2D p1 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
-		Point2D p2 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
+		Point2D.Double p1 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
+		Point2D.Double p2 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
 		SegmentDroite seg = new SegmentDroite("une Droite",p1,p2);
 		seg.setStroke(new BasicStroke(7));
 		seg.setStrokeColor(Color.red);

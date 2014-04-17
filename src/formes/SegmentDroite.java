@@ -7,11 +7,11 @@ import java.awt.geom.Point2D;
 
 public class SegmentDroite extends ObjetGeometrique {
 
-	protected Point2D p1;        //TODO : modifier en Point2D.Double
-	protected Point2D p2; //TODO               //
+	protected Point2D.Double p1;        //TODO : modifier en Point2D.Double
+	protected Point2D.Double p2; //TODO               //
 	
-	public SegmentDroite(String nom, Point2D p1, Point2D p2) {
-		super(nom, new Point2D.Double((p1.getX() + p2.getX())/2, (p1.getY() + p2.getY())/2), null, Color.black);
+	public SegmentDroite(Point2D.Double p1, Point2D.Double p2) {
+		super("Segment", new Point2D.Double((p1.getX() + p2.getX())/2, (p1.getY() + p2.getY())/2), null, Color.black);
 		this.setPoint(p1, 1);
 		this.setPoint(p2, 2);
 		this.generateShape();
@@ -28,7 +28,7 @@ public class SegmentDroite extends ObjetGeometrique {
 		return new SegmentDroite(this);
 	}
 
-	private void setPoint(Point2D p, int i) {
+	private void setPoint(Point2D.Double p, int i) {
 		switch(i) {
 		case 1:
 			this.p1 = p;

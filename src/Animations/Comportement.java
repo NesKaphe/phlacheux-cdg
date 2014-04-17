@@ -1,5 +1,6 @@
 package Animations;
 
+import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 
 import formes.ObjetGeometrique;
@@ -42,9 +43,14 @@ public class Comportement {
 		
 		//ICI : récupération de toutes les animations
 		AffineTransform at = a.getAffineTransform(t_courant);
+		BasicStroke stroke = null;
+		Float width = a.getWidthStroke(t_courant);
+		if(width != null) {
+			stroke = new BasicStroke((width>0)?width:0);
+		}
 		//TODO : récupération couleur stroke ,couleur fill,stroke ...
 
-		return objGeo.AppliqueAnimation(at, null, null, null);//TODO : null parceque pas encore implémenté les autre animations
+		return objGeo.AppliqueAnimation(at, null, null, stroke);//TODO : null parceque pas encore implémenté les autre animations
 	}
 
 	

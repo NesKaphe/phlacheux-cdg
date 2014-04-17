@@ -80,7 +80,7 @@ public abstract class ObjetGeometrique {
 	 * @param stroke
 	 * @return
 	 */
-	public ObjetGeometrique AppliqueAnimation(AffineTransform at,Color fillColor, Color strokeColor,BasicStroke stroke){
+	public ObjetGeometrique AppliqueAnimation(AffineTransform at,Color fillColor, Color strokeColor, BasicStroke stroke){
 		ObjetGeometrique objGeo = this.clone();//pour avoir concretement une copie de l'objet
 		if (at != null)
 			objGeo.forme = at.createTransformedShape(this.forme);
@@ -88,6 +88,8 @@ public abstract class ObjetGeometrique {
 			objGeo.fillColor = fillColor;
 		if (strokeColor != null)
 			objGeo.strokeColor = strokeColor;
+		if (stroke != null)
+			objGeo.stroke = new BasicStroke(this.stroke.getLineWidth()+stroke.getLineWidth());
 		return objGeo;
 	}
 	

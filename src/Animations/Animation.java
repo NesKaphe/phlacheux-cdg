@@ -1,6 +1,8 @@
 package Animations;
 
+import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.util.ArrayList;
 
 
@@ -14,6 +16,7 @@ public abstract class Animation {
 	private Double t_debut;
 	private Double t_fin;
 	private int easing;//TODO : pour l'instant c'est un int plus tard on fera une vrai classe
+	//---------------------trans : obsolète ---------------------------------------------
 	private AffineTransform trans;//sera la mémoire de la position de l'objet (seule une racine peux le modifier)
 	
 	public Animation(Double t_debut,Double t_fin,int easing,String type) {
@@ -37,6 +40,15 @@ public abstract class Animation {
 	 * @return
 	 */
 	public abstract AffineTransform getAffineTransform(Double t_courant);
+	
+	/**
+	 * Float getWidthStroke(Double t_courant) :
+	 * -----------------------------------------------------
+	 * @param t_courant le temps courant demandé pour l'animation
+	 * @return un float representant une epaisseur de trait a incrementer et null
+	 * si t_courant n'est pas dans l'intervalle de l'animation
+	 */
+	public abstract Float getWidthStroke(double t_courant);
 	
 	/**
 	 * boolean tmpOk(Double tmp):
@@ -145,6 +157,7 @@ public abstract class Animation {
 	protected AffineTransform getTrans() {
 		return trans;
 	}
+	
 
 	/**
 	 * On ne peux changer trans (AffineTransform)
@@ -250,9 +263,37 @@ class CompositeAnimation extends Animation{
 				if (atmp != null)
 					at_retour.concatenate(atmp);
 			}
+			else if(a.getT_fin() < t_courant){
+				AffineTransform atmp = a.getAffineTransform(a.getT_fin());
+				if (atmp != null)
+					at_retour.concatenate(atmp);
+			}
 		}
 		
-		setTrans(at_retour);
+		//setTrans(at_retour);
 		return at_retour;
+	}
+	
+	public Float getWidthStroke(double t_courant) {
+		if(!tmpOk(t_courant))
+			return null;
+		
+		float strokeWidthTotal = 0;
+		//parcourir la liste des enfants pour connaitre toute leurs transformations :
+		for(Animation a : this.ChildAnimations) {
+			//si notre enfant est conserné :
+			if (a.tmpOk(t_courant)){
+				Float btmp = a.getWidthStroke(t_courant);
+				if(btmp != null)
+					strokeWidthTotal += btmp;
+			}
+			else if(a.getT_fin() < t_courant){
+				Float btmp = a.getWidthStroke(a.getT_fin());
+				if(btmp != null)
+					strokeWidthTotal += btmp;
+			}
+		}
+		
+		return strokeWidthTotal;
 	}
 }
