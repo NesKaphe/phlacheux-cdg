@@ -1,17 +1,7 @@
 package Animations;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
-
-import javax.swing.JFrame;
-
-import formes.Rectangle;
-import formes.Triangle;
-
-import affichage.Toile;//juste pour le teste
 
 
 //une Animation simple est une feuille
@@ -20,20 +10,23 @@ public abstract class Animation {
 	private static int cpt_id = 0;
 	private int id;
 	private String type;//type d'animation
-	
 	protected Animation parent;//pour connaitre sont parent
 	private Double t_debut;
 	private Double t_fin;
-	private int easing;//TODO : pour l'instant c'est un int plus tard on fera une vrai classe 
+	private int easing;//TODO : pour l'instant c'est un int plus tard on fera une vrai classe
+	private AffineTransform trans;//sera la mémoire de la position de l'objet (seule une racine peux le modifier)
+	
 	public Animation(Double t_debut,Double t_fin,int easing,String type) {
 		this.t_debut = t_debut;
 		this.t_fin = t_fin;
 		this.easing = easing;
 		this.parent = null;
 		this.type = type;
-		this.id = this.cpt_id++;
+		this.id = Animation.cpt_id++;
+		this.trans = null;
 
 	}
+	//TODO : il serait utile de faire un constructeur par recopie
 	
 	/**
 	 * AffineTransform getAffineTransform(Double t_courant) :
@@ -70,7 +63,7 @@ public abstract class Animation {
 	public Double getPourun(Double t_courant){
 		if (!tmpOk(t_courant))
 			return -1.;
-		return (t_courant / ( t_fin - t_debut));
+		return ((t_courant- t_debut) / ( t_fin - t_debut));
 	}
 	
 	/**
@@ -95,6 +88,31 @@ public abstract class Animation {
 	}
 	
 	/**
+	 * void resetTrans():
+	 * 
+	 * pour remettre l'obejet dans l'état ou on l'a trouvé
+	 */
+	protected void resetTrans(){
+		this.trans = new AffineTransform();
+	}
+	
+	
+	/**
+	 * void ChangeTminTmax(double t_min,double t_max):
+	 * 
+	 * pour changer le temps debut et fin
+	 * Si t_min < this.t_debut alors t_debut = t_min
+	 * Si t_max > this.t_fin alors t_debut = t_max
+	 * cette méthode est récursive et change tout les parents
+	 */
+	public void ChangeTminTmax(double t_min,double t_max){
+		this.setT_debut(Math.min(this.getT_debut(), t_min));//affectation du temps min
+		this.setT_fin(Math.max(this.getT_fin(), t_max));//affectation du temps max
+		if(parent != null)
+			parent.ChangeTminTmax(t_min, t_max);
+	}
+	
+	/**
 	 * 
 	 * Getteur et Setter et toString
 	 * 
@@ -115,9 +133,65 @@ public abstract class Animation {
 	public int getId() {
 		return id;
 	}
+	
+	public Double getT_debut() {
+		return t_debut;
+	}
+
+	public Double getT_fin() {
+		return t_fin;
+	}
+
+	protected AffineTransform getTrans() {
+		return trans;
+	}
+
+	/**
+	 * On ne peux changer trans (AffineTransform)
+	 * que si on est une racine.
+	 * renvoi faux si la modification n'est pas effectué (car this n'est pas la racine)
+	 * 
+	 * @param trans 
+	 * @return
+	 */
+	protected boolean setTrans(AffineTransform trans) {
+		if (this.getMyLevel()==0){
+			//l'alocation ce fait ici
+			if(trans == null){
+				trans = new AffineTransform();
+			}
+			this.trans = trans;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * met à null l'objet trans.
+	 * à utiliser dans le cas ou l'animation devien l'enfant d'une autre
+	 */
+	protected void setNullTrans(){
+		this.trans =null;
+	}
+	
+	/**
+	 * attention à utiliser que si vraiment nécéssaire
+	 * @param t_debut
+	 */
+	protected void setT_debut(Double t_debut) {
+		this.t_debut = t_debut;
+	}
+	
+	/**
+	 * attention à utiliser que si vraiment nécéssaire
+	 * @param t_fin
+	 */
+	protected void setT_fin(Double t_fin) {
+		this.t_fin = t_fin;
+	}
 
 	@Override
-	public String toString() {
+	public String toString() {//TODO : faire une noivelle version
 		return "Animation [id=" + id + ", type=" + type + ", parent=" + parent
 				+ ", t_debut=" + t_debut + ", t_fin=" + t_fin + ", easing="
 				+ easing + "]";
@@ -144,7 +218,12 @@ class CompositeAnimation extends Animation{
 		//TODO : solution faire une méthode isMyparent pour empècher qu'il y ait des boucles avec les parents
 		//TODO : tester isMyParent(a)
 		
+		//modifications de références pour l'enfant :
 		a.setParent(this);//modification du parent
+		a.setNullTrans();//comme "a" n'est plus racine on supprime l'utilisation de trans
+		//modification des temps du parent qui est calé sur le temps min et temps max de ses enfants:
+		this.ChangeTminTmax(a.getT_debut(), a.getT_fin());
+		
 		return this.ChildAnimations.add(a);
 	}
 	
@@ -155,13 +234,12 @@ class CompositeAnimation extends Animation{
 	}
 
 
-
 	@Override
 	public AffineTransform getAffineTransform(Double t_courant) {
 		//si le temps demandé n'est pas dans notre intervalle 
 		//retourne null imédiatement
 		if(!tmpOk(t_courant))
-			return null;
+			return getTrans();
 		
 		AffineTransform at_retour = new AffineTransform();//va contenir les transformations
 		//parcourir la liste des enfants pour connaitre toute leurs transformations :
@@ -173,121 +251,8 @@ class CompositeAnimation extends Animation{
 					at_retour.concatenate(atmp);
 			}
 		}
+		
+		setTrans(at_retour);
 		return at_retour;
-	}
-}
-
-/**
- * 
- * @author clement
- *Animation simple : Rotation
- */
-class Rotation extends Animation{
-
-	private Double angle;//sens de rotation en radian
-	private Point2D.Double centre;//centre de rotation
-
-	public Rotation(Double t_debut, Double t_fin, int easing,Double angle,Point2D.Double centre) {
-		super(t_debut, t_fin, easing, "rotation");
-		this.angle = angle;
-		this.centre = centre;
-	}
-
-	@Override
-	public AffineTransform getAffineTransform(Double t_courant) {
-		Double pu = this.getPourun(t_courant);
-		//si pu est négatif c'est que notre temps courant n'est pas bon
-		if (pu <0.0)
-			return null;
-		Double a_courrant = this.angle * pu;//TODO : plustard utiliser les easing functions( ajouter : *easing)
-		System.out.println("angle vaux ="+Math.toDegrees(a_courrant));//info dev pour le teste
-		AffineTransform at = new AffineTransform();
-		at.setToRotation(a_courrant,centre.x,centre.y);
-		//at.setToRotation(a_courrant);
-		return at;
-	}
-	
-	public Double getAngle() {
-		return angle;
-	}
-
-
-	
-}
-
-/**
- * 
- */
-
-
-class teste{
-
-	//main de teste local
-	public static void main(String[] args) {
-		
-
-		
-		CompositeAnimation ca = new CompositeAnimation(0., 30., 0);
-		CompositeAnimation ca2 = new CompositeAnimation(2., 5., 0);
-		Rotation r1 = new Rotation(0., 30., 0, Math.toRadians(30.0),new Point2D.Double(0,0));
-		Rotation r2 = new Rotation(3., 25., 0, Math.toRadians(30.0),new Point2D.Double(0,0));
-		//teste affichage
-		System.out.println("ca :"+ca+"\nr1"+r1+"\nr2"+r2+"\n\n\n");
-		
-		//teste add (la version actuelle peux boucler add de soit même ou d'un parent)
-		ca.add(r1);
-		ca.add(r2);
-		
-		ca2.add(ca);
-		System.out.println("r1.getMyLevel()="+r1.getMyLevel());
-		System.out.println("r2.getMyLevel()="+r2.getMyLevel());
-		System.out.println("ca.getMyLevel() ="+ca.getMyLevel());
-		System.out.println("ca2.getMyLevel()="+ca2.getMyLevel());
-		
-		//teste remove :
-		System.out.println("\n1---r1 parent="+r1.getParent()+"\nca.remove(r1)="+ca.remove(r1));
-		System.out.println("2---r1 parent="+r1.getParent()+"\nca.remove(r1)="+ca.remove(r1));
-		
-		//teste d'une rotation toute seule :
-		Rotation r3 = new Rotation(0., 100., 0, Math.toRadians(180.0),new Point2D.Double(0,0));//temps_debut = 0% temps_fin = 100%
-		//teste d'un affine transforme qui marche pas :
-		r3.getAffineTransform(101.);
-		//teste d'un affine transforme qui marche ça doit afficher 45.0°
-		r3.getAffineTransform(25.);//45°
-		r3.getAffineTransform(50.);//90°
-		
-		
-		
-		
-		
-		
-		//teste visuel de la rotation :
-		System.out.println("\n\n\nconsole :\n");
-		JFrame frame = new JFrame("Visionneuse");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Toile t = new Toile(new Dimension(300,300));
-		frame.getContentPane().add(t);
-		frame.pack();
-		frame.setVisible(true);
-		GestionAnimation gest = new GestionAnimation(t);
-		
-		
-		//ajout d'un triangle
-		Triangle tr = new Triangle(new Point2D.Double(150,150),60);
-		Rotation rtr = new Rotation(0., 100., 0, Math.toRadians(360),tr.getCentre());
-		gest.ajouterComportement(tr, rtr);
-
-		//ajout d'un rectangle :
-		Rectangle rect = new Rectangle("monrectangle", new Point2D.Double(100,200), 70, 40);
-		rect.setStrokeWidth(2);
-		rect.setStrokeColor(Color.green);
-		rect.setFillColor(Color.cyan);
-		Rotation rr = new Rotation(0., 100., 0, Math.toRadians(-110),rect.getCentre());
-		gest.ajouterComportement(rect, rr);
-		for(int j=0;j<10;j++)
-		{
-			for(double i=0.;i<100.;i+=0.01)
-				gest.dessinerToile(i);
-		}
 	}
 }

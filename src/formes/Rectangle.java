@@ -1,11 +1,9 @@
 package formes;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.List;
+
 
 public class Rectangle extends ObjetGeometrique {
 
@@ -48,33 +46,9 @@ public class Rectangle extends ObjetGeometrique {
 		return p;
 	}
 
-	public void dessineGraphics(Graphics2D g) {
-		
-	}
-
 	public void generateShape() {
 		Point2D p = this.getCoord();
 		this.forme = new Rectangle2D.Double(p.getX(),p.getY(), this.width, this.height);
-	}
-
-	public void transTranslation(List<Point2D> listePoints, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		
-	}
-
-	public void transRotationCentrale(int sens, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		
-	}
-
-	public void transRotationExt(Point2D centre, int sens, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		
-	}
-
-	public void transStroke(BasicStroke finalStroke, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		
 	}
 
 
