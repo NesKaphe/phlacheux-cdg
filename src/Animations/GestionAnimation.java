@@ -1,11 +1,7 @@
 package Animations;
 import Animations.Comportement;
-
-import java.awt.Graphics2D;
 import java.util.ArrayList;
-
 import formes.ObjetGeometrique;
-
 import affichage.Toile;
 
 public class GestionAnimation {
