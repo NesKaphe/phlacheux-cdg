@@ -41,27 +41,27 @@ public class Main implements Runnable {
 		Triangle tr = new Triangle(new Point2D.Double(150,150),60);
 
 		//Cercle :
-		Cercle c = new Cercle("moncercle", new Point2D.Double((int)(Math.random()*301), (int)(Math.random()*301)), 30);
+		Cercle c = new Cercle(new Point2D.Double((int)(Math.random()*301), (int)(Math.random()*301)), 30);
 		c.setFillColor(Color.blue);
 		c.setStrokeWidth(5);
 		
 		//Ligne
 		Point2D.Double p1 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
 		Point2D.Double p2 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
-		SegmentDroite seg = new SegmentDroite("une Droite",p1,p2);
+		SegmentDroite seg = new SegmentDroite(p1,p2);
 		seg.setStroke(new BasicStroke(7));
 		seg.setStrokeColor(Color.red);
 		
 		//rectangle
 		Point2D.Double p3 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
-		Rectangle rect = new Rectangle("monrectangle", p3, 50, 30);
+		Rectangle rect = new Rectangle("Rectangle", p3, 50, 30);
 		rect.setStrokeWidth(2);
 		rect.setStrokeColor(Color.green);
 		rect.setFillColor(Color.cyan);
 		
 		//Carre
 		Point2D.Double p4 = new Point2D.Double((int)(Math.random()*301),(int)(Math.random()*301));
-		Carre carre = new Carre("moncarre", p4, 10);
+		Carre carre = new Carre(p4, 10);
 		carre.setStrokeWidth(6);
 		carre.setStrokeColor(Color.green);
 		carre.setFillColor(Color.orange);

@@ -155,9 +155,13 @@ class testeRotation{
 		Rotation rr1 = new Rotation(0., 125., 0, Math.toRadians(-120),rect.getCentre());
 		Rotation rr2 = new Rotation(135., 150., 0, Math.toRadians(+100),rect.getCentre());
 		Rotation rr3 = new Rotation(160., 200., 0, Math.toRadians(-20),rect.getCentre());
+		StrokeWidth swr1 = new StrokeWidth(0., 125., 0, 80);
+		StrokeWidth swr2 = new StrokeWidth(125., 200., 0, -70);
 		ca3.add(rr1);
 		ca3.add(rr2);
 		ca3.add(rr3);
+		ca3.add(swr1);
+		ca3.add(swr2);
 		gest.ajouterComportement(rect, ca3);
 		
 		//ajout de segment :

@@ -1,6 +1,5 @@
 package Animations;
 
-import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 
 public class StrokeWidth extends Animation {

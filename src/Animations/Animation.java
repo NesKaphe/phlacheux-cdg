@@ -1,8 +1,6 @@
 package Animations;
 
-import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
 import java.util.ArrayList;
 
 
@@ -251,8 +249,12 @@ class CompositeAnimation extends Animation{
 	public AffineTransform getAffineTransform(Double t_courant) {
 		//si le temps demandé n'est pas dans notre intervalle 
 		//retourne null imédiatement
+		/*
 		if(!tmpOk(t_courant))
 			return getTrans();
+		*/
+		if(t_courant < this.getT_debut())
+			return null;
 		
 		AffineTransform at_retour = new AffineTransform();//va contenir les transformations
 		//parcourir la liste des enfants pour connaitre toute leurs transformations :
@@ -275,7 +277,7 @@ class CompositeAnimation extends Animation{
 	}
 	
 	public Float getWidthStroke(double t_courant) {
-		if(!tmpOk(t_courant))
+		if(t_courant < this.getT_debut())
 			return null;
 		
 		float strokeWidthTotal = 0;
