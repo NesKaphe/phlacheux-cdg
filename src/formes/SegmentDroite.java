@@ -47,42 +47,9 @@ public class SegmentDroite extends ObjetGeometrique {
 		return null;
 	}
 
-	public void dessineGraphics(Graphics2D g) {
-
-	}
-
 	public void generateShape() {
 		this.forme = new Line2D.Double(this.p1, this.p2);
 	}
-
-	
-	public void transTranslation(List<Point2D> listePoints, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		// TODO Stub de la méthode généré automatiquement
-
-	}
-
-	
-	public void transRotationCentrale(int sens, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		// TODO Stub de la méthode généré automatiquement
-
-	}
-
-	
-	public void transRotationExt(Point2D centre, int sens, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		// TODO Stub de la méthode généré automatiquement
-
-	}
-
-	
-	public void transStroke(BasicStroke finalStroke, int easingFunction,
-			int tDepart, int tFin, int tCourant) throws Exception {
-		// TODO Stub de la méthode généré automatiquement
-
-	}
-
 
 
 }
