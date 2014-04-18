@@ -82,8 +82,15 @@ public class GestionAnimation {
 		//On dessine les objets dans le buffer
 		for(int i = 0; i < this.Comportements.size(); i++) {
 			//t.dessineObjet(this.Comportements.get(i).getEtatObjGeo(t_courant));
-			System.out.println(this.Comportements.get(i));
+			//System.out.println(this.Comportements.get(i));
 			t.dessineObjet(this.Comportements.get(i).getEtatObjGeo(t_courant));
+		}
+		
+		//On dessine l'objet temporaire s'il existe
+		ObjetGeometrique tmpGeo = this.t.getObjGeometrique();
+		if(tmpGeo != null) {
+			System.out.println("\tmaiiis"+tmpGeo.getInfos());
+			t.dessineObjet(tmpGeo);
 		}
 		
 		//On demande le raffraichissement de la toile

@@ -142,6 +142,7 @@ public abstract class ObjetGeometrique {
 	
 	public void setCentre(Point2D.Double centre) {
 		this.centre = centre;
+		this.generateShape();
 	}
 	
 	public void setStroke(BasicStroke stroke) {

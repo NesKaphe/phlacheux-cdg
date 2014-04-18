@@ -23,6 +23,7 @@ public class Visionneuse implements Runnable {
     	
     	// on crée notre toile
 		this.toile = new Toile(new Dimension(300,300));
+		this.toile.setBackground(Color.red);
 		
 		// on crée un menuBar static avec juste un bouton pour quitter et recharger la page
 		menuBar = new JMenuBar();

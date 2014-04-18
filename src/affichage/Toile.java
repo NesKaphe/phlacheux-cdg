@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import javax.swing.JPanel;
 import formes.ObjetGeometrique;
 
@@ -17,18 +16,14 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 
 	// Buffer utilisé pour le dessin des formes par le gestionnaire d'animation
 	private Image backBuffer;
-	
-	//private Image primarySurface;//obsolète //TODO:virer ce buffer
-	
-	/**
-	 * ??
-	 */
+		
 	private static final long serialVersionUID = 1L;
-	private ArrayList<ObjetGeometrique> liste;//liste d'objets géometrique à dessiner
-	private boolean flag;//obsolète
 	
 	//Position de la souris
 	private int x, y, ox, oy;
+	
+	//Objet temporaire en cours de creation (= null si aucun objet n'est en train d'etre créer)
+	private ObjetGeometrique objTemporaire;
 	
 	/**
 	 * @param dim : La dimension de la toile
@@ -38,11 +33,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		this.setDoubleBuffered(true);
 		this.setPreferredSize(dim);
 		this.setSize(dim);
-		this.liste = new ArrayList<ObjetGeometrique>();//TODO : (down)
-		/*modifier en conteneur Set (ou autre) pour pouvoir empècher 
-		 * les doublons et retirer certaines valeurs
-		 */
-		this.flag = false;
+		this.initObjTemporaire();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -50,18 +41,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		g2.drawImage((BufferedImage)this.backBuffer, null, 0, 0);
 	}
 	
-	public void addObjet(ObjetGeometrique geo) {
-		this.liste.add(geo);
-	}
-	
-	public void demanderViderListe() {
-		this.flag = true;
-	}
-	
-	private void viderListe() {
-		this.liste.clear();
-	}
-	
+
 	public void mousePressed(MouseEvent m) {
     	ox = m.getX();
     	oy = m.getY();
@@ -77,6 +57,18 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     public void mouseDragged(MouseEvent e) {}
     public void mouseMoved(MouseEvent e) { }
 
+    public void setObjTemporaire(ObjetGeometrique geo) {
+    	this.objTemporaire = geo;
+    }
+    
+    public ObjetGeometrique getObjGeometrique() {
+    	return this.objTemporaire;
+    }
+    
+    public void initObjTemporaire() {
+    	this.objTemporaire = null;
+    }
+    
 	public void dessineObjet(ObjetGeometrique geo) {		
 		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
 				
