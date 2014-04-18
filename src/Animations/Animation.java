@@ -1,5 +1,6 @@
 package Animations;
 
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
@@ -47,6 +48,24 @@ public abstract class Animation {
 	 * si t_courant n'est pas dans l'intervalle de l'animation
 	 */
 	public abstract Float getWidthStroke(double t_courant);
+	
+	/**
+	 * Color getStrokeColor(Double t_courant) :
+	 * -----------------------------------------------------
+	 * @param t_courant
+	 * @return un tableau contenant les valeurs RGB a incrementer à la forme geometrique
+	 * et null si t_courant n'est pas dans l'intervalle de l'animation
+	 */
+	public abstract int[] getStrokeColor(Double t_courant);
+	
+	/**
+	 * Color getFillColor(Double t_courant) :
+	 * -----------------------------------------------------
+	 * @param t_courant
+	 * @return un tableau contenant les valeurs RGB a incrementer à la forme geometrique
+	 * et null si t_courant n'est pas dans l'intervalle de l'animation
+	 */
+	public abstract int[] getFillColor(Double t_courant);
 	
 	/**
 	 * boolean tmpOk(Double tmp):
@@ -297,5 +316,75 @@ class CompositeAnimation extends Animation{
 		}
 		
 		return strokeWidthTotal;
+	}
+
+
+	@Override
+	public int[] getStrokeColor(Double t_courant) {
+		if(t_courant < this.getT_debut())
+			return null;
+		
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		//parcourir la liste des enfants pour connaitre toute leurs transformations :
+		for(Animation a : this.ChildAnimations) {
+			//si notre enfant est conserné :
+			int[] ctmp = null;
+			if (a.tmpOk(t_courant)){
+				ctmp = a.getStrokeColor(t_courant);
+			}
+			else if(a.getT_fin() < t_courant){
+				ctmp = a.getStrokeColor(a.getT_fin());
+			}
+
+			if(ctmp != null) {
+				r += ctmp[0];
+				g += ctmp[1];
+				b += ctmp[2];
+			}
+		}
+		
+		int[] c = new int[3];
+		c[0] = r;
+		c[1] = g;
+		c[2] = b;
+		
+		return c;
+	}
+
+
+	@Override
+	public int[] getFillColor(Double t_courant) {
+		if(t_courant < this.getT_debut())
+			return null;
+		
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		//parcourir la liste des enfants pour connaitre toute leurs transformations :
+		for(Animation a : this.ChildAnimations) {
+			//si notre enfant est conserné :
+			int[] ctmp = null;
+			if (a.tmpOk(t_courant)){
+				ctmp = a.getFillColor(t_courant);
+			}
+			else if(a.getT_fin() < t_courant){
+				ctmp = a.getFillColor(a.getT_fin());
+			}
+			
+			if(ctmp != null) {
+				r += ctmp[0];
+				g += ctmp[1];
+				b += ctmp[2];
+			}
+		}
+		
+		int[] c = new int[3];
+		c[0] = r;
+		c[1] = g;
+		c[2] = b;
+		
+		return c;
 	}
 }

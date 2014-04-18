@@ -1,5 +1,6 @@
 package Animations;
 
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 
 public class StrokeWidth extends Animation {
@@ -21,7 +22,21 @@ public class StrokeWidth extends Animation {
 		//si pu est négatif c'est que notre temps courant n'est pas bon
 		if (pu < 0.0)
 			return null;
-		System.out.println("\t"+pu * this.strokeWidthIncrement);
+		
 		return (float) (pu * this.strokeWidthIncrement);
+	}
+
+
+	@Override
+	public int[] getStrokeColor(Double t_courant) {
+		// TODO Stub de la méthode généré automatiquement
+		return null;
+	}
+
+
+	@Override
+	public int[] getFillColor(Double t_courant) {
+		// TODO Stub de la méthode généré automatiquement
+		return null;
 	}
 }
