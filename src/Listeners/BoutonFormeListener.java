@@ -158,7 +158,7 @@ public class BoutonFormeListener implements MouseListener {
 			if (optionTriangle == JOptionPane.OK_OPTION) {
 				try {
 					double cote = Double.parseDouble(CoteTriangle.getText());
-					Triangle triangle = new Triangle(new Point2D.Double(50, 50), (int) cote);
+					Triangle triangle = new Triangle(new Point2D.Double(0, 0), (int) cote);
 					triangle.setStrokeColor(StrokeChooser.getColor());
 					triangle.setFillColor(FillChooser.getColor());
 					triangle.setStrokeWidth(Float.parseFloat(Epaisseur.getText()));

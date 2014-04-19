@@ -31,7 +31,7 @@ public class Cercle extends ObjetGeometrique {
 	
 	public void generateShape() {
 		Point2D p = this.getCoord();
-		this.forme = new Ellipse2D.Double(p.getX(), p.getY(), rayon, rayon);
+		this.forme = new Ellipse2D.Double(p.getX(), p.getY(), 2*rayon, 2*rayon);
 	}
 
 	

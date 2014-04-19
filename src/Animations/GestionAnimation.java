@@ -89,7 +89,7 @@ public class GestionAnimation {
 		//On dessine l'objet temporaire s'il existe
 		ObjetGeometrique tmpGeo = this.t.getObjGeometrique();
 		if(tmpGeo != null) {
-			System.out.println("\tmaiiis"+tmpGeo.getInfos());
+			System.out.println("\t"+tmpGeo.getCentre());
 			t.dessineObjet(tmpGeo);
 		}
 		

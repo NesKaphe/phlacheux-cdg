@@ -29,7 +29,6 @@ public class MouseMotionToileListener implements MouseMotionListener{
 		
 		Point2D.Double centre = new Point2D.Double(posX,posY);
 		geo.setCentre(centre);
-		this.frame.getToile().setObjTemporaire(geo);
 		
 		System.out.println(this.frame.getToile().getObjGeometrique());
 		this.frame.getGestionAnimation().dessinerToile(0.);

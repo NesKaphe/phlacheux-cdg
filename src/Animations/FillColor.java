@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 
 import affichage.Toile;
 import formes.Rectangle;
-import formes.SegmentDroite;
 
 public class FillColor extends ColorAnimation {
 
