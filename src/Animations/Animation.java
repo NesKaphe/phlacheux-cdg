@@ -31,12 +31,16 @@ public abstract class Animation {
 	/**
 	 * AffineTransform getAffineTransform(Double t_courant) :
 	 * ------------------------------------------------------
+	 * Si notre animation conserne une translation il faut implémenter cette
+	 * méthode.
 	 * prendre en paramètre le temps courant est retourne la transformation
 	 * affine à cette instant si il n'y a aucune transformation retourne null
 	 * @param t_courant
 	 * @return
 	 */
-	public abstract AffineTransform getAffineTransform(Double t_courant);
+	public AffineTransform getAffineTransform(double t_courant){
+		return null;//null par défaut
+	}
 	
 	/**
 	 * boolean tmpOk(Double tmp):
@@ -143,7 +147,15 @@ public abstract class Animation {
 	}
 
 	protected AffineTransform getTrans() {
-		return trans;
+		if (this.parent == null){
+			//l'alocation ce fait ici parceque on est le parent
+			if(this.trans == null){
+				this.trans = new AffineTransform();
+			}
+			return trans;
+		}
+		else
+			return this.parent.getTrans();
 	}
 
 	/**
@@ -157,10 +169,13 @@ public abstract class Animation {
 	protected boolean setTrans(AffineTransform trans) {
 		if (this.getMyLevel()==0){
 			//l'alocation ce fait ici
-			if(trans == null){
-				trans = new AffineTransform();
+			if(this.trans == null){
+				this.trans = new AffineTransform();
 			}
-			this.trans = trans;
+			
+			if (trans != null)
+				//this.trans = trans;
+				this.trans.concatenate(trans);
 			return true;
 		}
 		return false;
@@ -235,7 +250,7 @@ class CompositeAnimation extends Animation{
 
 
 	@Override
-	public AffineTransform getAffineTransform(Double t_courant) {
+	public AffineTransform getAffineTransform(double t_courant) {
 		//si le temps demandé n'est pas dans notre intervalle 
 		//retourne null imédiatement
 		if(!tmpOk(t_courant))
@@ -249,10 +264,14 @@ class CompositeAnimation extends Animation{
 				AffineTransform atmp = a.getAffineTransform(t_courant);
 				if (atmp != null)
 					at_retour.concatenate(atmp);
+				
+			}else if(a.getT_fin() < t_courant){
+				
+				at_retour = a.getAffineTransform(a.getT_fin());
 			}
 		}
 		
-		setTrans(at_retour);
+		//setTrans(at_retour);
 		return at_retour;
 	}
 }

@@ -34,7 +34,7 @@ public class Rotation extends Animation{
 	}
 	
 	@Override
-	public AffineTransform getAffineTransform(Double t_courant) {
+	public AffineTransform getAffineTransform(double t_courant) {
 		ttt = t_courant; 
 		Double pu = this.getPourun(t_courant);
 		//si pu est négatif c'est que notre temps courant n'est pas bon
@@ -75,6 +75,16 @@ public class Rotation extends Animation{
 
 	
 }
+
+
+
+
+
+
+
+
+
+
 
 /**
  * pour tester la rotation
@@ -146,8 +156,9 @@ class testeRotation{
 		rect.setFillColor(Color.cyan);
 		
 		CompositeAnimation ca3 = new CompositeAnimation(0., 200., 0);
-		Rotation rr1 = new Rotation(0., 125., 0, Math.toRadians(-180),rect.getCentre());
-		Rotation rr2 = new Rotation(75., 200., 0, Math.toRadians(+100),rect.getCentre());
+		Rotation rr1 = new Rotation(0., 100., 0, Math.toRadians(-150),rect.getCentre());
+		//Rotation rr2 = new Rotation(75., 200., 0, Math.toRadians(+100),rect.getCentre());
+		Rotation rr2 = new Rotation(150., 250., 0, Math.toRadians(+100),rect.getCentre());
 		ca3.add(rr1);
 		ca3.add(rr2);	
 		gest.ajouterComportement(rect, ca3);
@@ -165,7 +176,7 @@ class testeRotation{
 		
 		for(int j=0;j<10;j++)
 		{
-			for(double i=0.;i<300.;i+=1.){
+			for(double i=0.;i<500.;i+=5.){
 				gest.dessinerToile(i);
 				rr2.AngleInfo();
 				
