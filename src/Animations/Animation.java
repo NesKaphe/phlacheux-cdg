@@ -282,10 +282,7 @@ class CompositeAnimation extends Animation{
 	public AffineTransform getAffineTransform(double t_courant) {
 		//si le temps demandé n'est pas dans notre intervalle 
 		//retourne null imédiatement
-		/*
-		if(!tmpOk(t_courant))
-			return getTrans();
-		*/
+
 		if(t_courant < this.getT_debut())
 			return null;
 		
