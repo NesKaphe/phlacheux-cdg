@@ -12,6 +12,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,7 +40,7 @@ public class Translation extends Animation {
 	private boolean nb_points_paire = false;//pour savoir si nous finissons par une line
 	private Point2D.Double cur_start_pt = null;
 	private Point2D.Double cur_end_pt = null;//point courant de fin du segment TODO : A supprimer
-
+	private Set<Point2D.Double> cur_list_points;//pour savoir si nous avons des points en double dans un segment
 	
 	public Translation(double t_debut, double t_fin, int easing,ArrayList<Point2D.Double> listPoint) {
 		super(t_debut, t_fin, easing, "translation");
@@ -84,8 +86,11 @@ public class Translation extends Animation {
 	 */
 	private void calculLen(){
 		len = 0;
-		while(this.nextPoint()!=null)
+		int i = 0;
+		while(this.nextPoint()!=null){
+			System.out.println(" i ="+i++ +"  pt_courant = "+this.cur_point);
 			len++;
+		}
 		restartParcour();
 	}
 	
@@ -93,6 +98,7 @@ public class Translation extends Animation {
 	 * void restartParcour():
 	 * ------------------------------------
 	 * pour recommencer le parcours du debut
+	 * tout est remis à zéro
 	 */
 	private void restartParcour(){
 		cur_seg = -1;//remise à zero du segment courant
@@ -103,14 +109,16 @@ public class Translation extends Animation {
 		cur_seg_gp = null;
 		nb_points_paire = false;
 		cur_start_pt = null;
+		cur_list_points = null;
 	}
 	
 	
 	public void generateListToutPoint(){
 		this.listToutPoint = new ArrayList<Point2D.Double>();
 		Point2D.Double nxt_pt;
-		int i = 0;
+
 		while((nxt_pt = this.nextPoint())!=null){
+			
 			this.listToutPoint.add(nxt_pt);
 		}
 		restartParcour();
@@ -264,7 +272,7 @@ public class Translation extends Animation {
 			case 6: dir = cur_dir.prevDir().prevDir().prevDir();break;	//dir sens anti-horaire +3
 			}
 			nextPts = dir.CorespondPoint(cur_point);
-			//System.out.println("DEBUG -nextPts ="+nextPts);
+			System.out.println("DEBUG -nextPts ="+nextPts+"  cas ="+i);
 			if(seg_gp.intersects(nextPts.getX(),nextPts.getY(),1,1)){
 				this.cur_dir = dir;
 				cur_point = nextPts;
@@ -298,13 +306,13 @@ public class Translation extends Animation {
 			nb_seg += nb_points/2;//division entière
 			cur_seg = 0;
 			cur_point = listPoint.get(0);//le point courrant est mis sur le point de départ
-			
 		}
 		
 		//initialisation de cur_seg_gp ,et des point de départ et de fin:
 		if (this.cur_seg_gp == null){
 			System.out.println("DEBUG -------nouveau seg gp--------");
 			ArrayList<Point2D.Double> LP = new ArrayList<Point2D.Double>();//va contenir les points du segment
+			cur_list_points = new HashSet<Point2D.Double>();
 			//cas pour le dernier segment si c'est une ligne :
 			if((cur_seg == this.nb_seg-1) && nb_points_paire){
 				cur_start_pt = listPoint.get(listPoint.size()-2);
@@ -335,7 +343,9 @@ public class Translation extends Animation {
 		cur_point = nextPointSegment(cur_seg_gp);
 		//on regarde si on est à la fin du segment :
 		//si cur_point est à null c'est que le segment est fini
-		if( cur_point == null){
+		//Astuce (moche) mais qui marche :
+		//ou si on tente d'insérer un point doublon c'est que l'on retourne en arrière et c'est pas bon
+		if( (cur_point == null) || (cur_list_points.add(cur_point)== false)){
 			System.out.println("DEBUG - fin du segment ");
 			//si nous somme au dernier segment retourne null
 			if(cur_seg == nb_seg-1){
@@ -492,7 +502,7 @@ class testeTranslation{
 				//System.out.println("main  i ="+i);
 				try {
 					//Thread.sleep((long) (1000));
-					Thread.sleep((long) (100));
+					Thread.sleep((long) (50));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
