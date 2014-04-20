@@ -92,7 +92,7 @@ public abstract class Animation {
 	 * @param tmp
 	 * @return
 	 */
-	public Double getPourun(Double t_courant){
+	public Double getPourun(double t_courant){
 		if (!tmpOk(t_courant))
 			return -1.;
 		return ((t_courant- t_debut) / ( t_fin - t_debut));

@@ -16,10 +16,10 @@ import formes.SegmentDroite;
  */
 public class Rotation extends Animation{
 
-	private Double angle;//sens de rotation en radian
+	private double angle;//sens de rotation en radian
 	private Point2D.Double centre;//centre de rotation
-	private Double a_courrant = Math.toRadians(9999999.);//mis en variable de classe juste pour la méthode AngleInfo()
-	Double ttt = 0.;//debug
+	private double a_courrant = Math.toRadians(9999999.);//mis en variable de classe juste pour la méthode AngleInfo()
+	Double ttt = 0.;//debug//TODO : a virer
 	
 	public Rotation(Double t_debut, Double t_fin, int easing,Double angle,Point2D.Double centre) {
 		super(t_debut, t_fin, easing, "rotation");
@@ -44,7 +44,6 @@ public class Rotation extends Animation{
 		//System.out.println("angle vaux ="+Math.round(Math.toDegrees(a_courrant))+"°  \tid="+getId());//info dev pour le teste
 		AffineTransform at = new AffineTransform();
 		at.setToRotation(a_courrant,centre.x,centre.y);
-		//at.setToRotation(a_courrant);
 		return at;
 	}
 	

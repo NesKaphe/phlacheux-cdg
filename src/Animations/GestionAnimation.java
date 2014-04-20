@@ -71,7 +71,7 @@ public class GestionAnimation {
 	/**
 	 * @param tDessin : L'instant t representant l'etat des objets pour le le dessin
 	 */
-	public void dessinerToile(Double t_courant) {
+	public void dessinerToile(double t_courant) {
 		//On va parcourir notre liste de comportements pour demander l'etat de l'objet a l'instant t
 		//On demande ensuite a la toile de dessiner chaque objets dans son buffer puis on appelle repaint()
 		
