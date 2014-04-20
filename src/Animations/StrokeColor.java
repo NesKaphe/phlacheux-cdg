@@ -20,10 +20,6 @@ public class StrokeColor extends ColorAnimation {
 		return this.getColor(t_courant);
 	}
 
-	@Override
-	public int[] getFillColor(Double t_courant) {
-		return null;
-	}
 
 }
 

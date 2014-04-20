@@ -25,17 +25,4 @@ public class StrokeWidth extends Animation {
 		return (float) (pu * this.strokeWidthIncrement);
 	}
 
-
-	@Override
-	public int[] getStrokeColor(Double t_courant) {
-		// TODO Stub de la méthode généré automatiquement
-		return null;
-	}
-
-
-	@Override
-	public int[] getFillColor(Double t_courant) {
-		// TODO Stub de la méthode généré automatiquement
-		return null;
-	}
 }

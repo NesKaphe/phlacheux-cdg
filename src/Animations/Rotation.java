@@ -71,26 +71,6 @@ public class Rotation extends Animation{
 		this.centre = centre;
 	}
 
-	@Override
-	public Float getWidthStroke(double t_courant) {
-		// TODO Stub de la méthode généré automatiquement
-		return null;
-	}
-
-	@Override
-	public int[] getStrokeColor(Double t_courant) {
-		// TODO Stub de la méthode généré automatiquement
-		return null;
-	}
-
-	@Override
-	public int[] getFillColor(Double t_courant) {
-		// TODO Stub de la méthode généré automatiquement
-		return null;
-	}
-	
-
-	
 }
 
 

@@ -13,15 +13,6 @@ public abstract class ColorAnimation extends Animation {
 		this.b = incrB;
 	}
 
-	@Override
-	public AffineTransform getAffineTransform(double t_courant) {
-		return null;
-	}
-
-	@Override
-	public Float getWidthStroke(double t_courant) {
-		return null;
-	}
 
 	protected int[] getColor(Double t_courant) {
 		Double pu = this.getPourun(t_courant);

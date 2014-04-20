@@ -50,7 +50,9 @@ public abstract class Animation {
 	 * @return un float representant une epaisseur de trait a incrementer et null
 	 * si t_courant n'est pas dans l'intervalle de l'animation
 	 */
-	public abstract Float getWidthStroke(double t_courant);
+	public Float getWidthStroke(double t_courant){
+		return null;//null par défaut
+	}
 	
 	/**
 	 * Color getStrokeColor(Double t_courant) :
@@ -59,7 +61,9 @@ public abstract class Animation {
 	 * @return un tableau contenant les valeurs RGB a incrementer à la forme geometrique
 	 * et null si t_courant n'est pas dans l'intervalle de l'animation
 	 */
-	public abstract int[] getStrokeColor(Double t_courant);
+	public int[] getStrokeColor(Double t_courant){
+		return null;//null par défaut
+	}
 	
 	/**
 	 * Color getFillColor(Double t_courant) :
@@ -68,7 +72,9 @@ public abstract class Animation {
 	 * @return un tableau contenant les valeurs RGB a incrementer à la forme geometrique
 	 * et null si t_courant n'est pas dans l'intervalle de l'animation
 	 */
-	public abstract int[] getFillColor(Double t_courant);
+	public int[] getFillColor(Double t_courant){
+		return null;//null par défaut
+	}
 	
 	/**
 	 * boolean tmpOk(Double tmp):

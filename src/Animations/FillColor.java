@@ -56,20 +56,26 @@ class testeFill{
 		
 		CompositeAnimation ca = new CompositeAnimation(0., 150., 0);
 		FillColor fr = new FillColor(0., 30., 0, 90, -25, -70);
-		FillColor fr2 = new FillColor(45., 90., 0, -40, -100, -80);
+		FillColor fr2 = new FillColor(0., 90., 0, -255, -255, -255);
+		FillColor fr3 = new FillColor(90., 180., 0, 255, 10, 10);
+		FillColor fr4 = new FillColor(175., 240., 0, 10, 255, 10);
+		FillColor fr5 = new FillColor(235., 300., 0, 10, 10, 255);
 		ca.add(fr);
 		ca.add(fr2);
+		ca.add(fr3);
+		//ca.add(fr4);
+		//ca.add(fr5);
 		gest.ajouterComportement(rect, ca);
 		
 		for(int j=0;j<10;j++)
 		{
-			for(double i=0.;i<200.;i+=1.){
+			for(double i=0.;i<350.;i+=1.){
 				gest.dessinerToile(i);
 				//rr2.AngleInfo();
 				
 				try {
 					//Thread.sleep((long) (1000));
-					Thread.sleep((long) (100));
+					Thread.sleep((long) (50));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

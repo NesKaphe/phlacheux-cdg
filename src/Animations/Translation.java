@@ -109,11 +109,11 @@ public class Translation extends Animation {
 		cur_seg_gp = null;
 		nb_points_paire = false;
 		cur_start_pt = null;
-		cur_list_points = null;
+		cur_list_points = null;//permet de faire de la place en mémoire
 	}
 	
 	
-	public void generateListToutPoint(){
+	private void generateListToutPoint(){
 		this.listToutPoint = new ArrayList<Point2D.Double>();
 		Point2D.Double nxt_pt;
 
@@ -214,7 +214,7 @@ public class Translation extends Animation {
 	 * @param pt
 	 * @return
 	 */
-	public boolean initCurDir(GeneralPath seg_gp,Point2D.Double pt){
+	private boolean initCurDir(GeneralPath seg_gp,Point2D.Double pt){
 		Point2D.Double nextPts ;
 		Direction dir = Direction.S;//on attribut arbitrairement une direction
 
@@ -256,7 +256,7 @@ public class Translation extends Animation {
 	 */
 	//TODO : faire détection de croisement de courbe
 
-	public Point2D.Double nextPointSegment(GeneralPath seg_gp){
+	private Point2D.Double nextPointSegment(GeneralPath seg_gp){
 		Point2D.Double nextPts ;
 		Direction dir = Direction.NO_DIR;//copie de la direction courante
 		//on explore tout les pixels environants sauf celui d'où l'on vien:
@@ -292,7 +292,7 @@ public class Translation extends Animation {
 	 * Initialise "cur_point" et "cur_dir".
 	 * @return
 	 */
-	public Point2D.Double nextPoint(){
+	private Point2D.Double nextPoint(){
 		cur_point_num++;//on incremente le numero du point courant
 		//INITIALISATIONS ============================
 		//initialisation de cur_seg et de nb_seg et cur_point:
@@ -363,7 +363,7 @@ public class Translation extends Animation {
 	}
 
 	/**
-	 * Point2D.Double prevPoint():
+	 * Point2D.Double prevPoint()://TODO jamais testé
 	 * --------------------------------------------------------
 	 * pour avoir le point precedent.
 	 * version "sale" qui refait tout le parcours.
@@ -371,7 +371,7 @@ public class Translation extends Animation {
 	 * 
 	 * @return
 	 */
-	public Point2D.Double prevPoint(){
+	private Point2D.Double prevPoint(){
 		int point_num = this.cur_point_num;//copie du numeros de point
 		//si nous somme au debut :
 		if (point_num < 0)
@@ -382,24 +382,6 @@ public class Translation extends Animation {
 			nxt_pt = nextPoint();
 		}
 		return nxt_pt;
-	}
-	
-	@Override
-	public Float getWidthStroke(double t_courant) {//TODO : faire une implémentation par défaut dans la classe animation
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int[] getStrokeColor(java.lang.Double t_courant) {//TODO : faire une implémentation par défaut dans la classe animation
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int[] getFillColor(java.lang.Double t_courant) {//TODO : faire une implémentation par défaut dans la classe animation
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }
@@ -539,7 +521,8 @@ class testeTranslation{
 
 
 
-
+//====pour le DEBUG 
+//TODO : à retirer pour la version final
 class petiteToile extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private static int compteur = 0;
