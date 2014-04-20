@@ -9,8 +9,8 @@ public class Cercle extends ObjetGeometrique {
 
 	protected double rayon;
 	
-	public Cercle(String nom, Point2D.Double centre, double rayon) {
-		super(nom, centre, Color.black, Color.red);
+	public Cercle(Point2D.Double centre, double rayon) {
+		super("Cercle", centre, Color.black, Color.red);
 		this.setRayon(rayon);
 		this.generateShape();
 	}
@@ -31,7 +31,7 @@ public class Cercle extends ObjetGeometrique {
 	
 	public void generateShape() {
 		Point2D p = this.getCoord();
-		this.forme = new Ellipse2D.Double(p.getX(), p.getY(), rayon, rayon);
+		this.forme = new Ellipse2D.Double(p.getX(), p.getY(), 2*rayon, 2*rayon);
 	}
 
 	

@@ -53,7 +53,7 @@ public class Triangle extends ObjetGeometrique {
 		//ici on donne le vrai centre (isobarycentre) de la figure :
 		Point2D.Double recentre = new Point2D.Double(-((h*2)/3),-(this.taille/2));
 		//Point2D recentre = new Point2D.Double(0,0);
-		this.setCentre(recentre);
+		this.centre = recentre;
 		
 		//coordonées des points :
 		int coords_x[] = {0,this.taille,(int)this.taille/2};
@@ -64,13 +64,14 @@ public class Triangle extends ObjetGeometrique {
 		//on a besoin de translaté la forme pour qu'elle 
 		//soit centré aux coordonées passé au constructeur :
 		AffineTransform tx = new AffineTransform();
-		tx.translate(centre.getX()+translation_centre.getX(),centre.getY()+translation_centre.getY());
+		tx.translate(translation_centre.getX()-this.taille/2,translation_centre.getY() - h*2/3);
 		this.forme = tx.createTransformedShape(triangle);
-		this.setCentre(translation_centre);
+		this.centre = translation_centre;
 			
 	}
 
-
-	
-
+	public void setCentre(Point2D.Double centre) {
+		this.translation_centre = centre;
+		this.generateShape();
+	}
 }

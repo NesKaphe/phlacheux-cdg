@@ -330,6 +330,24 @@ public class Translation extends Animation {
 		
 		return this.cur_point;
 	}
+
+	@Override
+	public Float getWidthStroke(double t_courant) {//TODO : faire une implémentation par défaut dans la classe animation
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[] getStrokeColor(java.lang.Double t_courant) {//TODO : faire une implémentation par défaut dans la classe animation
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[] getFillColor(java.lang.Double t_courant) {//TODO : faire une implémentation par défaut dans la classe animation
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
 

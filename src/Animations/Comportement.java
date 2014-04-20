@@ -1,5 +1,7 @@
 package Animations;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 
 import formes.ObjetGeometrique;
@@ -41,10 +43,68 @@ public class Comportement {
 			return this.objGeo;//cas particulier (attention il ne faut pas modifer l'objet)
 		
 		//ICI : récupération de toutes les animations
+		//AffineTransform
 		AffineTransform at = a.getAffineTransform(t_courant);
+		
+		//Stroke Transform
+		BasicStroke stroke = null;
+		Float width = a.getWidthStroke(t_courant);
+		if(width != null) {
+			width = this.objGeo.getStroke().getLineWidth() + width;
+			stroke = new BasicStroke((width>0)?width:0);
+		}
+		
+		//Colors Transform
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		
+		//Stroke Color
+		Color colorStroke = null;
+		int[] cStroke = a.getStrokeColor(t_courant);
+		if(cStroke != null) {
+			Color objColor = this.objGeo.getStrokeColor();
+			r = objColor.getRed() + cStroke[0];
+			g = objColor.getGreen() + cStroke[1];
+			b = objColor.getBlue() + cStroke[2];
+			
+			//On doit limiter rgb entre 0 et 255
+			r = r > 255 ? 255 : r;
+			g = g > 255 ? 255 : g;
+			b = b > 255 ? 255 : b;
+			
+			r = r < 0 ? 0 : r;
+			g = g < 0 ? 0 : g;
+			b = b < 0 ? 0 : b;
+			
+			colorStroke = new Color(r, g, b);
+		}
+		
+		//Fill Color
+		Color FillColor = null;
+		int[] fColor = a.getFillColor(t_courant);
+		if(fColor != null) {
+			Color objColor = this.objGeo.getFillColor();
+			if(objColor != null) { //Tous les objets ne sont pas remplis
+				r = objColor.getRed() + fColor[0];
+				g = objColor.getGreen() + fColor[1];
+				b = objColor.getBlue() + fColor[2];
+				
+				//On doit limiter rgb entre 0 et 255
+				r = r > 255 ? 255 : r;
+				g = g > 255 ? 255 : g;
+				b = b > 255 ? 255 : b;
+				
+				r = r < 0 ? 0 : r;
+				g = g < 0 ? 0 : g;
+				b = b < 0 ? 0 : b;
+				
+				FillColor = new Color(r, g, b);
+			}
+		}
 		//TODO : récupération couleur stroke ,couleur fill,stroke ...
 
-		return objGeo.AppliqueAnimation(at, null, null, null);//TODO : null parceque pas encore implémenté les autre animations
+		return objGeo.AppliqueAnimation(at, FillColor, colorStroke, stroke);//TODO : null parceque pas encore implémenté les autre animations
 	}
 
 	

@@ -40,7 +40,7 @@ public class Rotation extends Animation{
 		//si pu est négatif c'est que notre temps courant n'est pas bon
 		if (pu <0.0)
 			return null;
-		a_courrant = this.angle * pu;//TODO : plustard utiliser les easing functions( ajouter : *easing)
+		a_courrant = this.angle * pu; //TODO : plustard utiliser les easing functions( ajouter : *easing)
 		//System.out.println("angle vaux ="+Math.round(Math.toDegrees(a_courrant))+"°  \tid="+getId());//info dev pour le teste
 		AffineTransform at = new AffineTransform();
 		at.setToRotation(a_courrant,centre.x,centre.y);
@@ -70,6 +70,24 @@ public class Rotation extends Animation{
 
 	public void setCentre(Point2D.Double centre) {
 		this.centre = centre;
+	}
+
+	@Override
+	public Float getWidthStroke(double t_courant) {
+		// TODO Stub de la méthode généré automatiquement
+		return null;
+	}
+
+	@Override
+	public int[] getStrokeColor(Double t_courant) {
+		// TODO Stub de la méthode généré automatiquement
+		return null;
+	}
+
+	@Override
+	public int[] getFillColor(Double t_courant) {
+		// TODO Stub de la méthode généré automatiquement
+		return null;
 	}
 	
 
@@ -156,29 +174,46 @@ class testeRotation{
 		rect.setFillColor(Color.cyan);
 		
 		CompositeAnimation ca3 = new CompositeAnimation(0., 200., 0);
-		Rotation rr1 = new Rotation(0., 100., 0, Math.toRadians(-150),rect.getCentre());
-		//Rotation rr2 = new Rotation(75., 200., 0, Math.toRadians(+100),rect.getCentre());
-		Rotation rr2 = new Rotation(150., 250., 0, Math.toRadians(+100),rect.getCentre());
+
+		Rotation rr1 = new Rotation(0., 125., 0, Math.toRadians(-120),rect.getCentre());
+		Rotation rr2 = new Rotation(135., 150., 0, Math.toRadians(+100),rect.getCentre());
+		Rotation rr3 = new Rotation(160., 200., 0, Math.toRadians(-20),rect.getCentre());
+		StrokeWidth swr1 = new StrokeWidth(0., 125., 0, 80);
+		StrokeWidth swr2 = new StrokeWidth(125., 200., 0, -70);
+		StrokeColor scr1 = new StrokeColor(10., 50., 0, 255, -255, -255);
+
 		ca3.add(rr1);
-		ca3.add(rr2);	
+		ca3.add(rr2);
+		ca3.add(rr3);
+		ca3.add(swr1);
+		ca3.add(swr2);
+		ca3.add(scr1);
 		gest.ajouterComportement(rect, ca3);
 		
 		//ajout de segment :
-		SegmentDroite seg1 = new SegmentDroite("une Droite",new Point2D.Double(150,100),new Point2D.Double(250,100));
+		SegmentDroite seg1 = new SegmentDroite(new Point2D.Double(150,100),new Point2D.Double(250,100));
 		Rotation rs1 = new Rotation(rr1);
 		rs1.setCentre(seg1.getCentre());//repositionner le centre de rotation
 		gest.ajouterComportement(seg1,rs1);
 		
-		SegmentDroite seg2 = new SegmentDroite("une Droite",new Point2D.Double(10,100),new Point2D.Double(110,100));
+		SegmentDroite seg2 = new SegmentDroite(new Point2D.Double(10,100),new Point2D.Double(110,100));
 		Rotation rs2 = new Rotation(rr2);
 		rs2.setCentre(seg2.getCentre());//repositionner le centre de rotation
-		gest.ajouterComportement(seg2,rs2);
+		//gest.ajouterComportement(seg2,rs2);
+		
+		CompositeAnimation ca4 = new CompositeAnimation(0., 200., 0);
+		StrokeWidth sw = new StrokeWidth(0., 125., 0, 50);
+		StrokeWidth sw2 = new StrokeWidth(75., 200., 0, -60);
+		ca4.add(sw);
+		ca4.add(sw2);
+		ca4.add(rs2);
+		gest.ajouterComportement(seg2, ca4);
 		
 		for(int j=0;j<10;j++)
 		{
 			for(double i=0.;i<500.;i+=5.){
 				gest.dessinerToile(i);
-				rr2.AngleInfo();
+				//rr2.AngleInfo();
 				
 				try {
 					//Thread.sleep((long) (1000));
@@ -186,6 +221,13 @@ class testeRotation{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+			}
+			System.out.println("fin Boucle 1");
+			try {
+				Thread.sleep((long) (5000));
+			} catch (InterruptedException e) {
+				// TODO Bloc catch généré automatiquement
+				e.printStackTrace();
 			}
 		}
 		

@@ -4,8 +4,8 @@ import java.awt.geom.Point2D;
 
 public class Carre extends Rectangle {
 
-	public Carre(String nom, Point2D.Double centre, double width) {
-		super(nom, centre, width, width);
+	public Carre(Point2D.Double centre, double width) {
+		super("Carre", centre, width, width);
 	}
 	
 	public Carre(Carre c) {

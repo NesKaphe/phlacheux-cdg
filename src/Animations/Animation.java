@@ -14,6 +14,7 @@ public abstract class Animation {
 	private Double t_debut;
 	private Double t_fin;
 	private int easing;//TODO : pour l'instant c'est un int plus tard on fera une vrai classe
+	//---------------------trans : obsolète ---------------------------------------------
 	private AffineTransform trans;//sera la mémoire de la position de l'objet (seule une racine peux le modifier)
 	
 	public Animation(Double t_debut,Double t_fin,int easing,String type) {
@@ -41,6 +42,33 @@ public abstract class Animation {
 	public AffineTransform getAffineTransform(double t_courant){
 		return null;//null par défaut
 	}
+	
+	/**
+	 * Float getWidthStroke(Double t_courant) :
+	 * -----------------------------------------------------
+	 * @param t_courant le temps courant demandé pour l'animation
+	 * @return un float representant une epaisseur de trait a incrementer et null
+	 * si t_courant n'est pas dans l'intervalle de l'animation
+	 */
+	public abstract Float getWidthStroke(double t_courant);
+	
+	/**
+	 * Color getStrokeColor(Double t_courant) :
+	 * -----------------------------------------------------
+	 * @param t_courant
+	 * @return un tableau contenant les valeurs RGB a incrementer à la forme geometrique
+	 * et null si t_courant n'est pas dans l'intervalle de l'animation
+	 */
+	public abstract int[] getStrokeColor(Double t_courant);
+	
+	/**
+	 * Color getFillColor(Double t_courant) :
+	 * -----------------------------------------------------
+	 * @param t_courant
+	 * @return un tableau contenant les valeurs RGB a incrementer à la forme geometrique
+	 * et null si t_courant n'est pas dans l'intervalle de l'animation
+	 */
+	public abstract int[] getFillColor(Double t_courant);
 	
 	/**
 	 * boolean tmpOk(Double tmp):
@@ -157,6 +185,7 @@ public abstract class Animation {
 		else
 			return this.parent.getTrans();
 	}
+	
 
 	/**
 	 * On ne peux changer trans (AffineTransform)
@@ -253,8 +282,12 @@ class CompositeAnimation extends Animation{
 	public AffineTransform getAffineTransform(double t_courant) {
 		//si le temps demandé n'est pas dans notre intervalle 
 		//retourne null imédiatement
+		/*
 		if(!tmpOk(t_courant))
 			return getTrans();
+		*/
+		if(t_courant < this.getT_debut())
+			return null;
 		
 		AffineTransform at_retour = new AffineTransform();//va contenir les transformations
 		//parcourir la liste des enfants pour connaitre toute leurs transformations :
@@ -269,10 +302,107 @@ class CompositeAnimation extends Animation{
 				
 				at_retour = a.getAffineTransform(a.getT_fin());
 			}
+			else if(a.getT_fin() < t_courant){
+				AffineTransform atmp = a.getAffineTransform(a.getT_fin());
+				if (atmp != null)
+					at_retour.concatenate(atmp);
+			}
 		}
 		
 		//setTrans(at_retour);
 		return at_retour;
 	}
-}
+	
+	public Float getWidthStroke(double t_courant) {
+		if(t_courant < this.getT_debut())
+			return null;
+		
+		float strokeWidthTotal = 0;
+		//parcourir la liste des enfants pour connaitre toute leurs transformations :
+		for(Animation a : this.ChildAnimations) {
+			//si notre enfant est conserné :
+			if (a.tmpOk(t_courant)){
+				Float btmp = a.getWidthStroke(t_courant);
+				if(btmp != null)
+					strokeWidthTotal += btmp;
+			}
+			else if(a.getT_fin() < t_courant){
+				Float btmp = a.getWidthStroke(a.getT_fin());
+				if(btmp != null)
+					strokeWidthTotal += btmp;
+			}
+		}
+		
+		return strokeWidthTotal;
+	}
 
+
+	@Override
+	public int[] getStrokeColor(Double t_courant) {
+		if(t_courant < this.getT_debut())
+			return null;
+		
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		//parcourir la liste des enfants pour connaitre toute leurs transformations :
+		for(Animation a : this.ChildAnimations) {
+			//si notre enfant est conserné :
+			int[] ctmp = null;
+			if (a.tmpOk(t_courant)){
+				ctmp = a.getStrokeColor(t_courant);
+			}
+			else if(a.getT_fin() < t_courant){
+				ctmp = a.getStrokeColor(a.getT_fin());
+			}
+
+			if(ctmp != null) {
+				r += ctmp[0];
+				g += ctmp[1];
+				b += ctmp[2];
+			}
+		}
+		
+		int[] c = new int[3];
+		c[0] = r;
+		c[1] = g;
+		c[2] = b;
+		
+		return c;
+	}
+
+
+	@Override
+	public int[] getFillColor(Double t_courant) {
+		if(t_courant < this.getT_debut())
+			return null;
+		
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		//parcourir la liste des enfants pour connaitre toute leurs transformations :
+		for(Animation a : this.ChildAnimations) {
+			//si notre enfant est conserné :
+			int[] ctmp = null;
+			if (a.tmpOk(t_courant)){
+				ctmp = a.getFillColor(t_courant);
+			}
+			else if(a.getT_fin() < t_courant){
+				ctmp = a.getFillColor(a.getT_fin());
+			}
+			
+			if(ctmp != null) {
+				r += ctmp[0];
+				g += ctmp[1];
+				b += ctmp[2];
+			}
+		}
+		
+		int[] c = new int[3];
+		c[0] = r;
+		c[1] = g;
+		c[2] = b;
+		
+		return c;
+	}
+}
