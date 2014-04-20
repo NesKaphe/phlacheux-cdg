@@ -302,11 +302,6 @@ class CompositeAnimation extends Animation{
 				
 				at_retour = a.getAffineTransform(a.getT_fin());
 			}
-			else if(a.getT_fin() < t_courant){
-				AffineTransform atmp = a.getAffineTransform(a.getT_fin());
-				if (atmp != null)
-					at_retour.concatenate(atmp);
-			}
 		}
 		
 		//setTrans(at_retour);
