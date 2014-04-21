@@ -84,7 +84,7 @@ public class Edition extends JFrame {
     	JMenuItem mi_Cercle = new JMenuItem("Cercle");
     	JMenuItem mi_Triangle = new JMenuItem("Triangle");
     	JMenuItem mi_Rectangle = new JMenuItem("Rectangle");
-    	JMenuItem mi_Carre = new JMenuItem("Carre");
+    	JMenuItem mi_Carre = new JMenuItem("Carré");
     	JMenuItem mi_Ligne = new JMenuItem("Ligne");
     	menu_C.add(mi_Cercle);
     	menu_C.add(mi_Triangle);
@@ -172,35 +172,35 @@ public class Edition extends JFrame {
     	// le champ quitter du menu ferme tout
     	mi_Cercle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Cercle", mouseToileListener);
+    			alarm_configuration_objet("Cercle");
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Triangle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Triangle", mouseToileListener);
+    			alarm_configuration_objet("Triangle");
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Carre.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Carre", mouseToileListener);
+    			alarm_configuration_objet("Carre");
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Rectangle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Rectangle", mouseToileListener);
+    			alarm_configuration_objet("Rectangle");
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Ligne.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Ligne", mouseToileListener);
+    			alarm_configuration_objet("Ligne");
     		}
 	    });
     	
@@ -214,12 +214,13 @@ public class Edition extends JFrame {
 		return this.gestionnaire;
 	}
 	
-	public void alarm_configuration_objet(String type, MouseMotionToileListener motion){
+	public void alarm_configuration_objet(String type){
 		//JButton b = (JButton) e.getSource();
 		//System.out.println(b.getText());
 		JColorChooser StrokeChooser = new JColorChooser();
 		JColorChooser FillChooser = new JColorChooser();
 		JTextField Epaisseur = new JTextField();
+		Epaisseur.setText("1");
 		
 		for(final AbstractColorChooserPanel accp : StrokeChooser.getChooserPanels()) {
 			if(!accp.getDisplayName().equals("RVB")) {
