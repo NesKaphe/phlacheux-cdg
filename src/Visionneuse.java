@@ -25,18 +25,32 @@ public class Visionneuse implements Runnable {
 		this.toile = new Toile(new Dimension(300,300));
 		this.toile.setBackground(Color.red);
 		
-		// on crée un menuBar static avec juste un bouton pour quitter et recharger la page
+		// on crée un menuBar 
 		menuBar = new JMenuBar();
-		JMenu menu = new JMenu("Fichier");
+		
+		// menu fichier
+		JMenu menu_F = new JMenu("Fichier");
 		JMenuItem mi_new = new JMenuItem("Nouvelle Toile");
 		JMenuItem mi_refresh = new JMenuItem("Rafraichir");
 		JMenuItem mi_add_object = new JMenuItem("Ajouter un forme");
     	JMenuItem mi_exit = new JMenuItem("Quitter");
-    	menu.add(mi_new);
-    	menu.add(mi_refresh);
-    	menu.add(mi_add_object);
-    	menu.add(mi_exit);
-    	menuBar.add(menu);
+    	menu_F.add(mi_new);
+    	menu_F.add(mi_refresh);
+    	menu_F.add(mi_add_object);
+    	menu_F.add(mi_exit);
+    	menuBar.add(menu_F);
+    	
+    	// menu création d'objet
+    	JMenu menu_C = new JMenu("Création d'objet");
+		JMenuItem mi_Cercle = new JMenuItem("Cercle");
+		JMenuItem mi_Triangle = new JMenuItem("Triangle");
+		JMenuItem mi_Rectangle = new JMenuItem("Rectangle");
+    	JMenuItem mi_Ligne = new JMenuItem("Ligne");
+    	menu_C.add(mi_Cercle);
+    	menu_C.add(mi_Triangle);
+    	menu_C.add(mi_Rectangle);
+    	menu_C.add(mi_Ligne);
+    	menuBar.add(menu_C);
     	
     	//Les menu pouvant se déplacer
     	Container c = frame.getContentPane();
