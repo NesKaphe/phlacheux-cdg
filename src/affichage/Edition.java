@@ -52,14 +52,14 @@ public class Edition extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//Creation de la toile
-		this.toile = new Toile(new Dimension(Edition.widthToile, Edition.heightToile));
+		this.toile = new Toile(new Dimension(Edition.widthToile, Edition.heightToile), this);
 		this.toile.setBackground(Color.white);
 		this.toile.setOpaque(true);
 		
 		//Listeners de la toile
-		mouseToileListener = new MouseMotionToileListener(this);
-		MouseToileListener mouseClickToileListener = new MouseToileListener(this, mouseToileListener);
-		this.toile.addMouseListener(mouseClickToileListener);
+		//mouseToileListener = new MouseMotionToileListener(this);
+		//MouseToileListener mouseClickToileListener = new MouseToileListener(this, mouseToileListener);
+		//this.toile.addMouseListener(mouseClickToileListener);
 		
 		//Creation du gestionnaire d'animation
 		this.gestionnaire = new GestionAnimation(this.toile);
@@ -259,7 +259,8 @@ public class Edition extends JFrame {
 					System.out.println("Pas un entier");
 				}
 				//Ajouter un mouse movement listener a la toile avec un cercle a dessiner
-				this.toile.addMouseMotionListener(motion);
+				this.toile.modeListener();
+				//this.toile.addMouseMotionListener(motion);
 			} 
 			else {
 			    System.out.println("Annulation");
@@ -293,7 +294,8 @@ public class Edition extends JFrame {
 					System.out.println("Pas un entier");
 				}
 				//Ajouter un mouse movement listener a la toile avec un rectangle a dessiner
-				this.toile.addMouseMotionListener(motion);
+				this.toile.modeListener();
+				//this.toile.addMouseMotionListener(motion);
 			} 
 			else {
 			    System.out.println("Annulation");
@@ -324,7 +326,8 @@ public class Edition extends JFrame {
 					System.out.println("Pas un entier");
 				}
 				//Ajouter un mouse movement listener a la toile avec un carré a dessiner
-				this.toile.addMouseMotionListener(motion);
+				this.toile.modeListener();
+				//this.toile.addMouseMotionListener(motion);
 			} 
 			else {
 			    System.out.println("Annulation");
@@ -355,7 +358,8 @@ public class Edition extends JFrame {
 					System.out.println("Pas un entier");
 				}
 				//Ajouter un mouse movement listener a la toile avec un triangle a dessiner
-				this.toile.addMouseMotionListener(motion);
+				this.toile.modeListener();
+				//this.toile.addMouseMotionListener(motion);
 			} 
 			else {
 			    System.out.println("Annulation");

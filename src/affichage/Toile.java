@@ -7,7 +7,10 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import formes.ObjetGeometrique;
 
@@ -25,37 +28,74 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	//Objet temporaire en cours de creation (= null si aucun objet n'est en train d'etre créer)
 	private ObjetGeometrique objTemporaire;
 	
+	private Edition parent;
+	
+	private boolean modeListener;
+	
 	/**
 	 * @param dim : La dimension de la toile
 	 */
-	public Toile(Dimension dim) {
+	public Toile(Dimension dim, Edition parent) {
 		super();
 		this.setDoubleBuffered(true);
 		this.setPreferredSize(dim);
 		this.setSize(dim);
 		this.initObjTemporaire();
+		this.parent = parent;
+		this.modeListener = false;
+		this.addMouseListener(this);
 	}
 	
 	public void paintComponent(Graphics g) {
+		if(this.backBuffer == null)
+			this.initBuffer();
+		
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage((BufferedImage)this.backBuffer, null, 0, 0);
 	}
 	
 
+	public void modeListener() {
+		if(!this.modeListener) {
+			this.modeListener = true;
+			this.addMouseMotionListener(this);
+		}
+	}
+	
 	public void mousePressed(MouseEvent m) {
-    	ox = m.getX();
+    	/*ox = m.getX();
     	oy = m.getY();
-    	addMouseMotionListener((MouseMotionListener) this);
+    	addMouseMotionListener((MouseMotionListener) this);*/
     }
     
     public void mouseReleased(MouseEvent m) {
-    	removeMouseMotionListener((MouseMotionListener) this);
+    	if(this.modeListener) {
+	    	ObjetGeometrique geo = this.getObjGeometrique();
+			this.parent.getGestionAnimation().ajouterComportement(geo, null);
+			
+			this.initObjTemporaire();
+			removeMouseMotionListener((MouseMotionListener) this);
+			this.modeListener = false;
+		}
     }
 	public void mouseEntered(MouseEvent m) {}
     public void mouseExited(MouseEvent m) {}
     public void mouseClicked(MouseEvent m) {}
     public void mouseDragged(MouseEvent e) {}
-    public void mouseMoved(MouseEvent e) { }
+    
+    public void mouseMoved(MouseEvent e) {
+    	ox = e.getX();
+    	oy = e.getY();
+    	
+    	ObjetGeometrique geo = this.getObjGeometrique();
+		
+		Point2D.Double centre = new Point2D.Double(ox,oy);
+		geo.setCentre(centre);
+		
+		System.out.println(this.getObjGeometrique());
+		this.parent.getGestionAnimation().dessinerToile(0.);
+    	
+    }
 
     public void setObjTemporaire(ObjetGeometrique geo) {
     	this.objTemporaire = geo;
