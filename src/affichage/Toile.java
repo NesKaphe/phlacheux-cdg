@@ -38,7 +38,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		super();
 		this.setDoubleBuffered(true);
 		this.setPreferredSize(dim);
-		this.setSize(dim);
+		this.setSize(dim);//TODO : probablement remplacer par setMinSize 
 		this.initObjTemporaire();
 	}
 	
