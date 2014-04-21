@@ -68,7 +68,10 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     	addMouseMotionListener((MouseMotionListener) this);*/
     }
     
-    public void mouseReleased(MouseEvent m) {
+    public void mouseReleased(MouseEvent m) {}
+	public void mouseEntered(MouseEvent m) {}
+    public void mouseExited(MouseEvent m) {}
+    public void mouseClicked(MouseEvent m) {
     	if(this.modeListener) {
 	    	ObjetGeometrique geo = this.getObjGeometrique();
 			this.parent.getGestionAnimation().ajouterComportement(geo, null);
@@ -78,9 +81,6 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 			this.modeListener = false;
 		}
     }
-	public void mouseEntered(MouseEvent m) {}
-    public void mouseExited(MouseEvent m) {}
-    public void mouseClicked(MouseEvent m) {}
     public void mouseDragged(MouseEvent e) {}
     
     public void mouseMoved(MouseEvent e) {
