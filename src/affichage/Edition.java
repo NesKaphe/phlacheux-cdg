@@ -99,48 +99,13 @@ public class Edition extends JFrame {
     	menu_object_add.setFloatable(true);
     	menu_object_add.setRollover(true);
     	menu_object_add.setName("Add object");
+    	menu_object_add.setVisible(false);
     	JPanel list_form= new JPanel();
     	// Bouton objectGeometrique Cercle
     	JButton cercle = new JButton("Cercle");
 	    cercle.setToolTipText("Aide pour "+cercle.getText());
 	    list_form.add(cercle);
-	    // Bouton objectGeometrique Triangle
-    	JButton triangle = new JButton("Triangle");
-    	triangle.setToolTipText("Aide pour "+triangle.getText());
-    	list_form.add(triangle);
-	    // Bouton objectGeometrique Rectangle
-    	JButton rectangle = new JButton("Rectangle");
-    	rectangle.setToolTipText("Aide pour "+rectangle.getText());
-    	list_form.add(rectangle);
-	    JButton ligne = new JButton("Ligne");
-    	ligne.setToolTipText("Aide pour "+ligne.getText());
-    	list_form.add(ligne);
-    	// Bouton objectGeometrique Carre
-    	JButton carre = new JButton("Carré");
-	    list_form.add(carre);
-	    // Bouton objectGeometrique Cercle
-    	JButton b5= new JButton("b5");
-    	list_form.add(b5);
-	    // Bouton objectGeometrique Cercle
-    	JButton b6 = new JButton("b6");
-    	list_form.add(b6);
-	    JButton b7 = new JButton("b7");
-    	list_form.add(b7);
     	menu_object_add.add(list_form);
-    	
-    	//Ajout des listeners de bouttons de forme
-    	cercle.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	triangle.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	rectangle.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	ligne.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	carre.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	
-    	//Ajout des listeners de bouttons de forme
-    	mi_Cercle.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	mi_Triangle.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	mi_Rectangle.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	mi_Ligne.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
-    	mi_Carre.addMouseListener(new BoutonFormeListener(this.toile, mouseToileListener));
     	
     	this.getContentPane().setLayout(new BorderLayout());
     	this.add(toile, BorderLayout.CENTER);
