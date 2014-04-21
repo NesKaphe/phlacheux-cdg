@@ -10,7 +10,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import formes.ObjetGeometrique;
 
@@ -35,19 +34,35 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	/**
 	 * @param dim : La dimension de la toile
 	 */
-	public Toile(Dimension dim, Edition parent) {
+	public Toile(Dimension dim) {
 		super();
 		this.setDoubleBuffered(true);
 		this.setPreferredSize(dim);
 		this.setSize(dim);
 		this.initObjTemporaire();
+	}
+	
+	public Toile(Dimension dim, Edition parent) {
+		this(dim);
 		this.parent = parent;
 		this.modeListener = false;
+		this.addMouseListener(this);
 	}
 	
 	public void paintComponent(Graphics g) {
+		//Le buffer n'existe pas encore au moment du dessin
 		if(this.backBuffer == null)
 			this.initBuffer();
+		
+		//La dimension de la toile a changé, il faut changer le buffer
+		if(this.backBuffer.getWidth(null) != this.getWidth() || this.backBuffer.getHeight(null) != this.getHeight()) {
+			Image newBuffer = this.createImage(this.backBuffer.getWidth(null), this.backBuffer.getHeight(null));
+			Image tmp = this.backBuffer;
+			this.backBuffer = newBuffer;
+			this.initBuffer();
+			Graphics2D g2tmp = (Graphics2D) this.backBuffer.getGraphics();
+			g2tmp.drawImage((BufferedImage)tmp, null, 0, 0);
+		}
 		
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage((BufferedImage)this.backBuffer, null, 0, 0);
@@ -57,7 +72,6 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	public void modeListener() {
 		if(!this.modeListener) {
 			this.modeListener = true;
-			this.addMouseListener(this);
 			this.addMouseMotionListener(this);
 		}
 	}
@@ -74,12 +88,23 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     public void mouseClicked(MouseEvent m) {
     	if(this.modeListener) {
 	    	ObjetGeometrique geo = this.getObjGeometrique();
+	    	//Voir si c'est une ligne ici et faire un truc
+	    		//...
+	    	//Sinon c'est une forme qui se place qu'avec un clic
 			this.parent.getGestionAnimation().ajouterComportement(geo, null);
 			
 			this.initObjTemporaire();
 			removeMouseMotionListener((MouseMotionListener) this);
 			this.modeListener = false;
 		}
+    	else {
+    		//Si on est pas en mode listener, le clic signifie selection
+    		//On va demander au gestion animation si un objet contient les coordonnées du clic
+    		//TODO: recup le temps courant
+    		//this.parent.getGestionAnimation().getObjectAt(m.getX(),m.getY(),0.);
+    	}
+    		//On va demander au gestion animation si un objet contient les coordonnées du clic
+    			//Si oui, on selectionne dans la liste de david la ligne correspondante
     }
     public void mouseDragged(MouseEvent e) {}
     
@@ -94,7 +119,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 			geo.setCentre(centre);
 			
 			System.out.println(this.getObjGeometrique());
-			this.parent.getGestionAnimation().dessinerToile(0.);
+			this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
     	}
     }
 
@@ -125,10 +150,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	
 	public void initBuffer() {
 		
-		if(this.backBuffer == null) {
-			this.backBuffer = this.createImage(this.getWidth(), this.getHeight());
-			this.initBuffer();
-		}
+		this.backBuffer = this.createImage(this.getWidth(), this.getHeight());
 		
 		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
 		
