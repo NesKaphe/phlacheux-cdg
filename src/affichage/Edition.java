@@ -172,35 +172,35 @@ public class Edition extends JFrame {
     	// le champ quitter du menu ferme tout
     	mi_Cercle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Cercle", mouseToileListener);
+    			alarm_configuration_objet("Cercle");
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Triangle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Triangle", mouseToileListener);
+    			alarm_configuration_objet("Triangle");
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Carre.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Carre", mouseToileListener);
+    			alarm_configuration_objet("Carre");
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Rectangle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Rectangle", mouseToileListener);
+    			alarm_configuration_objet("Rectangle");
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Ligne.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Ligne", mouseToileListener);
+    			alarm_configuration_objet("Ligne");
     		}
 	    });
     	
@@ -214,9 +214,7 @@ public class Edition extends JFrame {
 		return this.gestionnaire;
 	}
 	
-	public void alarm_configuration_objet(String type, MouseMotionToileListener motion){
-		//JButton b = (JButton) e.getSource();
-		//System.out.println(b.getText());
+	public void alarm_configuration_objet(String type){
 		JColorChooser StrokeChooser = new JColorChooser();
 		JColorChooser FillChooser = new JColorChooser();
 		JTextField Epaisseur = new JTextField();
@@ -260,7 +258,6 @@ public class Edition extends JFrame {
 				}
 				//Ajouter un mouse movement listener a la toile avec un cercle a dessiner
 				this.toile.modeListener();
-				//this.toile.addMouseMotionListener(motion);
 			} 
 			else {
 			    System.out.println("Annulation");
@@ -295,7 +292,6 @@ public class Edition extends JFrame {
 				}
 				//Ajouter un mouse movement listener a la toile avec un rectangle a dessiner
 				this.toile.modeListener();
-				//this.toile.addMouseMotionListener(motion);
 			} 
 			else {
 			    System.out.println("Annulation");
@@ -303,7 +299,7 @@ public class Edition extends JFrame {
 			
 			break;
 			
-		case "Carré":
+		case "Carre":
 			JTextField CoteCarre = new JTextField();
 			Object[] messageCarre = {
 				"Coté:", CoteCarre,
@@ -359,7 +355,6 @@ public class Edition extends JFrame {
 				}
 				//Ajouter un mouse movement listener a la toile avec un triangle a dessiner
 				this.toile.modeListener();
-				//this.toile.addMouseMotionListener(motion);
 			} 
 			else {
 			    System.out.println("Annulation");

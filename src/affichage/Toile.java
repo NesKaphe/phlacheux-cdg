@@ -43,7 +43,6 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		this.initObjTemporaire();
 		this.parent = parent;
 		this.modeListener = false;
-		this.addMouseListener(this);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -58,6 +57,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	public void modeListener() {
 		if(!this.modeListener) {
 			this.modeListener = true;
+			this.addMouseListener(this);
 			this.addMouseMotionListener(this);
 		}
 	}
@@ -84,17 +84,18 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     public void mouseDragged(MouseEvent e) {}
     
     public void mouseMoved(MouseEvent e) {
-    	ox = e.getX();
-    	oy = e.getY();
-    	
-    	ObjetGeometrique geo = this.getObjGeometrique();
-		
-		Point2D.Double centre = new Point2D.Double(ox,oy);
-		geo.setCentre(centre);
-		
-		System.out.println(this.getObjGeometrique());
-		this.parent.getGestionAnimation().dessinerToile(0.);
-    	
+    	if (this.modeListener){
+    		ox = e.getX();
+    		oy = e.getY();
+    		
+    		ObjetGeometrique geo = this.getObjGeometrique();
+			
+			Point2D.Double centre = new Point2D.Double(ox,oy);
+			geo.setCentre(centre);
+			
+			System.out.println(this.getObjGeometrique());
+			this.parent.getGestionAnimation().dessinerToile(0.);
+    	}
     }
 
     public void setObjTemporaire(ObjetGeometrique geo) {
