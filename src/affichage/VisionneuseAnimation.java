@@ -23,6 +23,7 @@ import Animations.Comportement;
 import Animations.CompositeAnimation;
 import Animations.GestionAnimation;
 import Animations.Rotation;
+import Animations.Translation;
 
 /**
  * Visionneuse d'animation (il faut l'ajouter au sud) f.getContentPane().add("VisionneuseAnimation",BorderLayout.SOUTH);
@@ -197,11 +198,10 @@ class BlockAnimation extends JPanel{
 	 * @return
 	 */
 	public void insertionListe(ArrayList<Animation> list_a,int niveau){
-		System.out.println("DEBUG ni = "+niveau);
 		ArrayList<Animation> notInsertList = new ArrayList<Animation>();//liste des animations qui n'ont pas pus être inséré
 		
 		for (Animation a : list_a){
-			
+			System.out.println("DEBUG - insertionListe list_a = "+list_a.size());
 			//création du niveau si il n'existe pas :
 			try{
 				lla.get(niveau);
@@ -212,19 +212,20 @@ class BlockAnimation extends JPanel{
 			if(detecteColision(lla.get(niveau), a)){
 				
 				System.out.println("DEBUG - detecteColision = true");
+				notInsertList.add(a);
 
-				lla.get(niveau).add(a);
 			}
 			else{
+				
 				System.out.println("DEBUG - detecteColision = false");
-				notInsertList.add(a);
+				lla.get(niveau).add(a);
 			}
 				
 		}
 		
 		if (notInsertList.size() > 0){
-			System.out.println("DEBUG notInsertList = "+notInsertList);
-			insertionListe(notInsertList, niveau++);
+			//System.out.println("DEBUG notInsertList = "+notInsertList);
+			insertionListe(notInsertList, ++niveau);
 		}
 	}
 	
@@ -234,20 +235,20 @@ class BlockAnimation extends JPanel{
 	 * -----------------------------------------------------------------
 	 * retourne vrai si il est possible d'ajouter "a" dans "list_a" sans 
 	 * collision temporelle avec celle déjà présentent dans la "list_a".
-	 * retourne faux si impossible.
+	 * retourne vrai si il y a une colision 
 	 * @param list_a
 	 * @param a
 	 * @return
 	 */
 	public boolean detecteColision(ArrayList<Animation> list_a,Animation a){
-		if(list_a.size() == 0) return true;
+		if(list_a.size() == 0) return false;
 		
 		for (Animation sa : list_a){
-			if((a.getT_debut()<sa.getT_fin()) || (a.getT_fin()>sa.getT_debut())){
-				return false;
+			if( !((a.getT_fin()<sa.getT_debut()) || (a.getT_debut()>sa.getT_fin()))  ){
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	
@@ -260,9 +261,16 @@ class BlockAnimation extends JPanel{
 			int i = 1;
 			for(ArrayList<Animation> list_a : lla){
 				for (Animation a : list_a){
+					//donner une couleur au rectangle :
+					if(a.getType().equals("rotation"))
+						g2.setColor(Color.blue);
+					if(a.getType().equals("translation"))
+						g2.setColor(Color.red);
+					
 					//dessine rectangle à la bonne position:
-					g2.setColor(Color.blue);//donner une couleur au rectangle
 					g2.fill(new Rectangle2D.Double(a.getT_debut(), i*(levelSize-10), a.getT_fin()-a.getT_debut(), 15));
+					g2.setColor(Color.yellow);
+					g2.drawString(a.getType(),Math.round(a.getT_debut()), i*(levelSize));
 
 				}
 				i++;
@@ -301,9 +309,27 @@ class testeVisionAnim{
 		rect.setStrokeColor(Color.green);
 		rect.setFillColor(Color.cyan);
 		Rotation rr1 = new Rotation(200., 500., 0, Math.toRadians(-120),rect.getCentre());
-		GA.ajouterComportement(rect, rr1);
+		Rotation rr2 = new Rotation(100., 300., 0, Math.toRadians(+20),rect.getCentre());
+		
+		
+		//création des points
+		Point2D.Double p1 = new Point2D.Double(30,30);
+		Point2D.Double p2 = new Point2D.Double(260,160);
+		ArrayList<Point2D.Double> LP = new ArrayList<Point2D.Double>();
+		LP.add(p1);
+		LP.add(p2);
+
+		Translation tr = new Translation(20., 150., 0, LP);
+		
+		CompositeAnimation ca = new CompositeAnimation(0., 0., 0);
+		ca.add(rr1);
+		ca.add(rr2);
+		ca.add(tr);
+		GA.ajouterComportement(rect, ca);
+
 		GA.dessinerToile(0.);
 		System.out.println("GA.list ="+GA.getListComportements().size());
+		System.out.println("GA.getListComportements() =\n\n"+GA.getListComportements()+"\n");
 		vi.dessineAnimation();
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
