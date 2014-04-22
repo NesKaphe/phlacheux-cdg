@@ -228,7 +228,9 @@ class testeVisionAnim{
 		
 		f.getContentPane().add(t,BorderLayout.CENTER);
 		f.getContentPane().add(vi,BorderLayout.SOUTH);
+
 		f.pack();//ATTENTION à faire avant de faire GA.dessineToile() sinon bug (on sais pas trop pourquoi)!!!
+
 		
 		//dessiner un rectangle dans le GA :
 		Rectangle rect = new Rectangle("monrectangle", new Point2D.Double(100,200), 70, 40);

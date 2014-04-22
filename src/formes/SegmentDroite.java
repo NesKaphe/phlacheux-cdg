@@ -28,7 +28,7 @@ public class SegmentDroite extends ObjetGeometrique {
 		return new SegmentDroite(this);
 	}
 
-	private void setPoint(Point2D.Double p, int i) {
+	public void setPoint(Point2D.Double p, int i) {
 		switch(i) {
 		case 1:
 			this.p1 = p;
