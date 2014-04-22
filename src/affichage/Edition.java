@@ -26,9 +26,7 @@ import formes.Rectangle;
 import formes.Triangle;
 
 import Animations.GestionAnimation;
-import Listeners.BoutonFormeListener;
-import Listeners.MouseMotionToileListener;
-import Listeners.MouseToileListener;
+
 
 public class Edition extends JFrame {
 
@@ -44,7 +42,6 @@ public class Edition extends JFrame {
 	private JMenuBar menuBarEditionMode; //le menu du mode edition
 	private JMenuBar menuBarVisionneuseMode; //le menu du mode visionneuse
 	private JToolBar menu_object_add;
-	private MouseMotionToileListener mouseToileListener;
 	
 	public Edition() {
 		super("Edition");

@@ -133,7 +133,7 @@ class testeRotation{
 		System.out.println("\n\n\nconsole :\n");
 		JFrame frame = new JFrame("Visionneuse");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Toile t = new Toile(new Dimension(300,300));
+		Toile t = new Toile(new Dimension(300,300),null);
 		frame.getContentPane().add(t);
 		frame.pack();
 		frame.setVisible(true);

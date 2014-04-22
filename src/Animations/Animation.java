@@ -9,7 +9,7 @@ public abstract class Animation {
 	//id de l'animation :
 	private static int cpt_id = 0;
 	private int id;
-	private String type;//type d'animation
+	private final String type;//type d'animation
 	protected Animation parent;//pour connaitre sont parent
 	private Double t_debut;
 	private Double t_fin;
@@ -179,6 +179,16 @@ public abstract class Animation {
 	public Double getT_fin() {
 		return t_fin;
 	}
+	
+	
+	
+	protected int getEasing() {
+		return easing;
+	}
+
+	protected void setEasing(int easing) {
+		this.easing = easing;
+	}
 
 	protected AffineTransform getTrans() {
 		if (this.parent == null){
@@ -250,157 +260,3 @@ public abstract class Animation {
 }
 
 
-class CompositeAnimation extends Animation{
-	
-	private ArrayList<Animation> ChildAnimations;//list des animations enfants
-	
-	
-	public CompositeAnimation(Double t_debut,Double t_fin,int easing){
-		super(t_debut,t_fin,easing,"composite");
-		this.ChildAnimations = new ArrayList<Animation>();
-		//par défaut notre parent est à null car nous ne somme relier à personne
-	}
-	
-	
-	public boolean add(Animation a){
-		//TODO : pour l'instant on ajoute sans discrimination à faire plus tard!!!
-		//TODO : PROBLEME :la version actuelle peux boucler add de soit même ou d'un parent a exclure
-		//TODO : solution faire une méthode isMyparent pour empècher qu'il y ait des boucles avec les parents
-		//TODO : tester isMyParent(a)
-		
-		//modifications de références pour l'enfant :
-		a.setParent(this);//modification du parent
-		a.setNullTrans();//comme "a" n'est plus racine on supprime l'utilisation de trans
-		//modification des temps du parent qui est calé sur le temps min et temps max de ses enfants:
-		this.ChangeTminTmax(a.getT_debut(), a.getT_fin());
-		
-		return this.ChildAnimations.add(a);
-	}
-	
-	public boolean remove(Animation a){
-		//TODO : éventuellement faire un message contenant tout ce qui à été supprimé
-		a.setParent(null);//on lui détruit sa référence sur le parent
-		return this.ChildAnimations.remove(a);
-	}
-
-
-	@Override
-	public AffineTransform getAffineTransform(double t_courant) {
-		//si le temps demandé n'est pas dans notre intervalle 
-		//retourne null imédiatement
-
-		if(t_courant < this.getT_debut())
-			return null;
-		
-		AffineTransform at_retour = new AffineTransform();//va contenir les transformations
-		//parcourir la liste des enfants pour connaitre toute leurs transformations :
-		for(Animation a : this.ChildAnimations){
-			//si notre enfant est conserné :
-			if (a.tmpOk(t_courant)){
-				AffineTransform atmp = a.getAffineTransform(t_courant);
-				if (atmp != null)
-					at_retour.concatenate(atmp);
-				
-			}else if(a.getT_fin() < t_courant){
-				
-				at_retour = a.getAffineTransform(a.getT_fin());
-			}
-		}
-		
-		//setTrans(at_retour);
-		return at_retour;
-	}
-	
-	public Float getWidthStroke(double t_courant) {
-		if(t_courant < this.getT_debut())
-			return null;
-		
-		float strokeWidthTotal = 0;
-		//parcourir la liste des enfants pour connaitre toute leurs transformations :
-		for(Animation a : this.ChildAnimations) {
-			//si notre enfant est conserné :
-			if (a.tmpOk(t_courant)){
-				Float btmp = a.getWidthStroke(t_courant);
-				if(btmp != null)
-					strokeWidthTotal += btmp;
-			}
-			else if(a.getT_fin() < t_courant){
-				Float btmp = a.getWidthStroke(a.getT_fin());
-				if(btmp != null)
-					strokeWidthTotal += btmp;
-			}
-		}
-		
-		return strokeWidthTotal;
-	}
-
-
-	@Override
-	public int[] getStrokeColor(Double t_courant) {
-		if(t_courant < this.getT_debut())
-			return null;
-		
-		int r = 0;
-		int g = 0;
-		int b = 0;
-		//parcourir la liste des enfants pour connaitre toute leurs transformations :
-		for(Animation a : this.ChildAnimations) {
-			//si notre enfant est conserné :
-			int[] ctmp = null;
-			if (a.tmpOk(t_courant)){
-				ctmp = a.getStrokeColor(t_courant);
-			}
-			else if(a.getT_fin() < t_courant){
-				ctmp = a.getStrokeColor(a.getT_fin());
-			}
-
-			if(ctmp != null) {
-				r += ctmp[0];
-				g += ctmp[1];
-				b += ctmp[2];
-			}
-		}
-		
-		int[] c = new int[3];
-		c[0] = r;
-		c[1] = g;
-		c[2] = b;
-		
-		return c;
-	}
-
-
-	@Override
-	public int[] getFillColor(Double t_courant) {
-		if(t_courant < this.getT_debut())
-			return null;
-		
-		int r = 0;
-		int g = 0;
-		int b = 0;
-		//parcourir la liste des enfants pour connaitre toute leurs transformations :
-		for(Animation a : this.ChildAnimations) {
-			//si notre enfant est conserné :
-			int[] ctmp = null;
-			if (a.tmpOk(t_courant)){
-				ctmp = a.getFillColor(t_courant);
-			}
-			else if(a.getT_fin() < t_courant){
-				ctmp = a.getFillColor(a.getT_fin());
-			}
-			
-			if(ctmp != null) {
-				r += ctmp[0];
-				g += ctmp[1];
-				b += ctmp[2];
-			}
-		}
-		
-		int[] c = new int[3];
-		c[0] = r;
-		c[1] = g;
-		c[2] = b;
-		
-		return c;
-	}
-}

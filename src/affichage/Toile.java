@@ -151,7 +151,6 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	public void initBuffer() {
 		
 		this.backBuffer = this.createImage(this.getWidth(), this.getHeight());
-		
 		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
 		
 		g.setColor(this.getBackground());
