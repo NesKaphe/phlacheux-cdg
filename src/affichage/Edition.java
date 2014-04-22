@@ -297,10 +297,10 @@ public class Edition extends JFrame {
 		return config_Epaisseur;
 	}
 	
-	public boolean alarmbox_action(ObjetGeometrique o,JPanel champ_configuration, String status){
+	public boolean alarmbox_action(ObjetGeometrique o,JPanel champ_configuration, String status, boolean isFill){
 		Object[] messageCercle = {
 			    "", champ_configuration,
-			    "Choix des couleur", this.affiche_Colorchooser()
+			    "Choix des couleur", this.affiche_Colorchooser(isFill)
 			};
 			
 			int optionCercle = JOptionPane.showConfirmDialog(null, messageCercle, status, JOptionPane.OK_CANCEL_OPTION);
@@ -346,7 +346,7 @@ public class Edition extends JFrame {
 			
 			double r = Double.parseDouble(Rayon.getText());
 			Cercle c = new Cercle(new Point2D.Double(0,0), r);
-			if (this.alarmbox_action(c, config_forme, "Création de cercle")){
+			if (this.alarmbox_action(c, config_forme, "Création de cercle", false)){
 				r = Double.parseDouble(Rayon.getText());
 				c.setRayon(r);
 			}
@@ -365,7 +365,7 @@ public class Edition extends JFrame {
 			double h = Double.parseDouble(HauteurRectangle.getText());
 			Rectangle rect = new Rectangle("Rectangle", new Point2D.Double(0,0), l, h);
 			config_forme.add(config_rectangle, BorderLayout.CENTER);
-			if (this.alarmbox_action(rect, config_forme, "Création de Rectangle")){
+			if (this.alarmbox_action(rect, config_forme, "Création de Rectangle", false)){
 				l = Double.parseDouble(LargeurRectangle.getText());
 				h = Double.parseDouble(HauteurRectangle.getText());
 				rect.setWidth(l);
@@ -380,7 +380,7 @@ public class Edition extends JFrame {
 			
 			double cc = Double.parseDouble(cote_carre.getText());
 			Rectangle carre = new Rectangle("Carre", new Point2D.Double(0,0), cc, cc);
-			if (this.alarmbox_action(carre, config_forme, "Création du Carré")){
+			if (this.alarmbox_action(carre, config_forme, "Création du Carré", false)){
 				cc = Double.parseDouble(cote_carre.getText());
 				carre.setWidth(cc);
 				carre.setHeight(cc);
@@ -394,7 +394,7 @@ public class Edition extends JFrame {
 			
 			double ct = Double.parseDouble(CoteTriangle.getText());
 			Triangle triangle = new Triangle(new Point2D.Double(0, 0), (int) ct);
-			if (this.alarmbox_action(triangle, config_forme, "Création du Triangle")){
+			if (this.alarmbox_action(triangle, config_forme, "Création du Triangle", false)){
 				ct = Double.parseDouble(CoteTriangle.getText());
 				triangle.setTaille(ct);
 			}
