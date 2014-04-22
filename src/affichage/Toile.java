@@ -65,7 +65,9 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		if(this.backBuffer.getWidth(null) != this.getWidth() || this.backBuffer.getHeight(null) != this.getHeight()) {
 			this.backBuffer = null;
 			this.initBuffer();
-			this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup temps courant
+			if (parent != null)
+				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup temps courant //COMMENT clem : savoir si on garde ça ou non (ça ressemble à du teste pour moi)
+			
 		}
 		
 		Graphics2D g2 = (Graphics2D) g;

@@ -46,6 +46,10 @@ public class Comportement {
 		return this.a;
 	}
 	
+	public int getId() {
+		return id;
+	}
+
 	public ObjetGeometrique getEtatObjGeo(Double t_courant) {
 		//TODO: appliquer Animation pour obtenir l'état a l'instant T de l'objet
 		//retourne null si l'objet n'existait pas a l'instant T ???

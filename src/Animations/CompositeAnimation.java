@@ -38,7 +38,7 @@ public class CompositeAnimation extends Animation{
 	/**
 	 * ArrayList<Animation> getAllChilds() :
 	 * ------------------------------------------------------------
-	 * retourne tout les Animations simple d'un CompositeAnnimation
+	 * retourne tout les Animations simple (enfant) d'un CompositeAnnimation
 	 * recherche de manière récursive
 	 * @return
 	 */
