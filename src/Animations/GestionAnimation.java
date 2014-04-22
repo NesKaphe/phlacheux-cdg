@@ -2,7 +2,6 @@ package Animations;
 import Animations.Comportement;
 
 import java.awt.Shape;
-import java.awt.geom.Point2D.Double;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -69,7 +68,7 @@ public class GestionAnimation {
 		
 		//Si on n'a pas trouvé l'objet geometrique, on l'ajoute
 		if(comp == null) {
-			comp = new Comportement(geo, anim);
+			comp = new Comportement(geo, anim,this.idComportement);
 			this.Comportements.put(this.idComportement, comp);
 			this.idComportement++;
 		}

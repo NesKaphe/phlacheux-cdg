@@ -10,12 +10,12 @@ public class Comportement {
 
 	private ObjetGeometrique objGeo;
 	private Animation a;//sera toujours un composite animation
-	
+	private int id;
 	
 	public Comportement() {
 	}
 	
-	public Comportement(ObjetGeometrique geo, Animation a) {
+	public Comportement(ObjetGeometrique geo, Animation a,int id) {
 		this.objGeo = geo;
 		//on "cast" l'animation en composite si s'en est pas une :
 		if (a.getType().equals("composite")){
@@ -26,8 +26,7 @@ public class Comportement {
 			ca.add(a);
 			this.a = ca;
 		}
-		
-		System.out.println("info : a.class "+this.a.getType());
+		this.id = id;
 	}
 	
 	public void setObjGeo(ObjetGeometrique geo) {
