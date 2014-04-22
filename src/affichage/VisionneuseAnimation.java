@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.geom.Point2D;
@@ -13,6 +15,7 @@ import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -52,10 +55,12 @@ public class VisionneuseAnimation extends JScrollPane{
 		parentPan.setPreferredSize(new Dimension(this.maxTime,screenSize.height/5));
 		parentPan.setBackground(Color.gray);
 		
-		childPan = new JPanel();										
+		childPan = new JPanel();
+		childPan.setBackground(new Color(213,246,213));
 		childPan.setLayout(new BoxLayout(childPan, BoxLayout.Y_AXIS));
 		
-		//ajoute pour tester :
+		/*
+		//ajoute pour tester :=====================================
 		//1
 		JPanel litelChild1 = new JPanel();
 		litelChild1.setSize(new Dimension(200,50));
@@ -66,12 +71,13 @@ public class VisionneuseAnimation extends JScrollPane{
 		litelChild2.setSize(new Dimension(200,50));
 		litelChild2.setBackground(Color.blue);
 		childPan.add(litelChild2);
-		//2
+		//3
 		JPanel litelChild3 = new JPanel();
 		litelChild3.setSize(new Dimension(200,50));
 		litelChild3.setBackground(Color.green);
 		childPan.add(litelChild3);
-		
+		//===========================================================
+		*/
 		
 		//f.getContentPane().add(childPan,BorderLayout.CENTER);
 		parentPan.add(childPan,BorderLayout.CENTER);
@@ -107,8 +113,19 @@ class Tempo extends JPanel{
 		this.maxTime = maxTime;
 		this.setSize(new Dimension(maxTime,20));
 		this.setBackground(Color.red);
+		
 	}
 	
+	public void paintComponent(Graphics g){
+		Graphics2D g2 = (Graphics2D)g;
+		
+		g2.drawString("0", 0, 10);//dessiner le zero
+		int m = this.maxTime;
+		while (m > 0){
+			g2.drawString(Integer.toString(m), m, 10);
+			m-=50;
+		}
+	}
 	
 	
 }
