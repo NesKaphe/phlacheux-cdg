@@ -3,16 +3,20 @@ package affichage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -26,11 +30,13 @@ import javax.swing.SwingConstants;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 import formes.Carre;
 import formes.Cercle;
 import formes.ObjetGeometrique;
 import formes.Rectangle;
+import formes.SegmentDroite;
 import formes.Triangle;
 
 import Animations.GestionAnimation;
@@ -135,27 +141,19 @@ public class Edition extends JFrame {
 						toile.dessineSelectionOf(geo);
 					}
 				}
-				/*
-				if(debut != fin) {
-					while(debut < fin) {
-						if(liste.isSelectedIndex(debut)) {
-							ObjetGeometrique geo = gestionnaire.getObject(model.getElementAt(debut).getId(), 0.); //TODO: recup le temps courant
-							toile.dessineSelectionOf(geo);
-						}
-						debut++;
-					}
-				}
-				else {
-					if(liste.isSelectedIndex(debut)) {
-						ObjetGeometrique geo = gestionnaire.getObject(model.getElementAt(debut).getId(), 0.); //TODO: recup le temps courant
-						toile.dessineSelectionOf(geo);
-					}
-				}
-				*/
 			}
 		});
     	
-    	this.add(liste, BorderLayout.EAST);
+    	JPanel east = new JPanel();
+    	BoxLayout grid = new BoxLayout(east, BoxLayout.PAGE_AXIS);
+    	//GridBagLayout grid = new GridBagLayout();
+    	east.setLayout(grid);
+    	east.setBackground(Color.lightGray);
+    	JLabel titre = new JLabel("Liste d'objets");
+    	liste.setBackground(Color.lightGray);
+    	east.add(titre);
+    	east.add(liste);
+    	this.add(east, BorderLayout.EAST);
     	
     	mi_new.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
@@ -225,7 +223,6 @@ public class Edition extends JFrame {
 			lm.addElement(new JListItem(entry.getKey(), entry.getValue().getNom()));
 		}
 		liste.setModel(lm);
-		this.pack();
 	}
 	
 	public JList<JListItem> getListe() {
@@ -389,7 +386,27 @@ public class Edition extends JFrame {
 			break;
 			
 		case "Ligne":
+			Object[] messageSegment = {
+				"Epaisseur de trai", Epaisseur,
+				"Couleur de trait", StrokeChooser,
+			};
 			
+			int optionSegment = JOptionPane.showConfirmDialog(null, messageSegment, "Option Segment", JOptionPane.OK_CANCEL_OPTION);
+			if(optionSegment == JOptionPane.OK_OPTION) {
+				try {
+					SegmentDroite seg = new SegmentDroite(new Point2D.Double(0,0), new Point2D.Double(0,0));
+					seg.setStrokeColor(StrokeChooser.getColor());
+					seg.setStrokeWidth(Float.parseFloat(Epaisseur.getText()));
+					this.toile.setObjTemporaire(seg);
+				}
+				catch(Exception exception) {
+					System.out.println("Pas un entier");
+				}
+				this.toile.modeListener();
+			}
+			else {
+				System.out.println("Annulation");
+			}
 			break;
 		}
 	}

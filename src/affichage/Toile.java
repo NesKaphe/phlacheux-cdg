@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
 import java.util.Map.Entry;
 
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.ListModel;
 
 import formes.ObjetGeometrique;
+import formes.SegmentDroite;
 
 
 public class Toile extends JPanel implements MouseListener,MouseMotionListener {
@@ -62,12 +64,17 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		
 		//La dimension de la toile a changé, il faut changer le buffer
 		if(this.backBuffer.getWidth(null) != this.getWidth() || this.backBuffer.getHeight(null) != this.getHeight()) {
+			/*
 			Image newBuffer = this.createImage(this.getWidth(), this.getHeight());
 			Image tmp = this.backBuffer;
 			this.backBuffer = newBuffer;
 			this.initBuffer();
 			Graphics2D g2tmp = (Graphics2D) this.backBuffer.getGraphics();
 			g2tmp.drawImage((BufferedImage)tmp, null, 0, 0);
+			*/
+			this.backBuffer = null;
+			this.initBuffer();
+			this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup temps courant
 		}
 		
 		Graphics2D g2 = (Graphics2D) g;
@@ -86,23 +93,45 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     	/*ox = m.getX();
     	oy = m.getY();
     	addMouseMotionListener((MouseMotionListener) this);*/
+		if(this.modeListener) {
+			ObjetGeometrique geo = this.getObjGeometrique();
+			if(geo instanceof SegmentDroite) {
+				SegmentDroite seg = (SegmentDroite) geo;
+				seg.setPoint(new Point2D.Double(m.getX(),m.getY()), 1);
+				this.setObjTemporaire(seg);
+				System.out.println("p1 : "+new Point2D.Double(m.getX(),m.getY()));
+			}
+		}
     }
     
-    public void mouseReleased(MouseEvent m) {}
+    public void mouseReleased(MouseEvent m) {
+    	if(this.modeListener) {
+    		ObjetGeometrique geo = this.getObjGeometrique();
+    		if(geo instanceof SegmentDroite) {
+    			this.parent.getGestionAnimation().ajouterComportement(geo, null);
+    			this.initObjTemporaire();
+				removeMouseMotionListener((MouseMotionListener) this);
+				this.modeListener = false;
+				this.parent.listeObjets();
+    		}
+    	}
+    }
+    
 	public void mouseEntered(MouseEvent m) {}
     public void mouseExited(MouseEvent m) {}
+    
     public void mouseClicked(MouseEvent m) {
     	if(this.modeListener) {
 	    	ObjetGeometrique geo = this.getObjGeometrique();
 	    	//Voir si c'est une ligne ici et faire un truc
-	    		//...
-	    	//Sinon c'est une forme qui se place qu'avec un clic
-			this.parent.getGestionAnimation().ajouterComportement(geo, null);
-			
-			this.initObjTemporaire();
-			removeMouseMotionListener((MouseMotionListener) this);
-			this.modeListener = false;
-			this.parent.listeObjets();
+	    	if(!(geo instanceof SegmentDroite)) {
+	    		this.parent.getGestionAnimation().ajouterComportement(geo, null);
+				
+				this.initObjTemporaire();
+				removeMouseMotionListener((MouseMotionListener) this);
+				this.modeListener = false;
+				this.parent.listeObjets();
+	    	}
 		}
     	else {
     		//Si on est pas en mode listener, le clic signifie selection
@@ -122,7 +151,23 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     		}
     	}
     }
-    public void mouseDragged(MouseEvent e) {}
+    public void mouseDragged(MouseEvent e) {
+    	if (this.modeListener){
+    		ox = e.getX();
+    		oy = e.getY();
+    		
+    		ObjetGeometrique geo = this.getObjGeometrique();
+    		Point2D.Double point = new Point2D.Double(ox,oy);
+    		if(geo instanceof SegmentDroite) {
+				SegmentDroite seg = (SegmentDroite) geo;
+				seg.setPoint(point, 2);
+				seg.generateShape();
+				this.setObjTemporaire(seg);
+				System.out.println(this.getObjGeometrique());
+				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+    		}
+    	}	
+    }
     
     public void mouseMoved(MouseEvent e) {
     	if (this.modeListener){
@@ -130,12 +175,12 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     		oy = e.getY();
     		
     		ObjetGeometrique geo = this.getObjGeometrique();
-			
-			Point2D.Double centre = new Point2D.Double(ox,oy);
-			geo.setCentre(centre);
-			
-			System.out.println(this.getObjGeometrique());
-			this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+    		Point2D.Double point = new Point2D.Double(ox,oy);
+			if(!(geo instanceof SegmentDroite)) {
+				geo.setCentre(point);
+				System.out.println(this.getObjGeometrique());
+				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+			}
     	}
     }
 
