@@ -268,7 +268,7 @@ public class Edition extends JFrame {
 		}
 	}
 	
-	public JPanel affiche_Colorchooser(){
+	public JPanel affiche_Colorchooser(boolean isfill){
 		JPanel panel_Colorchoosers = new JPanel(new BorderLayout());
 		JPanel panel_stroke = new JPanel(new BorderLayout());
 		JPanel panel_fill = new JPanel(new BorderLayout());
@@ -279,7 +279,8 @@ public class Edition extends JFrame {
 		panel_fill.add(fill, BorderLayout.NORTH);
 		panel_fill.add(FillChooser, BorderLayout.CENTER);
 		panel_Colorchoosers.add(panel_stroke, BorderLayout.WEST);
-		panel_Colorchoosers.add(panel_fill, BorderLayout.EAST);
+		if (isfill)
+			panel_Colorchoosers.add(panel_fill, BorderLayout.EAST);
 		return panel_Colorchoosers;
 	}
 	
