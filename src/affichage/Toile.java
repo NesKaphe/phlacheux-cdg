@@ -105,6 +105,9 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     			geo.generateShape();
     			this.parent.getGestionAnimation().ajouterComportement(geo, null);
 				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+				removeMouseMotionListener((MouseMotionListener) this);
+				this.modeListener = false;
+				this.parent.listeObjets();
     		}
     	}
     }
@@ -118,27 +121,32 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	    	//Voir si c'est une ligne ici et faire un truc
 	    	if(!(geo instanceof SegmentDroite)) {
 		    	this.parent.getGestionAnimation().ajouterComportement(geo, null);
+		    	this.initObjTemporaire();
+				removeMouseMotionListener((MouseMotionListener) this);
+				this.modeListener = false;
+				this.parent.listeObjets();
 	    	}
-	    	this.initObjTemporaire();
-			removeMouseMotionListener((MouseMotionListener) this);
-			this.modeListener = false;
-			this.parent.listeObjets();
 		}
     	else {
     		//Si on est pas en mode listener, le clic signifie selection
-    		//On va demander au gestion animation si un objet contient les coordonnées du clic
-    		//this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
-    		Entry<Integer, ObjetGeometrique> entry = this.parent.getGestionAnimation().getObjectAt(m.getX(),m.getY(),0.);
-    		this.parent.getListe().clearSelection();
-    		//Si oui, on selectionne dans la liste la ligne correspondante
-    		if(entry != null) {
-    			this.dessineSelectionOf(entry.getValue());
-    			ListModel<Item> model = this.parent.getListe().getModel();
-    			for(int i = 0; i < model.getSize(); i++) {
-    				if(model.getElementAt(i).getId() == entry.getKey()) {
-    					this.parent.getListe().setSelectedIndex(i);
-    				}
-    			}
+    		if(this.getObjGeometrique() != null) { //Si l'objet temporaire n'est pas null
+    			this.initObjTemporaire(); //On remet a zéro (Cas de la ligne qui se selectionne apres ajout)
+    		}
+    		else {
+	    		//On va demander au gestion animation si un objet contient les coordonnées du clic
+	    		//this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+	    		Entry<Integer, ObjetGeometrique> entry = this.parent.getGestionAnimation().getObjectAt(m.getX(),m.getY(),0.);
+	    		this.parent.getListe().clearSelection();
+	    		//Si oui, on selectionne dans la liste la ligne correspondante
+	    		if(entry != null) {
+	    			this.dessineSelectionOf(entry.getValue());
+	    			ListModel<Item> model = this.parent.getListe().getModel();
+	    			for(int i = 0; i < model.getSize(); i++) {
+	    				if(model.getElementAt(i).getId() == entry.getKey()) {
+	    					this.parent.getListe().setSelectedIndex(i);
+	    				}
+	    			}
+	    		}
     		}
     	}
     }
