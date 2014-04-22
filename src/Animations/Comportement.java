@@ -9,7 +9,7 @@ import formes.ObjetGeometrique;
 public class Comportement {
 
 	private ObjetGeometrique objGeo;
-	private Animation a;
+	private Animation a;//sera toujours un composite animation
 	
 	
 	public Comportement() {
@@ -17,7 +17,17 @@ public class Comportement {
 	
 	public Comportement(ObjetGeometrique geo, Animation a) {
 		this.objGeo = geo;
-		this.a = a;
+		//on "cast" l'animation en composite si s'en est pas une :
+		if (a.getType().equals("composite")){
+			this.a = a;
+		}
+		else{
+			CompositeAnimation ca = new CompositeAnimation(a.getT_debut(),a.getT_fin(),a.getEasing());
+			ca.add(a);
+			this.a = ca;
+		}
+		
+		System.out.println("info : a.class "+this.a.getType());
 	}
 	
 	public void setObjGeo(ObjetGeometrique geo) {

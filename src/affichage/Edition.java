@@ -36,6 +36,7 @@ import formes.Triangle;
 
 import Animations.GestionAnimation;
 
+
 public class Edition extends JFrame {
 
 	/**
@@ -55,6 +56,7 @@ public class Edition extends JFrame {
 	private JMenuBar menuBarEditionMode; //le menu du mode edition
 	private JMenuBar menuBarVisionneuseMode; //le menu du mode visionneuse
 	private JToolBar menu_object_add;
+
 	
 	//Liste des objets dessinés
 	private JList<JListItem> liste;
@@ -63,6 +65,7 @@ public class Edition extends JFrame {
 	private JColorChooser StrokeChooser;
 	private JColorChooser FillChooser;
 	private JTextField Epaisseur;
+
 	
 	public Edition() {
 		super("Edition");

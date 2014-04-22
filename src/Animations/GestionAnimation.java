@@ -34,7 +34,7 @@ public class GestionAnimation {
 		return this.t;
 	}
 	
-	protected HashMap<Integer, Comportement> getComportements() {
+	public HashMap<Integer, Comportement> getListComportements() {
 		return Comportements;
 	}
 
