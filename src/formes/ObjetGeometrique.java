@@ -6,7 +6,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
-
 public abstract class ObjetGeometrique {
 
 	protected String nom;
@@ -161,4 +160,7 @@ public abstract class ObjetGeometrique {
 	public void setStrokeColor(Color c) {
 		this.strokeColor = c;
 	}
+	
+	
+	
 }

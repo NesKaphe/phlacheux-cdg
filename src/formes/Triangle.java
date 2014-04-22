@@ -74,4 +74,8 @@ public class Triangle extends ObjetGeometrique {
 		this.translation_centre = centre;
 		this.generateShape();
 	}
+	
+	public void setTaille(double t){
+		this.taille = (int) t;
+	}
 }
