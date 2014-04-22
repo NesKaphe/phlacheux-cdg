@@ -3,15 +3,13 @@ package affichage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -30,9 +28,6 @@ import javax.swing.SwingConstants;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-
-import formes.Carre;
 import formes.Cercle;
 import formes.ObjetGeometrique;
 import formes.Rectangle;
@@ -155,14 +150,16 @@ public class Edition extends JFrame {
 		});
     	
     	JPanel east = new JPanel();
-    	BoxLayout grid = new BoxLayout(east, BoxLayout.PAGE_AXIS);
+    	//BoxLayout grid = new BoxLayout(east, BoxLayout.PAGE_AXIS);
     	//GridBagLayout grid = new GridBagLayout();
+    	BorderLayout grid = new BorderLayout();
     	east.setLayout(grid);
     	east.setBackground(Color.lightGray);
     	JLabel titre = new JLabel("Liste d'objets");
+    	titre.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 5));
     	liste.setBackground(Color.lightGray);
-    	east.add(titre);
-    	east.add(liste);
+    	east.add(titre, BorderLayout.NORTH);
+    	east.add(liste, BorderLayout.CENTER);
     	this.add(east, BorderLayout.EAST);
     	
     	mi_new.addActionListener(new ActionListener() {
@@ -225,7 +222,6 @@ public class Edition extends JFrame {
     	this.listeObjets();
     	this.initColorchooser();
     	this.Epaisseur = new JTextField();
-    	
 	}
 	
 	public void listeObjets() {
@@ -342,7 +338,7 @@ public class Edition extends JFrame {
 			
 			double r = Double.parseDouble(Rayon.getText());
 			Cercle c = new Cercle(new Point2D.Double(0,0), r);
-			if (this.alarmbox_action(c, config_forme, "Création de cercle", false)){
+			if (this.alarmbox_action(c, config_forme, "Création de cercle", true)){
 				r = Double.parseDouble(Rayon.getText());
 				c.setRayon(r);
 			}
@@ -361,7 +357,7 @@ public class Edition extends JFrame {
 			double h = Double.parseDouble(HauteurRectangle.getText());
 			Rectangle rect = new Rectangle("Rectangle", new Point2D.Double(0,0), l, h);
 			config_forme.add(config_rectangle, BorderLayout.CENTER);
-			if (this.alarmbox_action(rect, config_forme, "Création de Rectangle", false)){
+			if (this.alarmbox_action(rect, config_forme, "Création de Rectangle", true)){
 				l = Double.parseDouble(LargeurRectangle.getText());
 				h = Double.parseDouble(HauteurRectangle.getText());
 				rect.setWidth(l);
@@ -376,7 +372,7 @@ public class Edition extends JFrame {
 			
 			double cc = Double.parseDouble(cote_carre.getText());
 			Rectangle carre = new Rectangle("Carre", new Point2D.Double(0,0), cc, cc);
-			if (this.alarmbox_action(carre, config_forme, "Création du Carré", false)){
+			if (this.alarmbox_action(carre, config_forme, "Création du Carré", true)){
 				cc = Double.parseDouble(cote_carre.getText());
 				carre.setWidth(cc);
 				carre.setHeight(cc);
@@ -390,7 +386,7 @@ public class Edition extends JFrame {
 			
 			double ct = Double.parseDouble(CoteTriangle.getText());
 			Triangle triangle = new Triangle(new Point2D.Double(0, 0), (int) ct);
-			if (this.alarmbox_action(triangle, config_forme, "Création du Triangle", false)){
+			if (this.alarmbox_action(triangle, config_forme, "Création du Triangle", true)){
 				ct = Double.parseDouble(CoteTriangle.getText());
 				triangle.setTaille(ct);
 			}
@@ -398,27 +394,8 @@ public class Edition extends JFrame {
 			break;
 			
 		case "Ligne":
-			Object[] messageSegment = {
-				"Epaisseur de trai", Epaisseur,
-				"Couleur de trait", StrokeChooser,
-			};
-			
-			int optionSegment = JOptionPane.showConfirmDialog(null, messageSegment, "Option Segment", JOptionPane.OK_CANCEL_OPTION);
-			if(optionSegment == JOptionPane.OK_OPTION) {
-				try {
-					SegmentDroite seg = new SegmentDroite(new Point2D.Double(0,0), new Point2D.Double(0,0));
-					seg.setStrokeColor(StrokeChooser.getColor());
-					seg.setStrokeWidth(Float.parseFloat(Epaisseur.getText()));
-					this.toile.setObjTemporaire(seg);
-				}
-				catch(Exception exception) {
-					System.out.println("Pas un entier");
-				}
-				this.toile.modeListener();
-			}
-			else {
-				System.out.println("Annulation");
-			}
+			SegmentDroite seg = new SegmentDroite(new Point2D.Double(0,0), new Point2D.Double(0,0));
+			this.alarmbox_action(seg, config_forme, "Création de ligne", false);
 			break;
 		}
 	}
