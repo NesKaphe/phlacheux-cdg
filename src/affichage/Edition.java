@@ -59,7 +59,7 @@ public class Edition extends JFrame {
 
 	
 	//Liste des objets dessinés
-	private JList<JListItem> liste;
+	private JList<Item> liste;
 	
 	//Element global de alarmbox de configuration
 	private JColorChooser StrokeChooser;
@@ -134,12 +134,12 @@ public class Edition extends JFrame {
     	this.setJMenuBar(this.menuBarEditionMode);
     	
     	//Liste
-    	liste = new JList<JListItem>();
+    	liste = new JList<Item>();
     	liste.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				ListModel<JListItem> model = liste.getModel();
+				ListModel<Item> model = liste.getModel();
 				
 				gestionnaire.dessinerToile(0.); //TODO:recup le temps courant
 				
@@ -153,8 +153,6 @@ public class Edition extends JFrame {
 		});
     	
     	JPanel east = new JPanel();
-    	//BoxLayout grid = new BoxLayout(east, BoxLayout.PAGE_AXIS);
-    	//GridBagLayout grid = new GridBagLayout();
     	BorderLayout grid = new BorderLayout();
     	east.setLayout(grid);
     	east.setBackground(Color.lightGray);
@@ -229,14 +227,14 @@ public class Edition extends JFrame {
 	
 	public void listeObjets() {
 		HashMap<Integer, ObjetGeometrique> map = this.gestionnaire.getAllObjects();
-		DefaultListModel<JListItem> lm = new DefaultListModel<JListItem>();
+		DefaultListModel<Item> lm = new DefaultListModel<Item>();
 		for(Entry<Integer, ObjetGeometrique> entry : map.entrySet()) {
-			lm.addElement(new JListItem(entry.getKey(), entry.getValue().getNom()));
+			lm.addElement(new Item(entry.getKey(), entry.getValue().getNom()));
 		}
 		liste.setModel(lm);
 	}
 	
-	public JList<JListItem> getListe() {
+	public JList<Item> getListe() {
 		return this.liste;
 	}
 	

@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
 import java.util.Map.Entry;
 
@@ -64,14 +63,6 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		
 		//La dimension de la toile a changé, il faut changer le buffer
 		if(this.backBuffer.getWidth(null) != this.getWidth() || this.backBuffer.getHeight(null) != this.getHeight()) {
-			/*
-			Image newBuffer = this.createImage(this.getWidth(), this.getHeight());
-			Image tmp = this.backBuffer;
-			this.backBuffer = newBuffer;
-			this.initBuffer();
-			Graphics2D g2tmp = (Graphics2D) this.backBuffer.getGraphics();
-			g2tmp.drawImage((BufferedImage)tmp, null, 0, 0);
-			*/
 			this.backBuffer = null;
 			this.initBuffer();
 			this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup temps courant
@@ -111,9 +102,12 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     		ObjetGeometrique geo = this.getObjGeometrique();
     		if(geo instanceof SegmentDroite) {
     			((SegmentDroite) geo).setPoint(new Point2D.Double(m.getX(),m.getY()), 2);
-    			geo.generateShape();
     			this.parent.getGestionAnimation().ajouterComportement(geo, null);
 				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+				this.initObjTemporaire();
+				removeMouseMotionListener((MouseMotionListener) this);
+				this.modeListener = false;
+				this.parent.listeObjets();
     		}
     	}
     }
@@ -127,12 +121,11 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	    	//Voir si c'est une ligne ici et faire un truc
 	    	if(!(geo instanceof SegmentDroite)) {
 		    	this.parent.getGestionAnimation().ajouterComportement(geo, null);
+		    	this.initObjTemporaire();
+				removeMouseMotionListener((MouseMotionListener) this);
+				this.modeListener = false;
+				this.parent.listeObjets();
 	    	}
-	    	
-	    	this.initObjTemporaire();
-			removeMouseMotionListener((MouseMotionListener) this);
-			this.modeListener = false;
-			this.parent.listeObjets();
 		}
     	else {
     		//Si on est pas en mode listener, le clic signifie selection
@@ -140,10 +133,10 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     		//this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
     		Entry<Integer, ObjetGeometrique> entry = this.parent.getGestionAnimation().getObjectAt(m.getX(),m.getY(),0.);
     		this.parent.getListe().clearSelection();
-    		//Si oui, on selectionne dans la liste de david la ligne correspondante
+    		//Si oui, on selectionne dans la liste la ligne correspondante
     		if(entry != null) {
     			this.dessineSelectionOf(entry.getValue());
-    			ListModel<JListItem> model = this.parent.getListe().getModel();
+    			ListModel<Item> model = this.parent.getListe().getModel();
     			for(int i = 0; i < model.getSize(); i++) {
     				if(model.getElementAt(i).getId() == entry.getKey()) {
     					this.parent.getListe().setSelectedIndex(i);

@@ -68,7 +68,10 @@ public class GestionAnimation {
 		
 		//Si on n'a pas trouvé l'objet geometrique, on l'ajoute
 		if(comp == null) {
-			comp = new Comportement(geo, anim,this.idComportement);
+			if(anim != null)
+				comp = new Comportement(geo, anim,this.idComportement);
+			else
+				comp = new Comportement(geo, this.idComportement);
 			this.Comportements.put(this.idComportement, comp);
 			this.idComportement++;
 		}
