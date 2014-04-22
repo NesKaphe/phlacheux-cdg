@@ -1,6 +1,7 @@
 package Animations;
 import Animations.Comportement;
 
+import java.awt.Shape;
 import java.awt.geom.Point2D.Double;
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ public class GestionAnimation {
 	//TODO : (nom un peux long)
 	public void ajouterComportement(ObjetGeometrique geo, Animation anim) {
 		//On va rechercher dans la liste si l'objet est deja present
+		System.out.println(geo.getInfos());
 		Comportement comp = null;
 		int i = 0;
 		while(i < this.Comportements.size()) {
@@ -119,7 +121,8 @@ public class GestionAnimation {
 		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {
 			Comportement c = entry.getValue();
 			ObjetGeometrique geo = c.getEtatObjGeo(t_courant);
-			if(geo.getShape().contains(x,y))
+			Shape shape = geo.getStroke().createStrokedShape(geo.getShape());
+			if(shape.contains(x,y) || geo.getShape().contains(x,y))
 				return new AbstractMap.SimpleEntry<Integer, ObjetGeometrique>(entry.getKey(), geo);
 		}
 		return null; //On renvoie null si on n'a pas trouvé d'objet ayant les coordonnées x,y a l'instant t_courant

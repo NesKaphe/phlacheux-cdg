@@ -93,6 +93,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     	/*ox = m.getX();
     	oy = m.getY();
     	addMouseMotionListener((MouseMotionListener) this);*/
+		System.out.println("press");
 		if(this.modeListener) {
 			ObjetGeometrique geo = this.getObjGeometrique();
 			if(geo instanceof SegmentDroite) {
@@ -105,14 +106,14 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     }
     
     public void mouseReleased(MouseEvent m) {
+    	System.out.println("release");
     	if(this.modeListener) {
     		ObjetGeometrique geo = this.getObjGeometrique();
     		if(geo instanceof SegmentDroite) {
+    			((SegmentDroite) geo).setPoint(new Point2D.Double(m.getX(),m.getY()), 2);
+    			geo.generateShape();
     			this.parent.getGestionAnimation().ajouterComportement(geo, null);
-    			this.initObjTemporaire();
-				removeMouseMotionListener((MouseMotionListener) this);
-				this.modeListener = false;
-				this.parent.listeObjets();
+				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
     		}
     	}
     }
@@ -125,13 +126,13 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	    	ObjetGeometrique geo = this.getObjGeometrique();
 	    	//Voir si c'est une ligne ici et faire un truc
 	    	if(!(geo instanceof SegmentDroite)) {
-	    		this.parent.getGestionAnimation().ajouterComportement(geo, null);
-				
-				this.initObjTemporaire();
-				removeMouseMotionListener((MouseMotionListener) this);
-				this.modeListener = false;
-				this.parent.listeObjets();
+		    	this.parent.getGestionAnimation().ajouterComportement(geo, null);
 	    	}
+	    	
+	    	this.initObjTemporaire();
+			removeMouseMotionListener((MouseMotionListener) this);
+			this.modeListener = false;
+			this.parent.listeObjets();
 		}
     	else {
     		//Si on est pas en mode listener, le clic signifie selection
@@ -210,7 +211,8 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	
 	public void dessineSelectionOf(ObjetGeometrique geo) {
 		//On cherche le shape qui contient l'objet geometrique
-		Shape shape = geo.getShape().getBounds2D();
+		BasicStroke shapeStroke = geo.getStroke();
+		Shape shape = shapeStroke.createStrokedShape(geo.getShape()).getBounds2D();
 		//On va dessiner le shape dans le buffer
 		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
 		float []pointilles = { 2.0f, 3.0f };

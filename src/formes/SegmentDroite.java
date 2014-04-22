@@ -49,5 +49,8 @@ public class SegmentDroite extends ObjetGeometrique {
 		this.forme = new Line2D.Double(this.p1, this.p2);
 	}
 
-
+	public String getInfos() {
+		return this.p1.toString()+this.p2.toString();
+		
+	}
 }
