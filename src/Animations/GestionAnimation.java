@@ -17,7 +17,7 @@ public class GestionAnimation {
 	public GestionAnimation(Toile t) {
 		this.Comportements = new HashMap<Integer, Comportement>();
 		this.setToile(t);
-		this.idComportement = 0;
+		this.idComportement = 0;//identifiant/clé associer aux comportements ajouté dans le HashMap "Comportements"
 	}
 	
 	public void viderComportements() {
@@ -33,6 +33,10 @@ public class GestionAnimation {
 		return this.t;
 	}
 	
+	protected HashMap<Integer, Comportement> getComportements() {
+		return Comportements;
+	}
+
 	public HashMap<Integer, ObjetGeometrique> getAllObjects() {
 		HashMap<Integer, ObjetGeometrique> objets = new HashMap<Integer, ObjetGeometrique>();
 		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {
