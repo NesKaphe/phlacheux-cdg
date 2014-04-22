@@ -1,16 +1,22 @@
 package affichage;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Map.Entry;
 
 import javax.swing.JPanel;
+import javax.swing.ListModel;
+
 import formes.ObjetGeometrique;
 
 
@@ -56,7 +62,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		
 		//La dimension de la toile a changé, il faut changer le buffer
 		if(this.backBuffer.getWidth(null) != this.getWidth() || this.backBuffer.getHeight(null) != this.getHeight()) {
-			Image newBuffer = this.createImage(this.backBuffer.getWidth(null), this.backBuffer.getHeight(null));
+			Image newBuffer = this.createImage(this.getWidth(), this.getHeight());
 			Image tmp = this.backBuffer;
 			this.backBuffer = newBuffer;
 			this.initBuffer();
@@ -96,15 +102,25 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 			this.initObjTemporaire();
 			removeMouseMotionListener((MouseMotionListener) this);
 			this.modeListener = false;
+			this.parent.listeObjets();
 		}
     	else {
     		//Si on est pas en mode listener, le clic signifie selection
     		//On va demander au gestion animation si un objet contient les coordonnées du clic
-    		//TODO: recup le temps courant
-    		//this.parent.getGestionAnimation().getObjectAt(m.getX(),m.getY(),0.);
+    		//this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+    		Entry<Integer, ObjetGeometrique> entry = this.parent.getGestionAnimation().getObjectAt(m.getX(),m.getY(),0.);
+    		this.parent.getListe().clearSelection();
+    		//Si oui, on selectionne dans la liste de david la ligne correspondante
+    		if(entry != null) {
+    			this.dessineSelectionOf(entry.getValue());
+    			ListModel<JListItem> model = this.parent.getListe().getModel();
+    			for(int i = 0; i < model.getSize(); i++) {
+    				if(model.getElementAt(i).getId() == entry.getKey()) {
+    					this.parent.getListe().setSelectedIndex(i);
+    				}
+    			}
+    		}
     	}
-    		//On va demander au gestion animation si un objet contient les coordonnées du clic
-    			//Si oui, on selectionne dans la liste de david la ligne correspondante
     }
     public void mouseDragged(MouseEvent e) {}
     
@@ -145,13 +161,26 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 			g.setColor(geo.getFillColor());
 			g.fill(geo.getShape());
 		}
-		
+	}
+	
+	public void dessineSelectionOf(ObjetGeometrique geo) {
+		//On cherche le shape qui contient l'objet geometrique
+		Shape shape = geo.getShape().getBounds2D();
+		//On va dessiner le shape dans le buffer
+		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
+		float []pointilles = { 2.0f, 3.0f };
+		BasicStroke stroke = new BasicStroke(1.0f,BasicStroke.CAP_BUTT,BasicStroke.JOIN_ROUND,1.0f,pointilles,0.0f);
+		g.setStroke(stroke);
+		g.setColor(Color.blue);
+		g.draw(shape);
+		this.repaint();
 	}
 	
 	public void initBuffer() {
-		
-		this.backBuffer = this.createImage(this.getWidth(), this.getHeight());
-		
+		if(this.backBuffer == null) {
+			this.backBuffer = this.createImage(this.getWidth(), this.getHeight());
+		}
+
 		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
 		
 		g.setColor(this.getBackground());

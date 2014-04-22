@@ -1,6 +1,10 @@
 package Animations;
 import Animations.Comportement;
+
+import java.awt.geom.Point2D.Double;
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import formes.ObjetGeometrique;
 import affichage.Toile;
@@ -31,10 +35,19 @@ public class GestionAnimation {
 	
 	public HashMap<Integer, ObjetGeometrique> getAllObjects() {
 		HashMap<Integer, ObjetGeometrique> objets = new HashMap<Integer, ObjetGeometrique>();
-		//Ici on va extraire tous les objets des comportements
+		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {
+			objets.put(entry.getKey(), entry.getValue().getObjGeo());
+		}
 		return objets;
 	}
 	
+	public HashMap<Integer, Animation> getAllAnimationsOf(int id) {
+		HashMap<Integer, Animation> animations = new HashMap<Integer, Animation>();
+		Animation anim = this.Comportements.get(id).getAnimation();
+		//Ici les opérations pour recup toutes les animations du comportement "id"
+		return animations;
+	}
+		
 	//TODO : (nom un peux long)
 	public void ajouterComportement(ObjetGeometrique geo, Animation anim) {
 		//On va rechercher dans la liste si l'objet est deja present
@@ -95,5 +108,20 @@ public class GestionAnimation {
 		
 		//On demande le raffraichissement de la toile
 		t.repaint();
+	}
+
+	public Entry<Integer, ObjetGeometrique> getObjectAt(int x, int y, double t_courant) {
+		//On va parcourir le hashmap des comportements et voir si le point x, y est contenu dans le shape
+		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {
+			Comportement c = entry.getValue();
+			ObjetGeometrique geo = c.getEtatObjGeo(t_courant);
+			if(geo.getShape().contains(x,y))
+				return new AbstractMap.SimpleEntry<Integer, ObjetGeometrique>(entry.getKey(), geo);
+		}
+		return null; //On renvoie null si on n'a pas trouvé d'objet ayant les coordonnées x,y a l'instant t_courant
+	}
+	
+	public ObjetGeometrique getObject(int id, double t_courant) {
+		return this.Comportements.get(id).getEtatObjGeo(t_courant);
 	}
 }

@@ -59,6 +59,7 @@ class testeVisionAnim{
 		f.getContentPane().add(t,BorderLayout.CENTER);
 		f.getContentPane().add(vi,BorderLayout.SOUTH);
 		
+		f.pack();
 		
 		//dessiner un rectangle dans le GA :
 		Rectangle rect = new Rectangle("monrectangle", new Point2D.Double(100,200), 70, 40);
@@ -72,6 +73,6 @@ class testeVisionAnim{
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		f.pack();
+		
 	}
 }

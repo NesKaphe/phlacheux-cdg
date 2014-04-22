@@ -6,10 +6,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -17,18 +21,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import formes.Carre;
 import formes.Cercle;
+import formes.ObjetGeometrique;
 import formes.Rectangle;
 import formes.Triangle;
 
 import Animations.GestionAnimation;
-import Listeners.BoutonFormeListener;
-import Listeners.MouseMotionToileListener;
-import Listeners.MouseToileListener;
 
 public class Edition extends JFrame {
 
@@ -44,7 +49,9 @@ public class Edition extends JFrame {
 	private JMenuBar menuBarEditionMode; //le menu du mode edition
 	private JMenuBar menuBarVisionneuseMode; //le menu du mode visionneuse
 	private JToolBar menu_object_add;
-	private MouseMotionToileListener mouseToileListener;
+	
+	//Liste des objets dessinés
+	private JList<JListItem> liste;
 	
 	public Edition() {
 		super("Edition");
@@ -112,6 +119,44 @@ public class Edition extends JFrame {
     	this.add(menu_object_add,BorderLayout.SOUTH);
     	this.setJMenuBar(this.menuBarEditionMode);
     	
+    	//Liste
+    	liste = new JList<JListItem>();
+    	liste.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				ListModel<JListItem> model = liste.getModel();
+				
+				gestionnaire.dessinerToile(0.); //TODO:recup le temps courant
+				
+				for(int i = 0; i < model.getSize(); i++) {
+					if(liste.isSelectedIndex(i)) {
+						ObjetGeometrique geo = gestionnaire.getObject(model.getElementAt(i).getId(), 0.); //TODO: recup le temps courant
+						toile.dessineSelectionOf(geo);
+					}
+				}
+				/*
+				if(debut != fin) {
+					while(debut < fin) {
+						if(liste.isSelectedIndex(debut)) {
+							ObjetGeometrique geo = gestionnaire.getObject(model.getElementAt(debut).getId(), 0.); //TODO: recup le temps courant
+							toile.dessineSelectionOf(geo);
+						}
+						debut++;
+					}
+				}
+				else {
+					if(liste.isSelectedIndex(debut)) {
+						ObjetGeometrique geo = gestionnaire.getObject(model.getElementAt(debut).getId(), 0.); //TODO: recup le temps courant
+						toile.dessineSelectionOf(geo);
+					}
+				}
+				*/
+			}
+		});
+    	
+    	this.add(liste, BorderLayout.EAST);
+    	
     	mi_new.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     		}
@@ -169,6 +214,22 @@ public class Edition extends JFrame {
     		}
 	    });
     	
+    	this.listeObjets();
+    	
+	}
+	
+	public void listeObjets() {
+		HashMap<Integer, ObjetGeometrique> map = this.gestionnaire.getAllObjects();
+		DefaultListModel<JListItem> lm = new DefaultListModel<JListItem>();
+		for(Entry<Integer, ObjetGeometrique> entry : map.entrySet()) {
+			lm.addElement(new JListItem(entry.getKey(), entry.getValue().getNom()));
+		}
+		liste.setModel(lm);
+		this.pack();
+	}
+	
+	public JList<JListItem> getListe() {
+		return this.liste;
 	}
 	
 	public Toile getToile() {
