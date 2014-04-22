@@ -44,7 +44,7 @@ public class CompositeAnimation extends Animation{
 	 */
 	public ArrayList<Animation> getAllChilds(){
 		ArrayList<Animation> listA = new ArrayList<Animation>();
-		for(Animation a : this.ChildAnimations){
+		for(Animation a : ChildAnimations){
 			if(a.getType().equals("composite")){
 				listA.addAll(((CompositeAnimation)a).getAllChilds());
 			}else{
