@@ -121,7 +121,6 @@ public class Comportement {
 			}
 		}
 		//TODO : récupération couleur stroke ,couleur fill,stroke ...
-
 		return objGeo.AppliqueAnimation(at, FillColor, colorStroke, stroke);//TODO : null parceque pas encore implémenté les autre animations
 	}
 

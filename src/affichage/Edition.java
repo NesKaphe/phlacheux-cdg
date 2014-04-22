@@ -147,6 +147,7 @@ public class Edition extends JFrame {
 					if(liste.isSelectedIndex(i)) {
 						ObjetGeometrique geo = gestionnaire.getObject(model.getElementAt(i).getId(), 0.); //TODO: recup le temps courant
 						toile.dessineSelectionOf(geo);
+						System.out.println(geo.getStroke().getLineWidth());
 					}
 				}
 			}
@@ -162,6 +163,11 @@ public class Edition extends JFrame {
     	east.add(titre, BorderLayout.NORTH);
     	east.add(liste, BorderLayout.CENTER);
     	this.add(east, BorderLayout.EAST);
+    	
+    	//Visionneuse
+    	VisionneuseAnimation va = new VisionneuseAnimation(this, this.getGestionAnimation(), 2000);
+    	va.dessineAnimation();
+    	this.add(va, BorderLayout.SOUTH);
     	
     	mi_new.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {

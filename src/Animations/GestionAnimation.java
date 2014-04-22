@@ -55,7 +55,7 @@ public class GestionAnimation {
 	//TODO : (nom un peux long)
 	public void ajouterComportement(ObjetGeometrique geo, Animation anim) {
 		//On va rechercher dans la liste si l'objet est deja present
-		System.out.println(geo.getInfos());
+		System.out.println("ajoutComportement "+geo.getStroke().getLineWidth());
 		Comportement comp = null;
 		int i = 0;
 		while(i < this.Comportements.size()) {

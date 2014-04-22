@@ -86,7 +86,6 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     	/*ox = m.getX();
     	oy = m.getY();
     	addMouseMotionListener((MouseMotionListener) this);*/
-		System.out.println("press");
 		if(this.modeListener) {
 			ObjetGeometrique geo = this.getObjGeometrique();
 			if(geo instanceof SegmentDroite) {
@@ -99,17 +98,13 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     }
     
     public void mouseReleased(MouseEvent m) {
-    	System.out.println("release");
     	if(this.modeListener) {
     		ObjetGeometrique geo = this.getObjGeometrique();
     		if(geo instanceof SegmentDroite) {
     			((SegmentDroite) geo).setPoint(new Point2D.Double(m.getX(),m.getY()), 2);
+    			geo.generateShape();
     			this.parent.getGestionAnimation().ajouterComportement(geo, null);
 				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
-				this.initObjTemporaire();
-				removeMouseMotionListener((MouseMotionListener) this);
-				this.modeListener = false;
-				this.parent.listeObjets();
     		}
     	}
     }
@@ -123,11 +118,11 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 	    	//Voir si c'est une ligne ici et faire un truc
 	    	if(!(geo instanceof SegmentDroite)) {
 		    	this.parent.getGestionAnimation().ajouterComportement(geo, null);
-		    	this.initObjTemporaire();
-				removeMouseMotionListener((MouseMotionListener) this);
-				this.modeListener = false;
-				this.parent.listeObjets();
 	    	}
+	    	this.initObjTemporaire();
+			removeMouseMotionListener((MouseMotionListener) this);
+			this.modeListener = false;
+			this.parent.listeObjets();
 		}
     	else {
     		//Si on est pas en mode listener, le clic signifie selection
@@ -159,7 +154,6 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 				seg.setPoint(point, 2);
 				seg.generateShape();
 				this.setObjTemporaire(seg);
-				System.out.println(this.getObjGeometrique());
 				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
     		}
     	}	
