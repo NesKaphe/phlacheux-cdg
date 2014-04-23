@@ -31,6 +31,8 @@ import javax.swing.SwingConstants;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import formes.Carre;
 import formes.Cercle;
 import formes.ObjetGeometrique;
 import formes.Rectangle;
@@ -213,35 +215,35 @@ public class Edition extends JFrame {
     	// le champ quitter du menu ferme tout
     	mi_Cercle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Cercle");
+    			alarm_configuration_objet("Cercle", null, true);
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Triangle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Triangle");
+    			alarm_configuration_objet("Triangle", null, true);
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Carre.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Carre");
+    			alarm_configuration_objet("Carre", null, true);
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Rectangle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Rectangle");
+    			alarm_configuration_objet("Rectangle", null, true);
     		}
 	    });
     	
     	// le champ quitter du menu ferme tout
     	mi_Ligne.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Ligne");
+    			alarm_configuration_objet("Ligne", null, true);
     		}
 	    });
     	
@@ -306,15 +308,6 @@ public class Edition extends JFrame {
 		return panel_Colorchoosers;
 	}
 	
-	public JPanel affiche_Epaisseur(){
-		JPanel config_Epaisseur = new JPanel(new BorderLayout());
-		Epaisseur.setText("1");
-		JLabel label_epaisseur = new JLabel("Choix de la taille du trait :");
-		config_Epaisseur.add(label_epaisseur, BorderLayout.NORTH);
-		config_Epaisseur.add(Epaisseur, BorderLayout.CENTER);
-		return config_Epaisseur;
-	}
-	
 	public boolean alarmbox_action(ObjetGeometrique o,JPanel champ_configuration, String status, boolean isFill){
 		Object[] messageCercle = {
 			    "", champ_configuration,
@@ -332,8 +325,6 @@ public class Edition extends JFrame {
 				catch(Exception exception) {
 					System.out.println("Pas un entier");
 				}
-				//Ajouter un mouse movement listener a la toile avec un cercle a dessiner
-				this.toile.modeListener();
 				return true;
 			} 
 			else {
@@ -353,18 +344,34 @@ public class Edition extends JFrame {
 		return config_global;
 	}
 	
-	public void alarm_configuration_objet(String type){
+	public void alarm_configuration_objet(String type, ObjetGeometrique o, boolean isCreation){
 		JPanel config_forme = new JPanel(new BorderLayout());
-		config_forme.add(this.affiche_Epaisseur(), BorderLayout.SOUTH);
+		config_forme.add(this.configure_forme(this.Epaisseur, "Choix de la taille du trait :", "1"), BorderLayout.SOUTH);
+		String default_value = "10";
+		boolean reponse_alarmbox = isCreation;
+		if (!isCreation){
+			StrokeChooser.setColor(o.getStrokeColor());
+			FillChooser.setColor(o.getFillColor());
+		}
+		
+		
 		switch(type) {
 		case "Cercle":
 			
 			JTextField Rayon = new JTextField();
-			config_forme.add(this.configure_forme(Rayon, "Rayon :", "10"), BorderLayout.CENTER);
-			
-			double r = Double.parseDouble(Rayon.getText());
-			Cercle c = new Cercle(new Point2D.Double(0,0), r);
-			if (this.alarmbox_action(c, config_forme, "Création de cercle", true)){
+			double r = Double.parseDouble(default_value);
+			Cercle c;
+			if(isCreation){
+				c = new Cercle(new Point2D.Double(0,0), r);
+			}
+			else {
+				c = (Cercle) o;
+				default_value = ""+c.getRayon();
+				Epaisseur.setText(""+c.getStroke().getLineWidth());
+			}
+			config_forme.add(this.configure_forme(Rayon, "Rayon :", default_value), BorderLayout.CENTER);
+			reponse_alarmbox = this.alarmbox_action(c, config_forme, "Création de cercle", true);
+			if (reponse_alarmbox){
 				r = Double.parseDouble(Rayon.getText());
 				c.setRayon(r);
 			}
@@ -373,17 +380,27 @@ public class Edition extends JFrame {
 		case "Rectangle":
 			JTextField LargeurRectangle = new JTextField();
 			JTextField HauteurRectangle = new JTextField();
+			double l = Double.parseDouble(default_value);
+			double h = Double.parseDouble(default_value);
+			Rectangle rect = new Rectangle("Rectangle", new Point2D.Double(0,0), l, h);
+			
+			if(isCreation){
+				rect = new Rectangle("Rectangle", new Point2D.Double(0,0), l, h);
+			}
+			else {
+				rect = (Rectangle) o;
+				l = rect.getWidth();
+				h = rect.getHeight();
+				Epaisseur.setText(""+rect.getStroke().getLineWidth());
+			}
 			
 			JPanel config_rectangle = new JPanel(new BorderLayout());
-			config_rectangle.add(this.configure_forme(LargeurRectangle, "Largeur :", "15"), BorderLayout.NORTH);
-			config_rectangle.add(this.configure_forme(HauteurRectangle, "Hauteur :", "10"), BorderLayout.CENTER);
+			config_rectangle.add(this.configure_forme(LargeurRectangle, "Largeur :", ""+l), BorderLayout.NORTH);
+			config_rectangle.add(this.configure_forme(HauteurRectangle, "Hauteur :", ""+h), BorderLayout.CENTER);
 			
-			
-			double l = Double.parseDouble(LargeurRectangle.getText());
-			double h = Double.parseDouble(HauteurRectangle.getText());
-			Rectangle rect = new Rectangle("Rectangle", new Point2D.Double(0,0), l, h);
 			config_forme.add(config_rectangle, BorderLayout.CENTER);
-			if (this.alarmbox_action(rect, config_forme, "Création de Rectangle", true)){
+			reponse_alarmbox = this.alarmbox_action(rect, config_forme, "Création de Rectangle", true);
+			if (reponse_alarmbox) {
 				l = Double.parseDouble(LargeurRectangle.getText());
 				h = Double.parseDouble(HauteurRectangle.getText());
 				rect.setWidth(l);
@@ -394,25 +411,41 @@ public class Edition extends JFrame {
 		case "Carre":
 			
 			JTextField cote_carre = new JTextField();
-			config_forme.add(this.configure_forme(cote_carre, "Coté :", "10"), BorderLayout.CENTER);
-			
-			double cc = Double.parseDouble(cote_carre.getText());
-			Rectangle carre = new Rectangle("Carre", new Point2D.Double(0,0), cc, cc);
-			if (this.alarmbox_action(carre, config_forme, "Création du Carré", true)){
+			double cc = Double.parseDouble(default_value);
+			Carre carre;
+			if(isCreation){
+				carre = new Carre(new Point2D.Double(0,0), cc);
+			}
+			else {
+				carre = (Carre) o;
+				default_value = ""+carre.getcote();
+				Epaisseur.setText(""+carre.getStroke().getLineWidth());
+			}
+			config_forme.add(this.configure_forme(cote_carre, "Coté :", default_value), BorderLayout.CENTER);
+			reponse_alarmbox = this.alarmbox_action(carre, config_forme, "Création du Carré", true);
+			if (reponse_alarmbox){
 				cc = Double.parseDouble(cote_carre.getText());
-				carre.setWidth(cc);
-				carre.setHeight(cc);
+				carre.setcote(cc);
 			}
 			
 			break;
 			
 		case "Triangle":
 			JTextField CoteTriangle = new JTextField();
-			config_forme.add(this.configure_forme(CoteTriangle, "Coté :", "10"), BorderLayout.CENTER);
+			double ct = Double.parseDouble(default_value);
+			Triangle triangle;
+			if(isCreation){
+				triangle = new Triangle(new Point2D.Double(0, 0), (int) ct);
+			}
+			else {
+				triangle = (Triangle) o;
+				default_value = ""+ triangle.getTaille();
+				Epaisseur.setText(""+triangle.getStroke().getLineWidth());
+			}
 			
-			double ct = Double.parseDouble(CoteTriangle.getText());
-			Triangle triangle = new Triangle(new Point2D.Double(0, 0), (int) ct);
-			if (this.alarmbox_action(triangle, config_forme, "Création du Triangle", true)){
+			config_forme.add(this.configure_forme(CoteTriangle, "Coté :", default_value), BorderLayout.CENTER);
+			reponse_alarmbox = this.alarmbox_action(triangle, config_forme, "Création du Triangle", true);
+			if (reponse_alarmbox){
 				ct = Double.parseDouble(CoteTriangle.getText());
 				triangle.setTaille(ct);
 			}
@@ -420,9 +453,19 @@ public class Edition extends JFrame {
 			break;
 			
 		case "Ligne":
-			SegmentDroite seg = new SegmentDroite(new Point2D.Double(0,0), new Point2D.Double(0,0));
-			this.alarmbox_action(seg, config_forme, "Création de ligne", false);
+			SegmentDroite seg;
+			if(isCreation){
+				seg = new SegmentDroite(new Point2D.Double(0,0), new Point2D.Double(0,0));
+			}
+			else{
+				seg = (SegmentDroite) o;
+			}
+			reponse_alarmbox = this.alarmbox_action(seg, config_forme, "Création de ligne", false);
 			break;
+		}
+		if(reponse_alarmbox && isCreation){
+			//Ajouter un mouse movement listener a la toile avec un cercle a dessiner
+			this.toile.modeListener();
 		}
 	}
 }
