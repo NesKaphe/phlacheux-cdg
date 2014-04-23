@@ -306,8 +306,6 @@ public class Edition extends JFrame {
 				catch(Exception exception) {
 					System.out.println("Pas un entier");
 				}
-				//Ajouter un mouse movement listener a la toile avec un cercle a dessiner
-				this.toile.modeListener();
 				return true;
 			} 
 			else {
@@ -331,6 +329,7 @@ public class Edition extends JFrame {
 		JPanel config_forme = new JPanel(new BorderLayout());
 		config_forme.add(this.configure_forme(this.Epaisseur, "Choix de la taille du trait :", "1"), BorderLayout.SOUTH);
 		String default_value = "10";
+		boolean reponse_alarmbox = isCreation;
 		if (!isCreation){
 			StrokeChooser.setColor(o.getStrokeColor());
 			FillChooser.setColor(o.getFillColor());
@@ -352,7 +351,8 @@ public class Edition extends JFrame {
 				Epaisseur.setText(""+c.getStroke().getLineWidth());
 			}
 			config_forme.add(this.configure_forme(Rayon, "Rayon :", default_value), BorderLayout.CENTER);
-			if (this.alarmbox_action(c, config_forme, "Création de cercle", true)){
+			reponse_alarmbox = this.alarmbox_action(c, config_forme, "Création de cercle", true);
+			if (reponse_alarmbox){
 				r = Double.parseDouble(Rayon.getText());
 				c.setRayon(r);
 			}
@@ -380,7 +380,8 @@ public class Edition extends JFrame {
 			config_rectangle.add(this.configure_forme(HauteurRectangle, "Hauteur :", ""+h), BorderLayout.CENTER);
 			
 			config_forme.add(config_rectangle, BorderLayout.CENTER);
-			if (this.alarmbox_action(rect, config_forme, "Création de Rectangle", true)){
+			reponse_alarmbox = this.alarmbox_action(rect, config_forme, "Création de Rectangle", true);
+			if (reponse_alarmbox) {
 				l = Double.parseDouble(LargeurRectangle.getText());
 				h = Double.parseDouble(HauteurRectangle.getText());
 				rect.setWidth(l);
@@ -402,7 +403,8 @@ public class Edition extends JFrame {
 				Epaisseur.setText(""+carre.getStroke().getLineWidth());
 			}
 			config_forme.add(this.configure_forme(cote_carre, "Coté :", default_value), BorderLayout.CENTER);
-			if (this.alarmbox_action(carre, config_forme, "Création du Carré", true)){
+			reponse_alarmbox = this.alarmbox_action(carre, config_forme, "Création du Carré", true);
+			if (reponse_alarmbox){
 				cc = Double.parseDouble(cote_carre.getText());
 				carre.setcote(cc);
 			}
@@ -423,8 +425,8 @@ public class Edition extends JFrame {
 			}
 			
 			config_forme.add(this.configure_forme(CoteTriangle, "Coté :", default_value), BorderLayout.CENTER);
-			
-			if (this.alarmbox_action(triangle, config_forme, "Création du Triangle", true)){
+			reponse_alarmbox = this.alarmbox_action(triangle, config_forme, "Création du Triangle", true);
+			if (reponse_alarmbox){
 				ct = Double.parseDouble(CoteTriangle.getText());
 				triangle.setTaille(ct);
 			}
@@ -439,8 +441,12 @@ public class Edition extends JFrame {
 			else{
 				seg = (SegmentDroite) o;
 			}
-			this.alarmbox_action(seg, config_forme, "Création de ligne", false);
+			reponse_alarmbox = this.alarmbox_action(seg, config_forme, "Création de ligne", false);
 			break;
+		}
+		if(reponse_alarmbox && isCreation){
+			//Ajouter un mouse movement listener a la toile avec un cercle a dessiner
+			this.toile.modeListener();
 		}
 	}
 }
