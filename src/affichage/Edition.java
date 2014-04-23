@@ -47,8 +47,8 @@ import formes.*;
 import Animations.GestionAnimation;
 
 
-public class Edition extends JFrame {
-
+public class Edition extends JFrame implements ActionListener {
+ 
 	/**
 	 * 
 	 */
@@ -78,6 +78,16 @@ public class Edition extends JFrame {
 	private JColorChooser StrokeChooser;
 	private JColorChooser FillChooser;
 	private JTextField Epaisseur;
+	
+	// Item du menu création d'objet
+	JMenuItem mi_Cercle = new JMenuItem("Cercle");
+	JMenuItem mi_Triangle = new JMenuItem("Triangle");
+	JMenuItem mi_Rectangle = new JMenuItem("Rectangle");
+	JMenuItem mi_Carre = new JMenuItem("Carré");
+	JMenuItem mi_Ligne = new JMenuItem("Ligne");
+	JMenuItem mi_Etoile = new JMenuItem("Etoile");
+	JMenuItem mi_Hexagone = new JMenuItem("Hexagone");
+	JMenuItem mi_Croix = new JMenuItem("Croix");
 
 	
 	public Edition() {
@@ -115,22 +125,14 @@ public class Edition extends JFrame {
     	    	
     	// menu création d'objet
     	JMenu menu_C = new JMenu("Création d'objet");
-    	JMenuItem mi_Cercle = new JMenuItem("Cercle");
-    	JMenuItem mi_Triangle = new JMenuItem("Triangle");
-    	JMenuItem mi_Rectangle = new JMenuItem("Rectangle");
-    	JMenuItem mi_Carre = new JMenuItem("Carré");
-    	JMenuItem mi_Ligne = new JMenuItem("Ligne");
-    	JMenuItem mi_Etoile = new JMenuItem("Etoile");
-    	JMenuItem mi_Hexagone = new JMenuItem("Hexagone");
-    	JMenuItem mi_Croix = new JMenuItem("Croix");
-    	menu_C.add(mi_Cercle);
-    	menu_C.add(mi_Triangle);
-    	menu_C.add(mi_Rectangle);
-    	menu_C.add(mi_Carre);
-    	menu_C.add(mi_Ligne);
-    	menu_C.add(mi_Etoile);
-    	menu_C.add(mi_Hexagone);
-    	menu_C.add(mi_Croix);
+    	mi_Cercle.addActionListener(this);menu_C.add(mi_Cercle);
+    	mi_Triangle.addActionListener(this);menu_C.add(mi_Triangle);
+    	mi_Rectangle.addActionListener(this);menu_C.add(mi_Rectangle);
+    	mi_Carre.addActionListener(this);menu_C.add(mi_Carre);
+    	mi_Ligne.addActionListener(this);menu_C.add(mi_Ligne);
+    	mi_Etoile.addActionListener(this);menu_C.add(mi_Etoile);
+    	mi_Hexagone.addActionListener(this);menu_C.add(mi_Hexagone);
+    	mi_Croix.addActionListener(this);menu_C.add(mi_Croix);
     	menuBarEditionMode.add(menu_C);
     	 	
     	//Formes
@@ -235,21 +237,6 @@ public class Edition extends JFrame {
     	va.dessineAnimation();
     	this.add(va, BorderLayout.SOUTH);
     	
-    	mi_new.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    		}
-    	});
-    	
-    	mi_refresh.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    		}
-    	});
-    	
-    	mi_add_object.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    		}
-    	});
-    	
     	// le champ quitter du menu ferme tout
     	mi_exit.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
@@ -257,61 +244,6 @@ public class Edition extends JFrame {
     		}
 	    });
     	
-    	// Active la creation d'un cercle
-    	mi_Cercle.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Cercle", null, true);
-    		}
-	    });
-    	
-    	// Active la creation d'un Triangle
-    	mi_Triangle.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Triangle", null, true);
-    		}
-	    });
-    	
-    	// Active la creation d'un Carre
-    	mi_Carre.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Carre", null, true);
-    		}
-	    });
-    	
-    	// Active la creation d'un Rectangle
-    	mi_Rectangle.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Rectangle", null, true);
-    		}
-	    });
-    	
-    	// Active la creation d'un Ligne
-    	mi_Ligne.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Ligne", null, true);
-    		}
-	    });
-    	
-    	// Active la creation d'un etoile
-    	mi_Etoile.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Etoile", null, true);
-    		}
-	    });
-    	
-    	// Active la creation d'un hexagone
-    	mi_Hexagone.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Hexagone", null, true);
-    		}
-	    });
-    	
-    	// Active la creation d'un cercle
-    	mi_Croix.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			alarm_configuration_objet("Croix", null, true);
-    		}
-	    });
     	
     	this.listeObjets();
     	this.initColorchooser();
@@ -344,6 +276,34 @@ public class Edition extends JFrame {
 	
 	public GestionAnimation getGestionAnimation() {
 		return this.gestionnaire;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		String source = e.getActionCommand();
+		if(source == this.mi_Cercle.getText()){
+			alarm_configuration_objet("Cercle", null, true);
+		}
+		else if(source == this.mi_Triangle.getText()){
+			alarm_configuration_objet("Triangle", null, true);
+		}
+		else if(source == this.mi_Carre.getText()){
+			alarm_configuration_objet("Carre", null, true);
+		}
+		else if(source == this.mi_Rectangle.getText()){
+			alarm_configuration_objet("Rectangle", null, true);
+		}
+		else if(source == this.mi_Ligne.getText()){
+			alarm_configuration_objet("Ligne", null, true);
+		}
+		else if(source == this.mi_Etoile.getText()){
+			alarm_configuration_objet("Etoile", null, true);
+		}
+		else if(source == this.mi_Hexagone.getText()){
+			alarm_configuration_objet("Hexagone", null, true);
+		}
+		else if(source == this.mi_Croix.getText()){
+			alarm_configuration_objet("Croix", null, true);
+		}
 	}
 	
 	public void initColorchooser(){
