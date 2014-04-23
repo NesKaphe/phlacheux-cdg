@@ -37,7 +37,7 @@ public class Etoile extends ObjetGeometrique{
 	
 	@Override
 	public void generateShape(){
-		
+		//TODO : COMMENT clem :  "cote = this.taille" pourquoi ? ça sert à rien
 		int cote = this.taille; //taille du centre vers un sommet le plus eloigne de l'etoile
 		int cote_d = cote*2; // double de la taille d'un cote
 		int cote_1 = cote/3; // 2/3 d'un cote
@@ -48,7 +48,7 @@ public class Etoile extends ObjetGeometrique{
 		int coords_y[] = {cote_d, cote+cote_1, cote, cote_2, 0, cote_2, cote, cote+cote_1};
 		
 		//forme du triangle généré :
-		Polygon triangle = new Polygon(coords_x,coords_y,8);
+		Polygon triangle = new Polygon(coords_x,coords_y,8);//TODO :  REGARDE CE QUE TU FAIT "triangle" comme non de variable (copier collé ??)
 				
 		//on a besoin de translaté la forme pour qu'elle 
 		//soit centré aux coordonées passé au constructeur :

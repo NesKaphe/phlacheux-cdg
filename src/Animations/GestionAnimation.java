@@ -118,6 +118,7 @@ public class GestionAnimation {
 		t.repaint();
 	}
 
+	//TODO : renommer en getObjetAt en getObjetIdAt
 	public Entry<Integer, ObjetGeometrique> getObjectAt(int x, int y, double t_courant) {
 		//On va parcourir le hashmap des comportements et voir si le point x, y est contenu dans le shape
 		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {

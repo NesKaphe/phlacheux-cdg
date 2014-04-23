@@ -30,8 +30,7 @@ public class Comportement {
 	}
 	
 	public Comportement(ObjetGeometrique geo, int id) {
-		//On crée un composite animation par defaut
-		this(geo,new CompositeAnimation(0., 0., 0),id);
+		this(geo,new CompositeAnimation(0., 0., 0), id);
 	}
 	
 	public void setObjGeo(ObjetGeometrique geo) {
@@ -121,6 +120,7 @@ public class Comportement {
 			}
 		}
 		//TODO : récupération couleur stroke ,couleur fill,stroke ...
+
 		return objGeo.AppliqueAnimation(at, FillColor, colorStroke, stroke);//TODO : null parceque pas encore implémenté les autre animations
 	}
 

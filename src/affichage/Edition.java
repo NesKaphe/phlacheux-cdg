@@ -3,12 +3,15 @@ package affichage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -16,6 +19,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -29,6 +33,9 @@ import javax.swing.JToolBar;
 import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.colorchooser.ColorSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -160,13 +167,30 @@ public class Edition extends JFrame {
     	liste.addMouseListener(new MouseAdapter() {
     		
     		public void mouseClicked(MouseEvent e) {
+    			//On est interessé par le double clic sur la liste
     			if(e.getClickCount() == 2) {
     				int index = liste.locationToIndex(e.getPoint());
     				ListModel<Item> lm = liste.getModel();
     				Item item = lm.getElementAt(index);
     				ObjetGeometrique geo = gestionnaire.getObject(item.getId(), 0.); //TODO: recup le temps courant
-    				JPanel config_forme = new JPanel(new BorderLayout());
-    				//config_forme.add(affiche_Epaisseur(), BorderLayout.SOUTH);
+    				String s;
+    				if(geo instanceof Cercle) {
+    					s = "Cercle";
+    				}
+    				else if(geo instanceof Triangle) {
+    					s = "Triangle";
+    				}
+    				else if(geo instanceof Carre) {
+    					s = "Carre";
+    				}
+    				else if(geo instanceof Rectangle) {
+    					s = "Rectangle";
+    				}
+    				else { //Segment de droite
+    					s = "Ligne";
+    				}
+    				alarm_configuration_objet(s,geo,false);
+    				
     				System.out.println("Double clic sur "+item+ "id : "+ item.getId());
     			}
     		}
@@ -265,6 +289,9 @@ public class Edition extends JFrame {
     	this.Epaisseur = new JTextField();
 	}
 	
+	/**
+	 * listeObjets va mettre a jour la JList contenant les objets geometriques
+	 */
 	public void listeObjets() {
 		HashMap<Integer, ObjetGeometrique> map = this.gestionnaire.getAllObjects();
 		DefaultListModel<Item> lm = new DefaultListModel<Item>();
@@ -292,6 +319,10 @@ public class Edition extends JFrame {
 		JTextField Epaisseur = new JTextField();
 		Epaisseur.setText("1");
 		
+		//changer l'apercu (qui est moche) :
+	    StrokeChooser.setPreviewPanel(new MyPreviewPanel(StrokeChooser));
+	    FillChooser.setPreviewPanel(new MyPreviewPanel(FillChooser));
+		
 		for(final AbstractColorChooserPanel accp : StrokeChooser.getChooserPanels()) {
 			if(!accp.getDisplayName().equals("RVB")) {
 				StrokeChooser.removeChooserPanel(accp);
@@ -316,6 +347,8 @@ public class Edition extends JFrame {
 		panel_fill.add(fill, BorderLayout.NORTH);
 		panel_fill.add(FillChooser, BorderLayout.CENTER);
 		panel_Colorchoosers.add(panel_stroke, BorderLayout.WEST);
+		
+		
 		if (isfill)
 			panel_Colorchoosers.add(panel_fill, BorderLayout.EAST);
 		return panel_Colorchoosers;
@@ -523,4 +556,37 @@ public class Edition extends JFrame {
 			this.toile.modeListener();
 		}
 	}
+}
+
+
+//code trouvé sur ce site : http://exampledepot.8waytrips.com/egs/javax.swing.colorchooser/CustPreview.html
+//This preview panel simply displays the currently selected color.
+class MyPreviewPanel extends JComponent {
+ // The currently selected color
+ Color curColor;
+
+ public MyPreviewPanel(JColorChooser chooser) {
+     // Initialize the currently selected color
+     curColor = chooser.getColor();
+
+     // Add listener on model to detect changes to selected color
+     ColorSelectionModel model = chooser.getSelectionModel();
+     model.addChangeListener(new ChangeListener() {
+         public void stateChanged(ChangeEvent evt) {
+             ColorSelectionModel model = (ColorSelectionModel)evt.getSource();
+
+             // Get the new color value
+             curColor = model.getSelectedColor();
+         }
+     }) ;
+
+     // Set a preferred size
+     setPreferredSize(new Dimension(50, 50));
+ }
+
+ // Paint current color
+ public void paint(Graphics g) {
+     g.setColor(curColor);
+     g.fillRect(0, 0, getWidth()-1, getHeight()-1);
+ }
 }
