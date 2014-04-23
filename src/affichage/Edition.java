@@ -32,13 +32,7 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import formes.Carre;
-import formes.Cercle;
-import formes.ObjetGeometrique;
-import formes.Rectangle;
-import formes.SegmentDroite;
-import formes.Triangle;
-import formes.Etoile;
+import formes.*;
 
 import Animations.GestionAnimation;
 
@@ -114,12 +108,14 @@ public class Edition extends JFrame {
     	JMenuItem mi_Carre = new JMenuItem("Carré");
     	JMenuItem mi_Ligne = new JMenuItem("Ligne");
     	JMenuItem mi_Etoile = new JMenuItem("Etoile");
+    	JMenuItem mi_Hexagone = new JMenuItem("Hexagone");
     	menu_C.add(mi_Cercle);
     	menu_C.add(mi_Triangle);
     	menu_C.add(mi_Rectangle);
     	menu_C.add(mi_Carre);
     	menu_C.add(mi_Ligne);
     	menu_C.add(mi_Etoile);
+    	menu_C.add(mi_Hexagone);
     	menuBarEditionMode.add(menu_C);
     	 	
     	//Formes
@@ -254,6 +250,13 @@ public class Edition extends JFrame {
     	mi_Etoile.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Etoile", null, true);
+    		}
+	    });
+    	
+    	// le champ quitter du menu ferme tout
+    	mi_Hexagone.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			alarm_configuration_objet("Hexagone", null, true);
     		}
 	    });
     	
@@ -491,6 +494,27 @@ public class Edition extends JFrame {
 			if (reponse_alarmbox){
 				t = Double.parseDouble(Taille.getText());
 				e.setTaille(t);
+			}
+			break;
+			
+		case "Hexagone":
+			
+			JTextField Rayon_h = new JTextField();
+			double r_h = Double.parseDouble(default_value);
+			Hexagone hexa;
+			if(isCreation){
+				hexa = new Hexagone(new Point2D.Double(0,0),(int) r_h);
+			}
+			else {
+				hexa = (Hexagone) o;
+				default_value = ""+hexa.getTaille();
+				Epaisseur.setText(""+hexa.getStroke().getLineWidth());
+			}
+			config_forme.add(this.configure_forme(Rayon_h, "Rayon :", default_value), BorderLayout.CENTER);
+			reponse_alarmbox = this.alarmbox_action(hexa, config_forme, "Création de Hexagone", true);
+			if (reponse_alarmbox){
+				r_h = Double.parseDouble(Rayon_h.getText());
+				hexa.setTaille(r_h);
 			}
 			break;
 		}
