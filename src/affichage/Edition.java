@@ -116,6 +116,7 @@ public class Edition extends JFrame {
     	JMenuItem mi_Ligne = new JMenuItem("Ligne");
     	JMenuItem mi_Etoile = new JMenuItem("Etoile");
     	JMenuItem mi_Hexagone = new JMenuItem("Hexagone");
+    	JMenuItem mi_Croix = new JMenuItem("Croix");
     	menu_C.add(mi_Cercle);
     	menu_C.add(mi_Triangle);
     	menu_C.add(mi_Rectangle);
@@ -123,6 +124,7 @@ public class Edition extends JFrame {
     	menu_C.add(mi_Ligne);
     	menu_C.add(mi_Etoile);
     	menu_C.add(mi_Hexagone);
+    	menu_C.add(mi_Croix);
     	menuBarEditionMode.add(menu_C);
     	 	
     	//Formes
@@ -235,52 +237,59 @@ public class Edition extends JFrame {
     		}
 	    });
     	
-    	// le champ quitter du menu ferme tout
+    	// Active la creation d'un cercle
     	mi_Cercle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Cercle", null, true);
     		}
 	    });
     	
-    	// le champ quitter du menu ferme tout
+    	// Active la creation d'un Triangle
     	mi_Triangle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Triangle", null, true);
     		}
 	    });
     	
-    	// le champ quitter du menu ferme tout
+    	// Active la creation d'un Carre
     	mi_Carre.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Carre", null, true);
     		}
 	    });
     	
-    	// le champ quitter du menu ferme tout
+    	// Active la creation d'un Rectangle
     	mi_Rectangle.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Rectangle", null, true);
     		}
 	    });
     	
-    	// le champ quitter du menu ferme tout
+    	// Active la creation d'un Ligne
     	mi_Ligne.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Ligne", null, true);
     		}
 	    });
     	
-    	// le champ quitter du menu ferme tout
+    	// Active la creation d'un etoile
     	mi_Etoile.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Etoile", null, true);
     		}
 	    });
     	
-    	// le champ quitter du menu ferme tout
+    	// Active la creation d'un hexagone
     	mi_Hexagone.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Hexagone", null, true);
+    		}
+	    });
+    	
+    	// Active la creation d'un cercle
+    	mi_Croix.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			alarm_configuration_objet("Croix", null, true);
     		}
 	    });
     	
@@ -548,6 +557,27 @@ public class Edition extends JFrame {
 			if (reponse_alarmbox){
 				r_h = Double.parseDouble(Rayon_h.getText());
 				hexa.setTaille(r_h);
+			}
+			break;
+			
+		case "Croix":
+			
+			JTextField Rayon_c = new JTextField();
+			double r_c = Double.parseDouble(default_value);
+			Croix croix;
+			if(isCreation){
+				croix = new Croix(new Point2D.Double(0,0),(int) r_c);
+			}
+			else {
+				croix = (Croix) o;
+				default_value = ""+croix.getTaille();
+				Epaisseur.setText(""+croix.getStroke().getLineWidth());
+			}
+			config_forme.add(this.configure_forme(Rayon_c, "Rayon :", default_value), BorderLayout.CENTER);
+			reponse_alarmbox = this.alarmbox_action(croix, config_forme, "Création de Croix", true);
+			if (reponse_alarmbox){
+				r_c = Double.parseDouble(Rayon_c.getText());
+				croix.setTaille(r_c);
 			}
 			break;
 		}
