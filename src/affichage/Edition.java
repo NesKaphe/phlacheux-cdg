@@ -3,9 +3,12 @@ package affichage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -13,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -26,6 +30,9 @@ import javax.swing.JToolBar;
 import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.colorchooser.ColorSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import formes.Cercle;
@@ -254,6 +261,10 @@ public class Edition extends JFrame {
 		JTextField Epaisseur = new JTextField();
 		Epaisseur.setText("1");
 		
+		//changer l'apercu (qui est moche) :
+	    StrokeChooser.setPreviewPanel(new MyPreviewPanel(StrokeChooser));
+	    FillChooser.setPreviewPanel(new MyPreviewPanel(FillChooser));
+		
 		for(final AbstractColorChooserPanel accp : StrokeChooser.getChooserPanels()) {
 			if(!accp.getDisplayName().equals("RVB")) {
 				StrokeChooser.removeChooserPanel(accp);
@@ -278,6 +289,8 @@ public class Edition extends JFrame {
 		panel_fill.add(fill, BorderLayout.NORTH);
 		panel_fill.add(FillChooser, BorderLayout.CENTER);
 		panel_Colorchoosers.add(panel_stroke, BorderLayout.WEST);
+		
+		
 		if (isfill)
 			panel_Colorchoosers.add(panel_fill, BorderLayout.EAST);
 		return panel_Colorchoosers;
@@ -402,4 +415,37 @@ public class Edition extends JFrame {
 			break;
 		}
 	}
+}
+
+
+//code trouvé sur ce site : http://exampledepot.8waytrips.com/egs/javax.swing.colorchooser/CustPreview.html
+//This preview panel simply displays the currently selected color.
+class MyPreviewPanel extends JComponent {
+ // The currently selected color
+ Color curColor;
+
+ public MyPreviewPanel(JColorChooser chooser) {
+     // Initialize the currently selected color
+     curColor = chooser.getColor();
+
+     // Add listener on model to detect changes to selected color
+     ColorSelectionModel model = chooser.getSelectionModel();
+     model.addChangeListener(new ChangeListener() {
+         public void stateChanged(ChangeEvent evt) {
+             ColorSelectionModel model = (ColorSelectionModel)evt.getSource();
+
+             // Get the new color value
+             curColor = model.getSelectedColor();
+         }
+     }) ;
+
+     // Set a preferred size
+     setPreferredSize(new Dimension(50, 50));
+ }
+
+ // Paint current color
+ public void paint(Graphics g) {
+     g.setColor(curColor);
+     g.fillRect(0, 0, getWidth()-1, getHeight()-1);
+ }
 }

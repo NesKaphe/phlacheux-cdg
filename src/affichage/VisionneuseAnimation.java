@@ -51,7 +51,6 @@ public class VisionneuseAnimation extends JScrollPane{
 		parentPan = new JPanel(new BorderLayout());//le panel qui va contenir la représentation de l'animation
 		parentPan.setMinimumSize(new Dimension(this.maxTime,screenSize.height/10));//TODO : réfléchir au maxTime
 		parentPan.setPreferredSize(new Dimension(this.maxTime,screenSize.height/5));
-		//parentPan.setBackground(Color.gray);
 		
 		childPan = new JPanel();
 		childPan.setBackground(new Color(213,246,213));
@@ -257,7 +256,7 @@ class BlockAnimation extends JPanel{
 		Graphics2D g2 = (Graphics2D)g;
 		if(this.dessinOK){			
 			g2.drawString(objGeo.getNom()+" "+id, 10, 15);//écrit le nom + id de l'objGeo
-			//boucle psur le nombre de ligne de lla
+			//boucle sur le nombre de ligne de lla
 			int i = 1;
 			for(ArrayList<Animation> list_a : lla){
 				for (Animation a : list_a){
