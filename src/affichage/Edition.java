@@ -171,13 +171,30 @@ public class Edition extends JFrame {
     	liste.addMouseListener(new MouseAdapter() {
     		
     		public void mouseClicked(MouseEvent e) {
+    			//On est interessé par le double clic sur la liste
     			if(e.getClickCount() == 2) {
     				int index = liste.locationToIndex(e.getPoint());
     				ListModel<Item> lm = liste.getModel();
     				Item item = lm.getElementAt(index);
     				ObjetGeometrique geo = gestionnaire.getObject(item.getId(), 0.); //TODO: recup le temps courant
-    				JPanel config_forme = new JPanel(new BorderLayout());
-    				//config_forme.add(affiche_Epaisseur(), BorderLayout.SOUTH);
+    				String s;
+    				if(geo instanceof Cercle) {
+    					s = "Cercle";
+    				}
+    				else if(geo instanceof Triangle) {
+    					s = "Triangle";
+    				}
+    				else if(geo instanceof Carre) {
+    					s = "Carre";
+    				}
+    				else if(geo instanceof Rectangle) {
+    					s = "Rectangle";
+    				}
+    				else { //Segment de droite
+    					s = "Ligne";
+    				}
+    				alarm_configuration_objet(s,geo,false);
+    				
     				System.out.println("Double clic sur "+item+ "id : "+ item.getId());
     			}
     		}
@@ -269,6 +286,9 @@ public class Edition extends JFrame {
     	this.Epaisseur = new JTextField();
 	}
 	
+	/**
+	 * listeObjets va mettre a jour la JList contenant les objets geometriques
+	 */
 	public void listeObjets() {
 		HashMap<Integer, ObjetGeometrique> map = this.gestionnaire.getAllObjects();
 		DefaultListModel<Item> lm = new DefaultListModel<Item>();

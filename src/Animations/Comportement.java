@@ -30,6 +30,7 @@ public class Comportement {
 	}
 	
 	
+	
 	public void setObjGeo(ObjetGeometrique geo) {
 		this.objGeo = geo;
 	}
