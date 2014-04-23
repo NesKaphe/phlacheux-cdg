@@ -78,4 +78,8 @@ public class Triangle extends ObjetGeometrique {
 	public void setTaille(double t){
 		this.taille = (int) t;
 	}
+	
+	public double getTaille(){
+		return this.taille;
+	}
 }

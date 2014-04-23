@@ -15,4 +15,13 @@ public class Carre extends Rectangle {
 	public Carre clone(){
 		return new Carre(this);
 	}
+	
+	public double getcote(){
+		return this.height;
+	}
+	
+	public void setcote(double cote){
+		this.setHeight(cote);
+		this.setWidth(cote);
+	}
 }
