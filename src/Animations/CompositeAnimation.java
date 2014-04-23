@@ -101,6 +101,9 @@ public class CompositeAnimation extends Animation{
 			}
 		}
 		
+		if(strokeWidthTotal == 0) { //Si rien n'a changé, on avait pas d'animation de width dans nos fils
+			return null;
+		}
 		return strokeWidthTotal;
 	}
 
@@ -129,6 +132,10 @@ public class CompositeAnimation extends Animation{
 				g += ctmp[1];
 				b += ctmp[2];
 			}
+		}
+		
+		if(r == 0 && g == 0 && b == 0) {
+			return null;
 		}
 		
 		int[] c = new int[3];
@@ -164,6 +171,10 @@ public class CompositeAnimation extends Animation{
 				g += ctmp[1];
 				b += ctmp[2];
 			}
+		}
+		
+		if(r == 0 && g == 0 && b == 0) {
+			return null;
 		}
 		
 		int[] c = new int[3];

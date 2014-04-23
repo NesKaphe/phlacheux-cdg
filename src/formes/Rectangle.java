@@ -40,6 +40,14 @@ public class Rectangle extends ObjetGeometrique {
 		}
 		
 	}
+	
+	public double getWidth() {
+		return this.width;
+	}
+	
+	public double getHeight() {
+		return this.height;
+	}
 
 	public Point2D getCoord() {
 		Point2D p = new Point2D.Double(this.centre.getX() - this.width/2, this.centre.getY() - this.height/2);

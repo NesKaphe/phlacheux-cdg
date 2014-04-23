@@ -1,11 +1,11 @@
 package affichage;
 
-public class JListItem {
+public class Item {
 
 	private int id;
 	private Object valeur;
 	
-	public JListItem(int id, Object valeur) {
+	public Item(int id, Object valeur) {
 		this.id = id;
 		this.valeur = valeur;
 	}

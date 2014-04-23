@@ -41,6 +41,10 @@ public class Cercle extends ObjetGeometrique {
 		else
 			this.rayon = 0;
 	}
+	
+	public double getRayon() {
+		return this.rayon;
+	}
 
 
 }
