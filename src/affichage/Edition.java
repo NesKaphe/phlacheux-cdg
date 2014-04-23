@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -156,6 +159,22 @@ public class Edition extends JFrame {
 					}
 				}
 			}
+		});
+    	
+    	liste.addMouseListener(new MouseAdapter() {
+    		
+    		public void mouseClicked(MouseEvent e) {
+    			if(e.getClickCount() == 2) {
+    				int index = liste.locationToIndex(e.getPoint());
+    				ListModel<Item> lm = liste.getModel();
+    				Item item = lm.getElementAt(index);
+    				ObjetGeometrique geo = gestionnaire.getObject(item.getId(), 0.); //TODO: recup le temps courant
+    				JPanel config_forme = new JPanel(new BorderLayout());
+    				//config_forme.add(affiche_Epaisseur(), BorderLayout.SOUTH);
+    				System.out.println("Double clic sur "+item+ "id : "+ item.getId());
+    			}
+    		}
+    		
 		});
     	
     	JPanel east = new JPanel();
