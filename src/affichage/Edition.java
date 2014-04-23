@@ -35,6 +35,7 @@ import formes.ObjetGeometrique;
 import formes.Rectangle;
 import formes.SegmentDroite;
 import formes.Triangle;
+import formes.Etoile;
 
 import Animations.GestionAnimation;
 
@@ -109,11 +110,13 @@ public class Edition extends JFrame {
     	JMenuItem mi_Rectangle = new JMenuItem("Rectangle");
     	JMenuItem mi_Carre = new JMenuItem("Carré");
     	JMenuItem mi_Ligne = new JMenuItem("Ligne");
+    	JMenuItem mi_Etoile = new JMenuItem("Etoile");
     	menu_C.add(mi_Cercle);
     	menu_C.add(mi_Triangle);
     	menu_C.add(mi_Rectangle);
     	menu_C.add(mi_Carre);
     	menu_C.add(mi_Ligne);
+    	menu_C.add(mi_Etoile);
     	menuBarEditionMode.add(menu_C);
     	 	
     	//Formes
@@ -225,6 +228,13 @@ public class Edition extends JFrame {
     	mi_Ligne.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			alarm_configuration_objet("Ligne", null, true);
+    		}
+	    });
+    	
+    	// le champ quitter du menu ferme tout
+    	mi_Etoile.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			alarm_configuration_objet("Etoile", null, true);
     		}
 	    });
     	
@@ -442,6 +452,27 @@ public class Edition extends JFrame {
 				seg = (SegmentDroite) o;
 			}
 			reponse_alarmbox = this.alarmbox_action(seg, config_forme, "Création de ligne", false);
+			break;
+			
+		case "Etoile":
+			
+			JTextField Taille = new JTextField();
+			double t = Double.parseDouble(default_value);
+			Etoile e;
+			if(isCreation){
+				e = new Etoile(new Point2D.Double(0,0),(int) t);
+			}
+			else {
+				e = (Etoile) o;
+				default_value = ""+e.getTaille();
+				Epaisseur.setText(""+e.getStroke().getLineWidth());
+			}
+			config_forme.add(this.configure_forme(Taille, "Taille :", default_value), BorderLayout.CENTER);
+			reponse_alarmbox = this.alarmbox_action(e, config_forme, "Création de Etoile", true);
+			if (reponse_alarmbox){
+				t = Double.parseDouble(Taille.getText());
+				e.setTaille(t);
+			}
 			break;
 		}
 		if(reponse_alarmbox && isCreation){
