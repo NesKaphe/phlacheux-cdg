@@ -84,6 +84,7 @@ public class GestionAnimation {
 	public void modifierObjetComportement(int cle, ObjetGeometrique geo) {
 		Comportement comp = this.Comportements.get(cle);
 		if(comp != null) {
+			System.out.println("MODIF");
 			comp.setObjGeo(geo);
 			//Decider de si on remet a 0 les animations ou non
 		}

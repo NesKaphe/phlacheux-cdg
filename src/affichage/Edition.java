@@ -28,6 +28,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListModel;
@@ -38,6 +39,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import listeners.ListeObjGeoSelectListener;
 
 import formes.*;
 
@@ -67,6 +70,9 @@ public class Edition extends JFrame {
 	
 	//Liste des objets dessinés
 	private JList<Item> liste;
+	
+	//Bouton d'ajout d'animation
+	JButton boutonAjoutAnimation;
 	
 	//Element global de alarmbox de configuration
 	private JColorChooser StrokeChooser;
@@ -148,6 +154,7 @@ public class Edition extends JFrame {
     	
     	//Liste
     	liste = new JList<Item>();
+    	/*
     	liste.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
@@ -165,7 +172,8 @@ public class Edition extends JFrame {
 				}
 			}
 		});
-    	
+    	*/
+    	liste.addListSelectionListener(new ListeObjGeoSelectListener(this));
     	liste.addMouseListener(new MouseAdapter() {
     		
     		public void mouseClicked(MouseEvent e) {
@@ -192,22 +200,34 @@ public class Edition extends JFrame {
     					s = "Ligne";
     				}
     				alarm_configuration_objet(s,geo,false);
-    				
-    				System.out.println("Double clic sur "+item+ "id : "+ item.getId());
+    				geo.generateShape();
+    				gestionnaire.modifierObjetComportement(item.getId(), geo);
+    				gestionnaire.dessinerToile(0.); //TODO: Recup le temps courant
     			}
     		}
     		
 		});
     	
+    	liste.setBackground(Color.lightGray);
+    	
+    	boutonAjoutAnimation = new JButton("Creer animation");
+    	boutonAjoutAnimation.setEnabled(false);
+    	
     	JPanel east = new JPanel();
     	BorderLayout grid = new BorderLayout();
     	east.setLayout(grid);
     	east.setBackground(Color.lightGray);
+    	
     	JLabel titre = new JLabel("Liste d'objets");
     	titre.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 5));
-    	liste.setBackground(Color.lightGray);
+    	
+    	//On met la JList dans un scrollPane dans le cas ou il y a trop d'elements
+    	JScrollPane scrollPane = new JScrollPane(liste);
+    	scrollPane.setPreferredSize(new Dimension(0,0));
+    	
     	east.add(titre, BorderLayout.NORTH);
-    	east.add(liste, BorderLayout.CENTER);
+    	east.add(scrollPane, BorderLayout.CENTER);
+    	east.add(boutonAjoutAnimation, BorderLayout.SOUTH);
     	this.add(east, BorderLayout.EAST);
     	
     	//Visionneuse
@@ -312,6 +332,10 @@ public class Edition extends JFrame {
 	
 	public JList<Item> getListe() {
 		return this.liste;
+	}
+	
+	public JButton getBoutonAjoutAnimation() {
+		return this.boutonAjoutAnimation;
 	}
 	
 	public Toile getToile() {

@@ -19,6 +19,6 @@ public class Item {
 	}
 	
 	public String toString() {
-		return this.valeur.toString();
+		return this.valeur.toString()+" - "+this.id;
 	}
 }
