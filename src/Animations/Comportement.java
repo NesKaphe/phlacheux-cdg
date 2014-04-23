@@ -34,6 +34,7 @@ public class Comportement {
 		this(geo,new CompositeAnimation(0., 0., 0),id);
 	}
 	
+	
 	public void setObjGeo(ObjetGeometrique geo) {
 		this.objGeo = geo;
 	}
