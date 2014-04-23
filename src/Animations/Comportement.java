@@ -29,7 +29,9 @@ public class Comportement {
 		this.id = id;
 	}
 	
-	
+	public Comportement(ObjetGeometrique geo, int id) {
+		this(geo,new CompositeAnimation(0., 0., 0), id);
+	}
 	
 	public void setObjGeo(ObjetGeometrique geo) {
 		this.objGeo = geo;
