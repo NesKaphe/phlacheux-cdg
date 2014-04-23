@@ -255,29 +255,29 @@ public class Edition extends JFrame implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		Object  source = e.getSource();
-		if(source == this.mi_Cercle){
+		String source = e.getActionCommand();
+		if(source == this.mi_Cercle.getText()){
 			alarm_configuration_objet("Cercle", null, true);
 		}
-		else if(source == this.mi_Triangle){
+		else if(source == this.mi_Triangle.getText()){
 			alarm_configuration_objet("Triangle", null, true);
 		}
-		else if(source == this.mi_Carre){
+		else if(source == this.mi_Carre.getText()){
 			alarm_configuration_objet("Carre", null, true);
 		}
-		else if(source == this.mi_Rectangle){
+		else if(source == this.mi_Rectangle.getText()){
 			alarm_configuration_objet("Rectangle", null, true);
 		}
-		else if(source == this.mi_Ligne){
+		else if(source == this.mi_Ligne.getText()){
 			alarm_configuration_objet("Ligne", null, true);
 		}
-		else if(source == this.mi_Etoile){
+		else if(source == this.mi_Etoile.getText()){
 			alarm_configuration_objet("Etoile", null, true);
 		}
-		else if(source == this.mi_Hexagone){
+		else if(source == this.mi_Hexagone.getText()){
 			alarm_configuration_objet("Hexagone", null, true);
 		}
-		else if(source == this.mi_Croix){
+		else if(source == this.mi_Croix.getText()){
 			alarm_configuration_objet("Croix", null, true);
 		}
 	}
