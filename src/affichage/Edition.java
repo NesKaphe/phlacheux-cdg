@@ -167,7 +167,7 @@ public class Edition extends JFrame {
     				Item item = lm.getElementAt(index);
     				ObjetGeometrique geo = gestionnaire.getObject(item.getId(), 0.); //TODO: recup le temps courant
     				JPanel config_forme = new JPanel(new BorderLayout());
-    				config_forme.add(affiche_Epaisseur(), BorderLayout.SOUTH);
+    				//config_forme.add(affiche_Epaisseur(), BorderLayout.SOUTH);
     				System.out.println("Double clic sur "+item+ "id : "+ item.getId());
     			}
     		}
