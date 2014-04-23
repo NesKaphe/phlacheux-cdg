@@ -47,13 +47,13 @@ public class Hexagone extends ObjetGeometrique{
 		int coords_y[] = {t,0,0,t,t+t,t+t};
 		
 		//forme du triangle généré :
-		Polygon triangle = new Polygon(coords_x,coords_y,6);
+		Polygon hexagone = new Polygon(coords_x,coords_y,6);
 				
 		//on a besoin de translaté la forme pour qu'elle 
 		//soit centré aux coordonées passé au constructeur :
 		AffineTransform tx = new AffineTransform();
 		tx.translate( point_centrale.getX()-this.taille, point_centrale.getY()-this.taille);
-		this.forme = tx.createTransformedShape(triangle);
+		this.forme = tx.createTransformedShape(hexagone);
 		this.centre =  point_centrale;;
 		
 			
