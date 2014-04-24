@@ -3,43 +3,33 @@ package affichage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListModel;
 import javax.swing.SwingConstants;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
-import javax.swing.colorchooser.ColorSelectionModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import listeners.CreateAnimationListener;
 
 import listeners.CreateObjGeoListener;
 import listeners.ListeObjGeoSelectListener;
+import listeners.MouseToileListener;
 
 
 import formes.*;
@@ -58,9 +48,10 @@ public class Edition extends JFrame {
 	private static final int widthToile = 300;
 	private static final int heightToile = 300;
 	
+	private MouseToileListener listenerToile;
+	
 	//Menus
 	private JMenuBar menuBarEditionMode; //le menu du mode edition
-	private JMenuBar menuBarVisionneuseMode; //le menu du mode visionneuse
 	private JToolBar menu_object_add;
 
 	
@@ -76,11 +67,6 @@ public class Edition extends JFrame {
 	
 	private VisionneuseAnimation visionneuse;
 	
-	
-	//Element global de alarmbox de configuration
-	private JColorChooser StrokeChooser;
-	private JColorChooser FillChooser;
-	private JTextField Epaisseur;
 	
 	// menu création d'objet
 	JMenu menu_C = new JMenu("Création d'objet");
@@ -102,7 +88,9 @@ public class Edition extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//Creation de la toile
-		this.toile = new Toile(new Dimension(Edition.widthToile, Edition.heightToile), this);
+		this.listenerToile = new MouseToileListener(this);
+		
+		this.toile = new Toile(new Dimension(Edition.widthToile, Edition.heightToile), this, this.listenerToile);
 		this.toile.setBackground(Color.white);
 		this.toile.setOpaque(true);
 		
@@ -137,7 +125,7 @@ public class Edition extends JFrame {
     	
     	//création et ajout du listener des menuItem :
     	//ce listener nous crée une alerte box pour créer un objGeométrique:
-    	final CreateObjGeoListener create_obj_listener = new CreateObjGeoListener(this.toile);
+    	final CreateObjGeoListener create_obj_listener = new CreateObjGeoListener(this.toile, this.gestionnaire);
     	mi_Cercle.addActionListener(create_obj_listener);
     	mi_Triangle.addActionListener(create_obj_listener);
     	mi_Rectangle.addActionListener(create_obj_listener);

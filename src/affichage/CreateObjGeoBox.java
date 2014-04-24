@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
+import Animations.GestionAnimation;
 
 import formes.Carre;
 import formes.Cercle;
@@ -21,7 +21,7 @@ import formes.Triangle;
 public class CreateObjGeoBox{
 	
 	
-	private Toile toile;
+	private GestionAnimation gestionnaire;
 	private JColorChooser StrokeChooser;
 	private JColorChooser FillChooser;
 	private float Epaisseur = -1;
@@ -31,9 +31,9 @@ public class CreateObjGeoBox{
 	private double default_taille ;
 	private String nomBox;
 	//consytructeur pour le mode création
-	public CreateObjGeoBox(Toile toile,String type){
+	public CreateObjGeoBox(GestionAnimation gestionnaire,String type){
 		System.out.println("INFO - constructeur création");
-		this.toile = toile;
+		this.gestionnaire = gestionnaire;
 		this.type = type;
 		this.objGeo = null;
 		this.default_taille = 100;
@@ -41,9 +41,9 @@ public class CreateObjGeoBox{
 	}
 	
 	//constructeur pour le mode modification
-	public CreateObjGeoBox(Toile toile,ObjetGeometrique objGeo){
+	public CreateObjGeoBox(GestionAnimation gestionnaire,ObjetGeometrique objGeo){
 		System.out.println("INFO - constructeur modif");
-		this.toile = toile;
+		this.gestionnaire = gestionnaire;
 		this.type = objGeo.getNom();
 		this.objGeo = objGeo;
 		this.default_taille = 100;
@@ -103,7 +103,7 @@ public class CreateObjGeoBox{
 					objGeo.setStrokeColor(StrokeChooser.getColor());
 					objGeo.setFillColor(FillChooser.getColor());
 					objGeo.setStrokeWidth(Epaisseur);
-					toile.setObjTemporaire(objGeo);
+					gestionnaire.setObjGeoEnCreation(objGeo);
 				}
 				catch(Exception e) {
 					System.err.println("Erreur de saisie des champs :");
@@ -155,7 +155,6 @@ public class CreateObjGeoBox{
 	public ObjetGeometrique GenerateAndConfigureBox(){
 		JPanel config_forme = new JPanel(new BorderLayout());//va contenir toutes les conficguration
 		CreateChamp champ_strokeW = new CreateChamp("Taille du trait :", 1);
-		double strokeW = 9999999;
 		config_forme.add(champ_strokeW, BorderLayout.SOUTH);
 		
 		//TODO : il y a beaucoup de pseudo-redondance mais bon la flème de tout changer
@@ -212,9 +211,9 @@ public class CreateObjGeoBox{
 				}
 				//ajout du champ dans le panel d'affichage
 				config_forme.add(champ_cote, BorderLayout.CENTER);
-				strokeW = champ_strokeW.Value();
+			champ_strokeW.Value();
 				if(createBox(config_forme)){
-					double cote = champ_cote.Value();
+					champ_cote.Value();
 					((Carre)this.objGeo).setcote(champ_cote.Value());//modif cote
 					objGeo.setStrokeWidth((float)champ_strokeW.Value());//modif strokeW
 				}else{
@@ -232,7 +231,7 @@ public class CreateObjGeoBox{
 				}
 				//ajout du champ dans le panel d'affichage
 				config_forme.add(champ_tt, BorderLayout.CENTER);
-				strokeW = champ_strokeW.Value();
+			champ_strokeW.Value();
 				if(createBox(config_forme)){
 					((Triangle)this.objGeo).setTaille(champ_tt.Value());
 					objGeo.setStrokeWidth((float)champ_strokeW.Value());//modif strokeW
@@ -262,7 +261,7 @@ public class CreateObjGeoBox{
 				}
 				//ajout du champ dans le panel d'affichage
 				config_forme.add(champ_te, BorderLayout.CENTER);
-				strokeW = champ_strokeW.Value();
+			champ_strokeW.Value();
 				if(createBox(config_forme)){
 					((Etoile)this.objGeo).setTaille(champ_te.Value());
 					objGeo.setStrokeWidth((float)champ_strokeW.Value());//modif strokeW
