@@ -24,6 +24,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListModel;
@@ -34,6 +35,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import formes.Carre;
 import formes.Cercle;
 import formes.ObjetGeometrique;
@@ -42,12 +44,17 @@ import formes.SegmentDroite;
 import formes.Triangle;
 import formes.Etoile;
 
-import Animations.GestionAnimation;
 
+import listeners.ListeObjGeoSelectListener;
+
+
+import formes.*;
+
+import Animations.GestionAnimation;
 
 @SuppressWarnings("serial")
 public class Edition extends JFrame {
-	
+
 	//Gestionnaire d'animation
 	private GestionAnimation gestionnaire;
 	
@@ -65,6 +72,27 @@ public class Edition extends JFrame {
 	//Liste des objets dessinés
 	private JList<Item> liste;
 
+	//Bouton d'ajout d'animation
+	JButton boutonAjoutAnimation;
+	
+	//Element global de alarmbox de configuration
+	private JColorChooser StrokeChooser;
+	private JColorChooser FillChooser;
+	private JTextField Epaisseur;
+	
+	// menu création d'objet
+	JMenu menu_C = new JMenu("Création d'objet");
+	
+	// Item du menu création d'objet
+	JMenuItem mi_Cercle = new JMenuItem("Cercle");
+	JMenuItem mi_Triangle = new JMenuItem("Triangle");
+	JMenuItem mi_Rectangle = new JMenuItem("Rectangle");
+	JMenuItem mi_Carre = new JMenuItem("Carré");
+	JMenuItem mi_Segment = new JMenuItem("Segment");
+	JMenuItem mi_Etoile = new JMenuItem("Etoile");
+	JMenuItem mi_Hexagone = new JMenuItem("Hexagone");
+	JMenuItem mi_Croix = new JMenuItem("Croix");
+	
 	
 	public Edition() {
 		super("Edition");
@@ -93,21 +121,16 @@ public class Edition extends JFrame {
     	menu_F.add(mi_add_object);
     	menu_F.add(mi_exit);
     	menuBarEditionMode.add(menu_F);
-    	    	
+    	  
     	// menu création d'objet
-    	JMenu menu_C = new JMenu("Création d'objet");
-    	JMenuItem mi_Cercle = new JMenuItem("Cercle");
-    	JMenuItem mi_Triangle = new JMenuItem("Triangle");
-    	JMenuItem mi_Rectangle = new JMenuItem("Rectangle");
-    	JMenuItem mi_Carre = new JMenuItem("Carré");
-    	JMenuItem mi_Segment = new JMenuItem("Segment");
-    	JMenuItem mi_Etoile = new JMenuItem("Etoile");
     	menu_C.add(mi_Cercle);
     	menu_C.add(mi_Triangle);
     	menu_C.add(mi_Rectangle);
     	menu_C.add(mi_Carre);
     	menu_C.add(mi_Segment);
     	menu_C.add(mi_Etoile);
+    	menu_C.add(mi_Hexagone);
+    	menu_C.add(mi_Croix);
     	menuBarEditionMode.add(menu_C);
     	//création et ajout du listener des menuItem :
     	//ce listener nous crée une alerte box pour créer un objGeométrique:
@@ -118,6 +141,7 @@ public class Edition extends JFrame {
     	mi_Carre.addActionListener(create_obj_listener);
     	mi_Segment.addActionListener(create_obj_listener);
     	mi_Etoile.addActionListener(create_obj_listener);
+    	
     	//ajoute de la commande assosier:
     	mi_Cercle.setActionCommand("create_Cercle");
     	mi_Triangle.setActionCommand("create_Triangle");
@@ -147,6 +171,10 @@ public class Edition extends JFrame {
     	
     	//Liste
     	liste = new JList<Item>();
+    	
+    	//Bouton d'ajout d'animation
+    	JButton boutonAjoutAnimation;
+    	
     	liste.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
@@ -183,15 +211,26 @@ public class Edition extends JFrame {
     		
 		});
     	
+    	liste.setBackground(Color.lightGray);
+    	
+    	boutonAjoutAnimation = new JButton("Creer animation");
+    	boutonAjoutAnimation.setEnabled(false);
+    	
     	JPanel east = new JPanel();
     	BorderLayout grid = new BorderLayout();
     	east.setLayout(grid);
     	east.setBackground(Color.lightGray);
+    	
     	JLabel titre = new JLabel("Liste d'objets");
     	titre.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 5));
-    	liste.setBackground(Color.lightGray);
+    	
+    	//On met la JList dans un scrollPane dans le cas ou il y a trop d'elements
+    	JScrollPane scrollPane = new JScrollPane(liste);
+    	scrollPane.setPreferredSize(new Dimension(0,0));
+    	
     	east.add(titre, BorderLayout.NORTH);
-    	east.add(liste, BorderLayout.CENTER);
+    	east.add(scrollPane, BorderLayout.CENTER);
+    	east.add(boutonAjoutAnimation, BorderLayout.SOUTH);
     	this.add(east, BorderLayout.EAST);
     	
     	//Visionneuse
@@ -222,9 +261,11 @@ public class Edition extends JFrame {
     			System.exit(0);
     		}
 	    });
+
     	this.MAJListeObjGeo();//mettre à jour la liste d'objets Géométriques
+    	//===============================================================================
 	}
-	//===============================================================================
+	
 	
 	/**
 	 * listeObjets va mettre a jour la JList contenant les objets geometriques
@@ -243,6 +284,10 @@ public class Edition extends JFrame {
 		return this.liste;
 	}
 	
+	public JButton getBoutonAjoutAnimation() {
+		return this.boutonAjoutAnimation;
+	}
+	
 	public Toile getToile() {
 		return this.toile;
 	}
@@ -250,6 +295,7 @@ public class Edition extends JFrame {
 	public GestionAnimation getGestionAnimation() {
 		return this.gestionnaire;
 	}
+
 }
 
 
