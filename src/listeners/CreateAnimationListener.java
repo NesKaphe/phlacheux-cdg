@@ -1,6 +1,7 @@
 package listeners;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -19,9 +20,12 @@ import formes.SegmentDroite;
 import Animations.Animation;
 import Animations.Comportement;
 import Animations.CompositeAnimation;
+import Animations.FillColor;
 import Animations.Rotation;
+import Animations.StrokeColor;
 import Animations.StrokeWidth;
 import affichage.Item;
+import affichage.MyColorChooser;
 import affichage.VisionneuseAnimation;
 
 /**
@@ -43,6 +47,7 @@ public class CreateAnimationListener implements ActionListener {
 	JTextField epaisseur;
 	JTextField t_debut;
 	JTextField t_fin;
+	MyColorChooser colorChooser;
 	
 	JOptionPane optionPane;
 	
@@ -50,6 +55,7 @@ public class CreateAnimationListener implements ActionListener {
 		this.liste = liste;
 		this.comboBoxAnimations = null;
 		this.visionneuse = visionneuse;
+		this.colorChooser = new MyColorChooser();
 	}
 	
 	
@@ -101,10 +107,11 @@ public class CreateAnimationListener implements ActionListener {
 			message = m;
 		}
 		else if (selection.equals("Couleur de trait")) {
-			//A faire color chooser
+			Object[] m = {"Nouvelle couleur de trait", this.colorChooser};
+			message = m;
 		}
 		else if (selection.equals("Couleur de fond")) {
-			//A faire color chooser
+			Object[] m = {"Nouvelle conleur de fond", this.colorChooser};
 		}
 		
 		Object[] messageFinal = new Object[message.length+4];
@@ -162,34 +169,52 @@ public class CreateAnimationListener implements ActionListener {
 		double tempsDebut = Double.parseDouble(this.t_debut.getText());
 		double tempsFin = Double.parseDouble(this.t_fin.getText());
 		
-		switch(selection) {
-		case "Rotation":
-			double angleRad = Math.toRadians(Double.parseDouble(this.angle.getText()));
-			anim = new Rotation(tempsDebut,tempsFin, 0, angleRad, comp.getObjGeo().getCentre());
-			break;
-		case "Translation":
-			//TODO: je sais pas comment le faire
-			break;
-		case "Epaisseur de trait":
-			//On va calculer la difference entre l'epaisseur demandée et l'epaisseur de l'objet
+		//On ne va créer que des animations valides (avec un temps de fin apres le temps debut)
+		if(tempsFin > tempsDebut) {
+			//On recupere l'objet geometrique
 			ObjetGeometrique obj = comp.getEtatObjGeo(0.); //TODO: recup le temps courant de l'edition
-			float epaisseurObj = obj.getStroke().getLineWidth();
-			float epaisseurDemande = Float.parseFloat(this.epaisseur.getText());
-			anim = new StrokeWidth(tempsDebut, tempsFin, 0, epaisseurDemande - epaisseurObj);
-			break;
-		case "Couleur de trait":
-			//TODO: JColorchooser
-			break;
-		case "Couleur de fond":
-			break;
+			
+			switch(selection) {
+			case "Rotation":
+				double angleRad = Math.toRadians(Double.parseDouble(this.angle.getText()));
+				anim = new Rotation(tempsDebut,tempsFin, 0, angleRad, obj.getCentre());
+				break;
+			case "Translation":
+				//TODO: je sais pas comment le faire
+				break;
+			case "Epaisseur de trait":
+				//On va calculer la difference entre l'epaisseur demandée et l'epaisseur de l'objet
+				float epaisseurObj = obj.getStroke().getLineWidth();
+				float epaisseurDemande = Float.parseFloat(this.epaisseur.getText());
+				anim = new StrokeWidth(tempsDebut, tempsFin, 0, epaisseurDemande - epaisseurObj);
+				break;
+			case "Couleur de trait":
+				//On va calculer la difference entre la couleur demandée et la couleur de l'objet
+				Color cObjStroke = obj.getStrokeColor();
+				Color cDemandeStroke = this.colorChooser.getColor();
+				anim = new StrokeColor(tempsDebut, tempsFin, 0, 
+							cDemandeStroke.getRed() - cObjStroke.getRed(), 
+							cDemandeStroke.getGreen() - cObjStroke.getGreen(),
+							cDemandeStroke.getBlue() - cObjStroke.getBlue());
+				break;
+			case "Couleur de fond":
+				//On va calculer la difference entre la couleur demandée et la couleur de l'objet
+				Color cObjFill = obj.getFillColor();
+				Color cDemandeFill = this.colorChooser.getColor();
+				anim = new FillColor(tempsDebut, tempsFin, 0,
+							cDemandeFill.getRed() - cObjFill.getRed(), 
+							cDemandeFill.getGreen() - cObjFill.getGreen(),
+							cDemandeFill.getBlue() - cObjFill.getBlue());
+				break;
+			}
+			
+			//On ajoute maintenant l'animation au comportement
+			CompositeAnimation ca = (CompositeAnimation) comp.getAnimation();
+			ca.add(anim);
+			
+			//Et on met a jour le dessin de notre visionneuse d'animation
+			this.visionneuse.dessineAnimation();
 		}
-		
-		//On ajoute maintenant l'animation au comportement
-		CompositeAnimation ca = (CompositeAnimation) comp.getAnimation();
-		ca.add(anim);
-		
-		//Et on met a jour le dessin de notre visionneuse d'animation
-		this.visionneuse.dessineAnimation();
 	}
 	
 	/*
