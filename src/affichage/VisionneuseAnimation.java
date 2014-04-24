@@ -382,7 +382,6 @@ class testeVisionAnim{
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-
 	}
 }
 

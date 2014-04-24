@@ -14,6 +14,8 @@ public class GestionAnimation {
 	private Toile t;
 	private int idComportement; //un comportement par objet
 	
+	private ObjetGeometrique objEnCreation;
+	
 	public GestionAnimation(Toile t) {
 		this.Comportements = new HashMap<Integer, Comportement>();
 		this.setToile(t);
@@ -109,7 +111,7 @@ public class GestionAnimation {
 		}
 		
 		//On dessine l'objet temporaire s'il existe
-		ObjetGeometrique tmpGeo = this.t.getObjGeometrique();
+		ObjetGeometrique tmpGeo = this.getObjGeoEnCreation();
 		if(tmpGeo != null) {
 			System.out.println("\t"+tmpGeo.getCentre());
 			t.dessineObjet(tmpGeo);
@@ -134,5 +136,17 @@ public class GestionAnimation {
 	
 	public ObjetGeometrique getObject(int id, double t_courant) {
 		return this.Comportements.get(id).getEtatObjGeo(t_courant);
+	}
+	
+	public ObjetGeometrique getObjGeoEnCreation() {
+		return this.objEnCreation;
+	}
+	
+	public void setObjGeoEnCreation(ObjetGeometrique geo) {
+		this.objEnCreation = geo;
+	}
+	
+	public void resetObjGeoEnCreation() {
+		this.objEnCreation = null;
 	}
 }

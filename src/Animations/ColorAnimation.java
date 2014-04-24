@@ -1,7 +1,5 @@
 package Animations;
 
-import java.awt.geom.AffineTransform;
-
 public abstract class ColorAnimation extends Animation {
 
 	int r,g,b;

@@ -3,6 +3,7 @@ package listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import Animations.GestionAnimation;
 import affichage.Toile;
 
 import formes.ObjetGeometrique;
@@ -11,8 +12,11 @@ import affichage.*;
 public class CreateObjGeoListener implements ActionListener{
 	
 	private Toile toile;
-	public CreateObjGeoListener(Toile toile/*ref sur le itemSelect*/) {
+	private GestionAnimation gestionnaire;
+	
+	public CreateObjGeoListener(Toile toile/*ref sur le itemSelect*/, GestionAnimation gestionnaire) {
 		this.toile = toile;
+		this.gestionnaire = gestionnaire;
 	}
 	
 
@@ -47,7 +51,7 @@ public class CreateObjGeoListener implements ActionListener{
 		switch(commands[0]){
 			case "create":
 				System.out.println("Alert box create");
-				alert_box = new CreateObjGeoBox(toile,commands[1]);
+				alert_box = new CreateObjGeoBox(gestionnaire,commands[1]);
 				break ;
 			case "modif" :
 				System.out.println("Alert box modif");
@@ -61,8 +65,9 @@ public class CreateObjGeoListener implements ActionListener{
 		//TODO : attention rajouter une suppresion si c'est une modification d'objet
 		//si geo est a null c'est que l'action est annulée
 		if (geo != null){
-			this.toile.modeListener();
-			toile.setObjTemporaire(geo);//la toile va se chager de dessiner l'objet
+			this.toile.modeAjout();
+			//toile.setObjTemporaire(geo);//la toile va se chager de dessiner l'objet
+			this.gestionnaire.setObjGeoEnCreation(geo);
 		}
 	}
 }

@@ -7,37 +7,26 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Shape;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.Map.Entry;
-
 import javax.swing.JPanel;
-import javax.swing.ListModel;
+import listeners.MouseToileListener;
 
 import formes.ObjetGeometrique;
-import formes.SegmentDroite;
 
 
-public class Toile extends JPanel implements MouseListener,MouseMotionListener {
+public class Toile extends JPanel {
 
 	// Buffer utilisé pour le dessin des formes par le gestionnaire d'animation
 	private Image backBuffer;
 		
 	private static final long serialVersionUID = 1L;
 	
-	//Position de la souris
-	private int x, y, ox, oy;
-	
-	//Objet temporaire en cours de creation (= null si aucun objet n'est en train d'etre créer)
-	private ObjetGeometrique objTemporaire;
-	
 	private Edition parent;
 	
-	//modeListener permet de detecter si on est en mode ajout d'objet ou non sur la toile
-	private boolean modeListener;
+	private String mode;
+	
+	private MouseToileListener listener;
 	
 	/**
 	 * Ancien constructeur
@@ -48,20 +37,37 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		this.setDoubleBuffered(true);
 		this.setPreferredSize(dim);
 		this.setSize(dim);//TODO : probablement remplacer par setMinSize 
-		this.initObjTemporaire();
 	}
 	
 	/**
 	 * @param dim La dimension de la toile
 	 * @param parent Fenetre d'edition dans laquelle la toile est insérée
 	 */
-	public Toile(Dimension dim, Edition parent) {
+	public Toile(Dimension dim, Edition frame, MouseToileListener listener) {
 		this(dim);
-		this.parent = parent;
-		this.modeListener = false;
-		this.addMouseListener(this);
+		this.addMouseListener(listener);
+		this.parent = frame;
+		this.listener = listener;
+		this.modeSelection(); //par defaut on est en mode selection
 	}
 	
+	
+	/**
+	 * @return un string representant le mode de la toile
+	 */
+	public String getMode() {
+		return this.mode;
+	}
+	
+	public void modeAjout() {
+		this.mode = "ajoutObj";
+		this.addMouseMotionListener((MouseMotionListener)this.listener);
+	}
+	
+	public void modeSelection() {
+		this.mode = "selection";
+		this.removeMouseMotionListener((MouseMotionListener)this.listener);
+	}
 	
 	public void paintComponent(Graphics g) {
 		//Le buffer n'existe pas encore au moment du dessin
@@ -79,183 +85,6 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage((BufferedImage)this.backBuffer, null, 0, 0);
 	}
-	
-	/**
-	 * modeListener passe la toile en mode listener
-	 * C'est a dire en mode ajout d'objet geometrique
-	 */
-	public void modeListener() {
-		if(!this.modeListener) {
-			this.modeListener = true;
-			this.addMouseMotionListener(this);
-		}
-	}
-	
-	public void mousePressed(MouseEvent m) {
-		//Si on est en mode listener (=Ajout d'objet)
-		if(this.modeListener) {
-			//On recupere l'objet geometrique temporaire
-			ObjetGeometrique geo = this.getObjGeometrique();
-			
-			//Cet evenement ne sert que pour le Segment de droite
-			if(geo instanceof SegmentDroite) {				
-				SegmentDroite seg = (SegmentDroite) geo;
-				
-				//Le premier point du segment est la position du mouse press dans la toile
-				seg.setPoint(new Point2D.Double(m.getX(),m.getY()), 1);
-				
-				//On sauvegarde maintenant ce segment comme nouvel objet temporaire
-				this.setObjTemporaire(seg);
-			}
-		}
-    }
-    
-    public void mouseReleased(MouseEvent m) {
-    	//Si on est en mode listener (=Ajout d'objet)
-    	if(this.modeListener) {
-    		
-    		//On recupere l'objet geometrique temporaire
-    		ObjetGeometrique geo = this.getObjGeometrique();
-    		
-    		//Cet evenement ne sert que pour le Segment de droite
-    		if(geo instanceof SegmentDroite) {
-    			//On va placer le deuxieme point du segment la ou la souris a relaché son clic
-    			((SegmentDroite) geo).setPoint(new Point2D.Double(m.getX(),m.getY()), 2);
-    			//On genere la nouvelle forme du segment pour le dessin
-    			geo.generateShape();
-    			
-    			//On va maintenant enregistrer notre objet dans le gestionnaire d'animation
-    			this.parent.getGestionAnimation().ajouterComportement(geo, null);
-				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
-				
-				//On a terminé la creation de la ligne, on ne reste pas en mode listener
-				removeMouseMotionListener((MouseMotionListener) this);
-				this.modeListener = false;
-				this.parent.MAJListeObjGeo();
-    		}
-    	}
-    }
-    
-	public void mouseEntered(MouseEvent m) {}
-    public void mouseExited(MouseEvent m) {}
-    
-    public void mouseClicked(MouseEvent m) {
-    	//Si on est en mode listener (=Ajout d'objet)
-    	if(this.modeListener) {
-    		
-    		//On commence par recupérer l'objet geometrique temporaire
-	    	ObjetGeometrique geo = this.getObjGeometrique();
-	    	
-	    	//Cet evenement ne sera utilisé que pour les formes se plaçant avec un clic unique (= Pas un segment)
-	    	//L'ajout de ces formes est combiné avec le mouseMoved
-	    	if(!(geo instanceof SegmentDroite)) {
-	    		
-	    		//On enregistre l'objet geometrique dans le gestionnaire d'animation
-		    	this.parent.getGestionAnimation().ajouterComportement(geo, null);
-		    	
-		    	//On a terminé notre ajout, on ne reste pas en mode listener
-		    	this.initObjTemporaire();
-				removeMouseMotionListener((MouseMotionListener) this);
-				this.modeListener = false;
-				
-				//On oublie pas de mettre a jour la liste des objets (JList)
-				this.parent.MAJListeObjGeo();
-	    	}
-		}
-    	else { //Si on est pas en mode listener, le clic signifie selection
-    		
-    		//Si l'objet temporaire n'est pas null (Cas du segment après le dessin
-    		if(this.getObjGeometrique() != null) {
-    			//On remet a zéro
-    			this.initObjTemporaire();
-    		}
-    		else { //Sinon, on va essayer de detecter le clic sur les objets geometriques dessinés
-    			
-	    		//On va demander au gestion animation si un objet contient les coordonnées du clic
-	    		Entry<Integer, ObjetGeometrique> entry = this.parent.getGestionAnimation().getObjectAt(m.getX(),m.getY(),0.);
-	
-	    		//On deselectionne tous les elements de la liste
-	    		this.parent.getListe().clearSelection();
-	    		
-	    		//Si on a trouvé un objet geometrique, on selectionne dans la liste la ligne correspondante
-	    		if(entry != null) {
-	    			
-	    			//On va maintenant dessiner un rectangle pour montrer a l'utilisateur que l'objet est selectionné
-	    			this.dessineSelectionOf(entry.getValue());
-	    			
-	    			//Et finalement, va selectionner la ligne de l'objet dans la JList
-	    			ListModel<Item> model = this.parent.getListe().getModel();
-	    			for(int i = 0; i < model.getSize(); i++) {
-	    				if(model.getElementAt(i).getId() == entry.getKey()) {
-	    					this.parent.getListe().setSelectedIndex(i);
-	    				}
-	    			}
-	    		}
-    		}
-    	}
-    }
-    
-    public void mouseDragged(MouseEvent e) {
-    	//Si on est en mode listener (Ajout d'objet)
-    	if (this.modeListener){
-    		ox = e.getX();
-    		oy = e.getY();
-    		
-    		ObjetGeometrique geo = this.getObjGeometrique();
-    		Point2D.Double point = new Point2D.Double(ox,oy);
-    		//Cet evenement n'est utilisé que pour le segment de droite (deplacement de souris apres le clic)
-    		if(geo instanceof SegmentDroite) {
-				SegmentDroite seg = (SegmentDroite) geo;
-				seg.setPoint(point, 2);
-				
-				//On genere la nouvelle forme du segment pour le dessin
-				seg.generateShape();
-				
-				//On met a jour notre objet temporaire
-				this.setObjTemporaire(seg);
-				
-				//Et on raffraichi le dessin des objets
-				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
-    		}
-    	}	
-    }
-    
-    public void mouseMoved(MouseEvent e) {
-    	//Si on est en mode listener (Ajout d'objet)
-    	if (this.modeListener){
-    		ox = e.getX();
-    		oy = e.getY();
-    		
-    		ObjetGeometrique geo = this.getObjGeometrique();
-    		Point2D.Double point = new Point2D.Double(ox,oy);
-    		//Cet evenement sert pour les objets geometrique qui ne sont pas des Segments
-			if(!(geo instanceof SegmentDroite)) {
-				//On deplace le centre de l'objet sur le pointeur de la souris
-				geo.setCentre(point);
-				
-				//On raffraichi le dessin des objets
-				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
-			}
-    	}
-    }
-
-    
-    public void setObjTemporaire(ObjetGeometrique geo) {
-    	this.objTemporaire = geo;
-    }
-    
-        
-    public ObjetGeometrique getObjGeometrique() {//TODO : mal nommé 
-    	return this.objTemporaire;
-    }
-    
-    /**
-     * Va remettre l'objet temporaire a null (utilisé apres avoir crée un objet completement)
-     */
-    public void initObjTemporaire() {
-    	this.objTemporaire = null;
-    }
-    
     
     /**
      * dessineObjet va dessiner un objetGeometrique dans le backBuffer de la toile
