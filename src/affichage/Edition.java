@@ -3,15 +3,12 @@ package affichage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -37,13 +34,13 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
+import listeners.CreateAnimationListener;
 import listeners.ListeObjGeoSelectListener;
 
 import formes.*;
 
+import Animations.Comportement;
 import Animations.GestionAnimation;
 
 
@@ -70,9 +67,12 @@ public class Edition extends JFrame implements ActionListener {
 	
 	//Liste des objets dessinés
 	private JList<Item> liste;
+	private ListeObjGeoSelectListener listenerListeObjet;
 	
 	//Bouton d'ajout d'animation
 	JButton boutonAjoutAnimation;
+	
+	CreateAnimationListener listenerAnimations;
 	
 	//Element global de alarmbox de configuration
 	private JColorChooser StrokeChooser;
@@ -134,7 +134,7 @@ public class Edition extends JFrame implements ActionListener {
     	mi_Hexagone.addActionListener(this);menu_C.add(mi_Hexagone);
     	mi_Croix.addActionListener(this);menu_C.add(mi_Croix);
     	menuBarEditionMode.add(menu_C);
-    	 	
+    	
     	//Formes
     	// menu d'ajout d'objet
     	menu_object_add = new JToolBar(SwingConstants.HORIZONTAL);
@@ -175,7 +175,7 @@ public class Edition extends JFrame implements ActionListener {
 			}
 		});
     	*/
-    	liste.addListSelectionListener(new ListeObjGeoSelectListener(this));
+    	
     	liste.addMouseListener(new MouseAdapter() {
     		
     		public void mouseClicked(MouseEvent e) {
@@ -212,8 +212,14 @@ public class Edition extends JFrame implements ActionListener {
     	
     	liste.setBackground(Color.lightGray);
     	
+    	listenerAnimations = new CreateAnimationListener(liste);
+    	
     	boutonAjoutAnimation = new JButton("Creer animation");
     	boutonAjoutAnimation.setEnabled(false);
+    	boutonAjoutAnimation.addActionListener(listenerAnimations);
+    	boutonAjoutAnimation.setActionCommand("creation");
+    	listenerListeObjet = new ListeObjGeoSelectListener(this.gestionnaire, this.toile, this.boutonAjoutAnimation);
+    	liste.addListSelectionListener(listenerListeObjet);
     	
     	JPanel east = new JPanel();
     	BorderLayout grid = new BorderLayout();
@@ -254,10 +260,10 @@ public class Edition extends JFrame implements ActionListener {
 	 * listeObjets va mettre a jour la JList contenant les objets geometriques
 	 */
 	public void listeObjets() {
-		HashMap<Integer, ObjetGeometrique> map = this.gestionnaire.getAllObjects();
+		HashMap<Integer, Comportement> map = this.gestionnaire.getListComportements();
 		DefaultListModel<Item> lm = new DefaultListModel<Item>();
-		for(Entry<Integer, ObjetGeometrique> entry : map.entrySet()) {
-			lm.addElement(new Item(entry.getKey(), entry.getValue().getNom()));
+		for(Entry<Integer, Comportement> entry : map.entrySet()) {
+			lm.addElement(new Item(entry.getValue().getId(), entry.getValue()));
 		}
 		liste.setModel(lm);
 	}
