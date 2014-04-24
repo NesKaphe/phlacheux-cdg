@@ -120,7 +120,7 @@ public abstract class ObjetGeometrique {
 		return this.forme;
 	}
 	
-	public String getInfos() {
+	public String getInfos() {//TODO : sert pas à grand chose
 		Class<?> enclosingClass = getClass().getEnclosingClass();
 		String nomclass;
 		if (enclosingClass != null) {
@@ -159,6 +159,13 @@ public abstract class ObjetGeometrique {
 	
 	public void setStrokeColor(Color c) {
 		this.strokeColor = c;
+	}
+
+	@Override
+	public String toString() {
+		return "ObjetGeometrique [nom=" + nom + ", centre=" + centre
+				+ ", stroke=" + stroke + ", fillColor=" + fillColor
+				+ ", strokeColor=" + strokeColor + ", forme=" + forme + "]";
 	}
 	
 	
