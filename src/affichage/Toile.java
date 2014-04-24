@@ -131,7 +131,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 				//On a terminé la creation de la ligne, on ne reste pas en mode listener
 				removeMouseMotionListener((MouseMotionListener) this);
 				this.modeListener = false;
-				this.parent.listeObjets();
+				this.parent.MAJListeObjGeo();
     		}
     	}
     }
@@ -159,7 +159,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
 				this.modeListener = false;
 				
 				//On oublie pas de mettre a jour la liste des objets (JList)
-				this.parent.listeObjets();
+				this.parent.MAJListeObjGeo();
 	    	}
 		}
     	else { //Si on est pas en mode listener, le clic signifie selection
@@ -245,7 +245,7 @@ public class Toile extends JPanel implements MouseListener,MouseMotionListener {
     }
     
         
-    public ObjetGeometrique getObjGeometrique() {
+    public ObjetGeometrique getObjGeometrique() {//TODO : mal nommé 
     	return this.objTemporaire;
     }
     
