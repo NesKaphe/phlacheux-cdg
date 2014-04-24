@@ -18,20 +18,20 @@ import formes.Rectangle;
 import formes.SegmentDroite;
 import formes.Triangle;
 
-
-class CreateObjGeoBox{
+public class CreateObjGeoBox{
+	
 	
 	private Toile toile;
 	private JColorChooser StrokeChooser;
 	private JColorChooser FillChooser;
 	private float Epaisseur = -1;
 	private String type ;
-	private ObjetGeometrique objGeo;//si l'objetGeometrique est à null cous somme en mode création
+	private ObjetGeometrique objGeo;//si l'objetGeometrique est à null nous somme en mode création
 									//si l'objetGeo est non null nous sommes en mode modification
 	private double default_taille ;
 	private String nomBox;
 	//consytructeur pour le mode création
-	CreateObjGeoBox(Toile toile,String type){
+	public CreateObjGeoBox(Toile toile,String type){
 		System.out.println("INFO - constructeur création");
 		this.toile = toile;
 		this.type = type;
@@ -41,7 +41,7 @@ class CreateObjGeoBox{
 	}
 	
 	//constructeur pour le mode modification
-	CreateObjGeoBox(Toile toile,ObjetGeometrique objGeo){
+	public CreateObjGeoBox(Toile toile,ObjetGeometrique objGeo){
 		System.out.println("INFO - constructeur modif");
 		this.toile = toile;
 		this.type = objGeo.getNom();
@@ -49,34 +49,21 @@ class CreateObjGeoBox{
 		this.default_taille = 100;
 		nomBox = "modification :"+type;
 		//TODO : celui qui appel celle métode se charge de supprimer l'objet
-		//si createBox retourne vrai on supprime l'ancien objGeo
+		//si GenerateAndConfigureBox() retourne null on supprime l'ancien objGeo
 	}
 
 	private void initColorChooser(){
-		StrokeChooser = new JColorChooser();
-		FillChooser = new JColorChooser();
+		StrokeChooser = new MyColorChooser();
+		FillChooser = new MyColorChooser();
 		JTextField Epaisseur = new JTextField();
 		Epaisseur.setText("1");
-	    StrokeChooser.setPreviewPanel(new MyPreviewPanel(StrokeChooser));
-	    FillChooser.setPreviewPanel(new MyPreviewPanel(FillChooser));
-		for(final AbstractColorChooserPanel accp : StrokeChooser.getChooserPanels()) {
-			if(!accp.getDisplayName().equals("RVB")) {
-				StrokeChooser.removeChooserPanel(accp);
-			}
-		}
-		
-		for(final AbstractColorChooserPanel accp : FillChooser.getChooserPanels()) {
-			if(!accp.getDisplayName().equals("RVB")) {
-				FillChooser.removeChooserPanel(accp);
-			}
-		}
 	}
 	
 	/**
 	 * premet de créer le colorChooser du trait et du font de la forme
 	 * @return
 	 */
-	private JPanel CreateColorChooser(){
+	private JPanel CreateColorChooserPanel(){
 		initColorChooser();
 		JPanel panel_Colorchoosers = new JPanel(new BorderLayout());
 		JPanel panel_stroke = new JPanel(new BorderLayout());
@@ -107,7 +94,7 @@ class CreateObjGeoBox{
 			    "", 
 			    configuration,
 			    "Choix des couleur",
-			    CreateColorChooser()
+			    CreateColorChooserPanel()
 			};
 			
 			int option = JOptionPane.showConfirmDialog(null, contenu, nomBox, JOptionPane.OK_CANCEL_OPTION);
