@@ -38,6 +38,7 @@ import javax.swing.event.ListSelectionListener;
 
 import listeners.CreateAnimationListener;
 
+import listeners.CreateObjGeoListener;
 import listeners.ListeObjGeoSelectListener;
 
 
@@ -178,7 +179,7 @@ public class Edition extends JFrame {
     	
     	//Liste de comportements
     	liste = new JList<Item>();
-    	    	
+
     	liste.addMouseListener(new MouseAdapter() {//TODO : implémenter une classe si code trop grand
     		//TODO : EN FAIT ÇA MARCHE PAS !!!!!!!!!!!!!!!!!!!
 
@@ -284,42 +285,4 @@ public class Edition extends JFrame {
 		return this.gestionnaire;
 	}
 
-}
-
-
-
-
-
-
-@SuppressWarnings("serial")
-//code trouvé sur ce site : http://exampledepot.8waytrips.com/egs/javax.swing.colorchooser/CustPreview.html
-//This preview panel simply displays the currently selected color.
-class MyPreviewPanel extends JComponent {
- // The currently selected color
- Color curColor;
-
- public MyPreviewPanel(JColorChooser chooser) {
-     // Initialize the currently selected color
-     curColor = chooser.getColor();
-
-     // Add listener on model to detect changes to selected color
-     ColorSelectionModel model = chooser.getSelectionModel();
-     model.addChangeListener(new ChangeListener() {
-         public void stateChanged(ChangeEvent evt) {
-             ColorSelectionModel model = (ColorSelectionModel)evt.getSource();
-
-             // Get the new color value
-             curColor = model.getSelectedColor();
-         }
-     }) ;
-
-     // Set a preferred size
-     setPreferredSize(new Dimension(50, 50));
- }
-
- // Paint current color
- public void paint(Graphics g) {
-     g.setColor(curColor);
-     g.fillRect(0, 0, getWidth()-1, getHeight()-1);
- }
 }

@@ -1,11 +1,14 @@
-package affichage;
+package listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import formes.ObjetGeometrique;
+import affichage.Toile;
 
-class CreateObjGeoListener implements ActionListener{
+import formes.ObjetGeometrique;
+import affichage.*;
+
+public class CreateObjGeoListener implements ActionListener{
 	
 	private Toile toile;
 	public CreateObjGeoListener(Toile toile/*ref sur le itemSelect*/) {
