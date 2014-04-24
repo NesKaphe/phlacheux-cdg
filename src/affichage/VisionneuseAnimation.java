@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -33,11 +35,11 @@ import Animations.Translation;
 public class VisionneuseAnimation extends JScrollPane{
 
 	private JFrame f;
-	private JPanel parentPan;
-	private JPanel childPan;
-	private Tempo tempo;
+	private JPanel parentPan;//c'est le "viewport" de VisioneuseA. (contien tempo au nord et childPan au centre)
+	private JPanel childPan;//va contenir tout les blocks correspondant au objgeo
+	private Tempo tempo;//va afficher la tempo 0 10 20 30 ...
 	private GestionAnimation GA;
-	private int maxTime;
+	private int maxTime;//temps maximum que l'on va dessiner
 	private ArrayList<BlockAnimation> listBlockA;
 	
 	VisionneuseAnimation(JFrame f,GestionAnimation GA,double maxTime) {
@@ -50,7 +52,7 @@ public class VisionneuseAnimation extends JScrollPane{
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		parentPan = new JPanel(new BorderLayout());//le panel qui va contenir la représentation de l'animation
 		parentPan.setMinimumSize(new Dimension(this.maxTime,screenSize.height/10));//TODO : réfléchir au maxTime
-		parentPan.setPreferredSize(new Dimension(this.maxTime,screenSize.height/5));
+		parentPan.setPreferredSize(new Dimension(this.maxTime,screenSize.height/5));//donne la taille
 		
 		childPan = new JPanel();
 		childPan.setBackground(new Color(213,246,213));
@@ -61,22 +63,83 @@ public class VisionneuseAnimation extends JScrollPane{
 		
 		this.setPreferredSize(new Dimension(screenSize.width,screenSize.height/4));//va prendre 1/4  de la hauteur de l'écran
 		this.setViewportView(parentPan);
-		
+		//this.getCorner(LOWER_LEFT_CORNER).addMouseListener(l)//TODO à faire si on veux que l'affichage soit parfait
+		this.getVerticalScrollBar().addAdjustmentListener(new myAdjustmentListener(this));//ajout du ajustment listener
 	}
 
+	
+	    
+    /**
+     * class myAdjustmentListener implements AdjustmentListener :
+     * ---------------------------------------------------------
+     * inner class 
+     * inspiré de : http://www.coderanch.com/t/531943/java/java/trap-JScrollPane-event-scolled-perform
+     * pour avoir initialiser "this.adjustmentListener"
+     * @author clement
+     *
+     */
+    class myAdjustmentListener implements AdjustmentListener{
+
+    	private JScrollPane scrollPane;
+    	private int oldVPos;
+    	private int oldHPos;
+    	
+    	myAdjustmentListener(JScrollPane scrollPane){
+    		this.scrollPane = scrollPane;
+    		this.oldVPos = 0;
+    		this.oldHPos = 0;
+    	}
+    	
+		@Override
+		/*
+		 * pour repeindre le JscrollPane
+		 */
+		public void adjustmentValueChanged(AdjustmentEvent e) {
+            int vPos = scrollPane.getVerticalScrollBar().getValue();
+            int hPos = scrollPane.getHorizontalScrollBar().getValue();
+            
+	            if (e.getSource().equals(scrollPane.getVerticalScrollBar())   
+	                    && vPos != oldVPos) {  
+	                System.out.println("Vertical Scroll Bar changed position to "  
+	                        + scrollPane.getVerticalScrollBar().getValue());  
+	                oldVPos = vPos;
+	                scrollPane.repaint();
+	            }
+	            if (e.getSource().equals(scrollPane.getHorizontalScrollBar())  
+	                    && hPos != oldHPos) {  
+	                System.out.println("Horizontal Scroll Bar changed position to "  
+	                        + scrollPane.getHorizontalScrollBar().getValue());  
+	                oldHPos = hPos;
+	                scrollPane.repaint();
+	            }  
+
+		}
+    	
+    }
+	
+	
+	
 	
 	public void dessineAnimation(){
 		HashMap<Integer, Comportement> listComp = GA.getListComportements();
 		//pour faire ce foreach voir :
 		//http://stackoverflow.com/questions/4234985/how-to-for-each-the-hashmap
 		System.out.println("listComp = "+GA.getListComportements().size());
-		childPan.removeAll();
+		childPan.removeAll();//on vide le child pan
+		//on va retailler le childPan en fonction du nombres d'élément qu'il va contenir : 
+		//JPanel childTmp = new JPanel();
+		//parentPan.setSize(new Dimension(parentPan.getWidth(),it*200));
+		int hauteurChildPan = 0;
 		for(Entry<Integer, Comportement> entry : listComp.entrySet()){
 			Comportement c = entry.getValue();
-			childPan.add(new BlockAnimation(c, this));
+			BlockAnimation ba = new BlockAnimation(c, this);
+			hauteurChildPan += ba.getTotalHeight();
+			childPan.add(ba);
 		}
-		
-		
+		System.out.println("hauteurChildPan = "+hauteurChildPan);
+		parentPan.setPreferredSize(new Dimension(parentPan.getWidth(),hauteurChildPan));
+		this.revalidate();
+		this.repaint();
 	}
 	
 	public void paintComponent(Graphics g){
@@ -130,6 +193,7 @@ class BlockAnimation extends JPanel{
 	private int nbNiveaux;//nombres de niveau que blockAnimation va contenir sur chaque ces niveaux sera représenté les listes.
 	private int levelSize;
 	private int firstSize;
+	private int totalHeight;//va contenir la hauteur totale 
 	private boolean dessinOK = false;//pour savoir si la création de la list "lla" est fini
 	
 	BlockAnimation(Comportement C,VisionneuseAnimation parent){
@@ -149,6 +213,7 @@ class BlockAnimation extends JPanel{
 		
 		//attribuer une couleur par type d'animations
 		//dessiner dans le panel
+		this.totalHeight=((nbNiveaux+1)*(levelSize))+firstSize;//calcul de la hauteur du block
 		this.dessinOK = true;
 	}
 	
@@ -203,7 +268,6 @@ class BlockAnimation extends JPanel{
 		}
 		
 		if (notInsertList.size() > 0){
-			//System.out.println("DEBUG notInsertList = "+notInsertList);
 			insertionListe(notInsertList, ++niveau);
 		}
 	}
@@ -236,6 +300,7 @@ class BlockAnimation extends JPanel{
 		Graphics2D g2 = (Graphics2D)g;
 		if(this.dessinOK){			
 			g2.drawString(objGeo.getNom()+" "+id, 10, 15);//écrit le nom + id de l'objGeo
+			//totalHeight = 15;// + g2.getFontMetrics().getHeight();// =hauteur de dessin + hauteur de la police de caractère
 			//boucle sur le nombre de ligne de lla
 			int i = 1;
 			for(ArrayList<Animation> list_a : lla){
@@ -247,14 +312,18 @@ class BlockAnimation extends JPanel{
 						g2.setColor(Color.red);
 					
 					//dessine rectangle à la bonne position:
-					g2.fill(new Rectangle2D.Double(a.getT_debut(), i*(levelSize-10), a.getT_fin()-a.getT_debut(), 15));
+					g2.fill(new Rectangle2D.Double(a.getT_debut(), i*(levelSize), a.getT_fin()-a.getT_debut(), 15));
 					g2.setColor(Color.yellow);
-					g2.drawString(a.getType(),Math.round(a.getT_debut()), i*(levelSize));
-
+					g2.drawString(a.getType(),Math.round(a.getT_debut()), (i*levelSize)+13);
 				}
 				i++;
 			}
+			
 		}
+	}
+
+	public int getTotalHeight() {
+		return totalHeight;
 	}
 	
 }
