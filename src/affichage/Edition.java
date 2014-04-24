@@ -69,9 +69,12 @@ public class Edition extends JFrame {
 	private ListeObjGeoSelectListener listenerListeObjet;
 	
 	//Bouton d'ajout d'animation
-	JButton boutonAjoutAnimation;
+	private JButton boutonAjoutAnimation;
 	
-	CreateAnimationListener listenerAnimations;
+	private CreateAnimationListener listenerAnimations;
+	
+	private VisionneuseAnimation visionneuse;
+	
 	
 	//Element global de alarmbox de configuration
 	private JColorChooser StrokeChooser;
@@ -168,7 +171,12 @@ public class Edition extends JFrame {
     	this.add(menu_object_add,BorderLayout.SOUTH);
     	this.setJMenuBar(this.menuBarEditionMode);
     	
-    	//Liste
+    	//Visionneuse
+    	this.visionneuse = new VisionneuseAnimation(this, gestionnaire, 2000);
+    	this.visionneuse.dessineAnimation();
+    	this.add(this.visionneuse, BorderLayout.SOUTH);
+    	
+    	//Liste de comportements
     	liste = new JList<Item>();
 
     	liste.addMouseListener(new MouseAdapter() {//TODO : implémenter une classe si code trop grand
@@ -192,7 +200,7 @@ public class Edition extends JFrame {
     	
     	liste.setBackground(Color.lightGray);
     	
-    	listenerAnimations = new CreateAnimationListener(liste);
+    	listenerAnimations = new CreateAnimationListener(liste, this.visionneuse);
     	
     	boutonAjoutAnimation = new JButton("Creer animation");
     	boutonAjoutAnimation.setEnabled(false);
@@ -218,10 +226,6 @@ public class Edition extends JFrame {
     	east.add(boutonAjoutAnimation, BorderLayout.SOUTH);
     	this.add(east, BorderLayout.EAST);
     	
-    	//Visionneuse
-    	VisionneuseAnimation va = new VisionneuseAnimation(this, gestionnaire, 2000);
-    	va.dessineAnimation();
-    	this.add(va, BorderLayout.SOUTH);
     	
     	
     	//TODO : on va voir si c'est vraiment utile ========================================
