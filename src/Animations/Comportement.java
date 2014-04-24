@@ -124,5 +124,8 @@ public class Comportement {
 		return objGeo.AppliqueAnimation(at, FillColor, colorStroke, stroke);//TODO : null parceque pas encore implémenté les autre animations
 	}
 
+	public String toString() {
+		return this.objGeo.getNom()+" - "+this.getId();
+	}
 	
 }

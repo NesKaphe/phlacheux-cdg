@@ -36,14 +36,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import formes.Carre;
-import formes.Cercle;
-import formes.ObjetGeometrique;
-import formes.Rectangle;
-import formes.SegmentDroite;
-import formes.Triangle;
-import formes.Etoile;
-
+import listeners.CreateAnimationListener;
 
 import listeners.CreateObjGeoListener;
 import listeners.ListeObjGeoSelectListener;
@@ -51,6 +44,7 @@ import listeners.ListeObjGeoSelectListener;
 
 import formes.*;
 
+import Animations.Comportement;
 import Animations.GestionAnimation;
 
 @SuppressWarnings("serial")
@@ -72,9 +66,13 @@ public class Edition extends JFrame {
 	
 	//Liste des objets dessinés
 	private JList<Item> liste;
-
+	
+	private ListeObjGeoSelectListener listenerListeObjet;
+	
 	//Bouton d'ajout d'animation
 	JButton boutonAjoutAnimation;
+	
+	CreateAnimationListener listenerAnimations;
 	
 	//Element global de alarmbox de configuration
 	private JColorChooser StrokeChooser;
@@ -133,6 +131,7 @@ public class Edition extends JFrame {
     	menu_C.add(mi_Hexagone);
     	menu_C.add(mi_Croix);
     	menuBarEditionMode.add(menu_C);
+    	
     	//création et ajout du listener des menuItem :
     	//ce listener nous crée une alerte box pour créer un objGeométrique:
     	final CreateObjGeoListener create_obj_listener = new CreateObjGeoListener(this.toile);
@@ -172,28 +171,10 @@ public class Edition extends JFrame {
     	
     	//Liste
     	liste = new JList<Item>();
-    	
 
-    	liste.addListSelectionListener(new ListSelectionListener() {
-			
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				ListModel<Item> model = liste.getModel();
-				
-				gestionnaire.dessinerToile(0.); //TODO:recup le temps courant
-				
-				for(int i = 0; i < model.getSize(); i++) {
-					if(liste.isSelectedIndex(i)) {
-						ObjetGeometrique geo = gestionnaire.getObject(model.getElementAt(i).getId(), 0.); //TODO: recup le temps courant
-						toile.dessineSelectionOf(geo);
-						System.out.println(geo.getStroke().getLineWidth());
-					}
-				}
-			}
-		});
-    	
     	liste.addMouseListener(new MouseAdapter() {//TODO : implémenter une classe si code trop grand
     		//TODO : EN FAIT ÇA MARCHE PAS !!!!!!!!!!!!!!!!!!!
+
     		public void mouseClicked(MouseEvent e) {
     			//On est interessé par le double clic sur la liste
     			if(e.getClickCount() == 2) {
@@ -212,8 +193,14 @@ public class Edition extends JFrame {
     	
     	liste.setBackground(Color.lightGray);
     	
+    	listenerAnimations = new CreateAnimationListener(liste);
+    	
     	boutonAjoutAnimation = new JButton("Creer animation");
     	boutonAjoutAnimation.setEnabled(false);
+    	boutonAjoutAnimation.addActionListener(listenerAnimations);
+    	boutonAjoutAnimation.setActionCommand("creation");
+    	listenerListeObjet = new ListeObjGeoSelectListener(this.gestionnaire, this.toile, this.boutonAjoutAnimation);
+    	liste.addListSelectionListener(listenerListeObjet);
     	
     	JPanel east = new JPanel();
     	BorderLayout grid = new BorderLayout();
@@ -269,12 +256,11 @@ public class Edition extends JFrame {
 	/**
 	 * listeObjets va mettre a jour la JList contenant les objets geometriques
 	 */
-	//TODO : renommer MAJListeObjGeo
 	public void MAJListeObjGeo() {
-		HashMap<Integer, ObjetGeometrique> map = this.gestionnaire.getAllObjects();
+		HashMap<Integer, Comportement> map = this.gestionnaire.getListComportements();
 		DefaultListModel<Item> lm = new DefaultListModel<Item>();
-		for(Entry<Integer, ObjetGeometrique> entry : map.entrySet()) {
-			lm.addElement(new Item(entry.getKey(), entry.getValue().getNom()));
+		for(Entry<Integer, Comportement> entry : map.entrySet()) {
+			lm.addElement(new Item(entry.getValue().getId(), entry.getValue()));
 		}
 		liste.setModel(lm);
 	}
