@@ -170,29 +170,7 @@ public class Edition extends JFrame {
     	
     	//Liste
     	liste = new JList<Item>();
-    	
-    	//Bouton d'ajout d'animation
-    	JButton boutonAjoutAnimation;
-    	
-    	liste.addListSelectionListener(new ListSelectionListener() {
-			
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				ListModel<Item> model = liste.getModel();
-				
-				gestionnaire.dessinerToile(0.); //TODO:recup le temps courant
-				
-				for(int i = 0; i < model.getSize(); i++) {
-					if(liste.isSelectedIndex(i)) {
-						ObjetGeometrique geo = gestionnaire.getObject(model.getElementAt(i).getId(), 0.); //TODO: recup le temps courant
-						toile.dessineSelectionOf(geo);
-						System.out.println(geo.getStroke().getLineWidth());
-					}
-				}
-			}
-		});
-
-    	
+    	    	
     	liste.addMouseListener(new MouseAdapter() {//TODO : implémenter une classe si code trop grand
     		//TODO : EN FAIT ÇA MARCHE PAS !!!!!!!!!!!!!!!!!!!
 

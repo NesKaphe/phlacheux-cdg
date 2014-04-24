@@ -65,16 +65,7 @@ public class CreateAnimationListener implements ActionListener{
 			if(reponseSelection == JOptionPane.OK_OPTION) {
 				String selection = this.comboBoxAnimations.getSelectedItem().toString();
 				int reponseAnim = this.afficheAlertBoxOf(selection);
-				//On regarde le type de l'animation
-				//Si c'est une translation on va faire quelque chose
-				if(this.comboBoxAnimations.getSelectedItem().toString() == "Translation") {
-					//A faire
-				}
-				else { //Sinon on fait autre chose pour les autres
-					//L'animation associée a un comportement est toujours un CompositeAnimation
-					this.creerAnimation(comp, selection);
-					
-				}
+				
 			}
 			break;
 		case "modification": //Pas sur mais je prefere le prevoir
@@ -151,7 +142,9 @@ public class CreateAnimationListener implements ActionListener{
 		//A implementer plus tard
 	}
 	
-	private void creerAnimation
+	private void creerAnimation(Comportement comp, String selection) {
+		
+	}
 	
 	/*
 	private void createChamps() {
