@@ -56,27 +56,6 @@ public class VisionneuseAnimation extends JScrollPane{
 		childPan.setBackground(new Color(213,246,213));
 		childPan.setLayout(new BoxLayout(childPan, BoxLayout.Y_AXIS));
 		
-		/*
-		//ajoute pour tester :=====================================
-		//1
-		JPanel litelChild1 = new JPanel();
-		litelChild1.setSize(new Dimension(200,50));
-		litelChild1.setBackground(Color.cyan);
-		childPan.add(litelChild1);
-		//2
-		JPanel litelChild2 = new JPanel();
-		litelChild2.setSize(new Dimension(200,50));
-		litelChild2.setBackground(Color.blue);
-		childPan.add(litelChild2);
-		//3
-		JPanel litelChild3 = new JPanel();
-		litelChild3.setSize(new Dimension(200,50));
-		litelChild3.setBackground(Color.green);
-		childPan.add(litelChild3);
-		//===========================================================
-		*/
-
-		
 		parentPan.add(childPan,BorderLayout.CENTER);
 		parentPan.add(tempo,BorderLayout.NORTH);
 		
@@ -91,9 +70,9 @@ public class VisionneuseAnimation extends JScrollPane{
 		//pour faire ce foreach voir :
 		//http://stackoverflow.com/questions/4234985/how-to-for-each-the-hashmap
 		System.out.println("listComp = "+GA.getListComportements().size());
+		childPan.removeAll();
 		for(Entry<Integer, Comportement> entry : listComp.entrySet()){
 			Comportement c = entry.getValue();
-			//listBlockA.add(new BlockAnimation(c, this));//finalement pas besoin de ça
 			childPan.add(new BlockAnimation(c, this));
 		}
 		
@@ -111,6 +90,7 @@ public class VisionneuseAnimation extends JScrollPane{
 
 
 /**
+ * class Tempo extends JPanel :
  * pour afficher les chiffres temporelles
  * @author clement
  *
