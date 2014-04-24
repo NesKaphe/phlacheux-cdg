@@ -26,7 +26,6 @@ import javax.swing.JToolBar;
 import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import listeners.CreateAnimationListener;
-
 import listeners.CreateObjGeoListener;
 import listeners.ListeObjGeoSelectListener;
 import listeners.MouseToileListener;
