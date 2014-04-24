@@ -37,7 +37,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import listeners.CreateAnimationListener;
-
 import listeners.CreateObjGeoListener;
 import listeners.ListeObjGeoSelectListener;
 
