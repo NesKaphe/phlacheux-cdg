@@ -22,18 +22,26 @@ public class LectureAnimationListener implements ActionListener {
 		LecteurAnimation lecteur = this.frame.getLecteur();
 		switch(commande) {
 		case "lecture_debut":
-			//On desactive le bouton de lecture et active le bouton d'arret
-			this.frame.getMenuLectureDebut().setEnabled(false);
-			this.frame.getMenuArretLecture().setEnabled(true);
 			lecteur.setTempsLecture(0.); //On se place au debut avant de commencer la lecture
+		case "reprendre_lecture":
+			//On passe la frame en mode lecture (va desactiver les menus qu'il faut)
+			this.frame.modeLecture();
+			
+			//On desactive le bouton d'ajout d'animation
+			this.frame.getBoutonAjoutAnimation().setEnabled(false);
+		
 			this.threadLecture = new Thread(lecteur); //On lance notre lecteur
 			this.threadLecture.start();
 			break;
 		case "arret_lecture":
-			//On desactive le bouton d'arret et active le bouton de lecture
-			this.frame.getMenuArretLecture().setEnabled(false);
-			this.frame.getMenuLectureDebut().setEnabled(true);
+			lecteur.stop();
+			lecteur.setTempsLecture(0.); //On se remet au debut
+		case "pause_lecture":
 			lecteur.stop(); //On demande a notre lecteur de se terminer
+		case "fin": //TODO: Redondance avec le arret_lecture, peut etre utilisr la même commande
+			//On passe la frame en mode edition (va reactiver les menus qu'il faut)
+			this.frame.modeEdition();
+
 			
 			try {
 				this.threadLecture.join();
@@ -41,21 +49,9 @@ public class LectureAnimationListener implements ActionListener {
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			
+			this.frame.getGestionAnimation().refreshDessin();
 			break;
-		case "fin":
-			//On desactuve le bouton d'arret et active le bouton de lecture
-			this.frame.getMenuArretLecture().setEnabled(false);
-			this.frame.getMenuLectureDebut().setEnabled(true);
-			try {
-				this.threadLecture.join();
-				this.threadLecture = null;
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			
-			break;
-		}
+		}	
 	}
 
 }

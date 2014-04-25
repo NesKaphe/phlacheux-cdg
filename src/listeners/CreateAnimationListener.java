@@ -110,6 +110,7 @@ public class CreateAnimationListener implements ActionListener {
 		}
 		else if (selection.equals("Couleur de fond")) {
 			Object[] m = {"Nouvelle conleur de fond", this.colorChooser};
+			message = m;
 		}
 		
 		Object[] messageFinal = new Object[message.length+4];
@@ -214,23 +215,4 @@ public class CreateAnimationListener implements ActionListener {
 			this.visionneuse.dessineAnimation();
 		}
 	}
-	
-	/*
-	private void createChamps() {
-		this.champsDynamiques = new JPanel();
-		this.champsDynamiques.setLayout(new FlowLayout());
-		this.angle = new JTextField("0");
-		this.strokeWidth = new JTextField("0");
-	}
-	
-	/**
-	 * Va creer et initialiser l'optionPane afin d'afficher une option box 
-	 * pour que l'utilisateur puisse faire son choix d'animation et valider
-	 * /!\ Cette methode doit être appelée apres avoir crée la JcomboBox des animations
-	 */
-	/*
-	private void createOptionPane() {
-		this.optionPane = new JOptionPane(this.comboBoxAnimations, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-	}
-	*/
 }

@@ -3,6 +3,8 @@ package listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JList;
+
 import Animations.GestionAnimation;
 import affichage.Toile;
 
@@ -14,9 +16,12 @@ public class CreateObjGeoListener implements ActionListener{
 	private Toile toile;
 	private GestionAnimation gestionnaire;
 	
+	private ObjetGeometrique objGeoAModifier;
+	
 	public CreateObjGeoListener(Toile toile/*ref sur le itemSelect*/, GestionAnimation gestionnaire) {
 		this.toile = toile;
 		this.gestionnaire = gestionnaire;
+		this.objGeoAModifier = null;
 	}
 	
 
@@ -30,6 +35,11 @@ public class CreateObjGeoListener implements ActionListener{
 	public void actionPerformed(String Command){
 		String[] commands = getCommands(Command);
 		__Action(commands);
+	}
+	
+	public void actionPerformed(String Command, ObjetGeometrique geoAModifier) {
+		this.objGeoAModifier = geoAModifier;
+		this.actionPerformed(Command);
 	}
 	
 	/**
@@ -55,7 +65,7 @@ public class CreateObjGeoListener implements ActionListener{
 				break ;
 			case "modif" :
 				System.out.println("Alert box modif");
-				//alert_box = new createObjGeoBox(toile,/*get du itemSelect*/);//TODO : a finir
+				alert_box = new CreateObjGeoBox(gestionnaire, this.objGeoAModifier);//TODO : a finir
 				break;
 			default:
 				System.err.println("\n\ncommande\""+commands[0]+//TODO : une fois modifier changer ça
@@ -65,9 +75,15 @@ public class CreateObjGeoListener implements ActionListener{
 		//TODO : attention rajouter une suppresion si c'est une modification d'objet
 		//si geo est a null c'est que l'action est annulée
 		if (geo != null){
-			this.toile.modeAjout();
-			//toile.setObjTemporaire(geo);//la toile va se chager de dessiner l'objet
-			this.gestionnaire.setObjGeoEnCreation(geo);
+			if(this.objGeoAModifier == null) {
+				this.toile.modeAjout();
+				//toile.setObjTemporaire(geo);//la toile va se chager de dessiner l'objet
+				this.gestionnaire.setObjGeoEnCreation(geo);
+			}
+			else {
+				this.gestionnaire.refreshDessin();
+				this.objGeoAModifier = null;
+			}
 		}
 	}
 }

@@ -6,12 +6,16 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import listeners.LectureAnimationListener;
+
 import formes.ObjetGeometrique;
+import affichage.LecteurAnimation;
 import affichage.Toile;
 
 public class GestionAnimation {
 	private HashMap<Integer, Comportement> Comportements;
 	private Toile t;
+	private LecteurAnimation lecteur; //Pour recuperer le temps courant du dessin
 	private int idComportement; //un comportement par objet
 	
 	private ObjetGeometrique objEnCreation;
@@ -20,6 +24,7 @@ public class GestionAnimation {
 		this.Comportements = new HashMap<Integer, Comportement>();
 		this.setToile(t);
 		this.idComportement = 0;//identifiant/clé associer aux comportements ajouté dans le HashMap "Comportements"
+		this.lecteur = null;
 	}
 	
 	public void viderComportements() {
@@ -29,6 +34,14 @@ public class GestionAnimation {
 	
 	public void setToile(Toile t) {
 		this.t = t;
+	}
+	
+	public void setLecteurAnimation(LecteurAnimation lecteur) {
+		this.lecteur = lecteur;
+	}
+	
+	public LecteurAnimation getLecteurAnimation() {
+		return this.lecteur;
 	}
 	
 	public Toile getToile() {
@@ -119,6 +132,15 @@ public class GestionAnimation {
 		
 		//On demande le raffraichissement de la toile
 		t.repaint();
+	}
+	
+	/**
+	 * Cette methode va demander le temps courant au lecteur puis va dessiner sur le buffer de la toile
+	 * les objets a ce temps
+	 */
+	public void refreshDessin() {
+		double t_courant = this.lecteur.getTempsCourant();
+		this.dessinerToile(t_courant);
 	}
 
 	//TODO : renommer en getObjetAt en getObjetIdAt

@@ -68,7 +68,7 @@ public class LecteurAnimation implements Runnable {
 		while(this.lecture) {
 			long debut = System.nanoTime();
 			
-			this.gestionnaire.dessinerToile(this.tempsLecture);
+			this.gestionnaire.refreshDessin();
 			this.tempsLecture += this.step;
 			
 			if(this.tempsLecture > tempsAnimation) {
@@ -94,6 +94,10 @@ public class LecteurAnimation implements Runnable {
 			}
 		}
 		
+	}
+
+	public double getTempsCourant() {
+		return this.tempsLecture;
 	}
 
 }
