@@ -32,13 +32,14 @@ public class Rectangle extends ObjetGeometrique {
 		if(width > 0) {
 			this.width = width;
 		}
+		this.generateShape();
 	}
 	
 	public void setHeight(double height) {
 		if(height > 0) {
 			this.height = height;
 		}
-		
+		this.generateShape();		
 	}
 	
 	public double getWidth() {

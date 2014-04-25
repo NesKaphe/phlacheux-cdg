@@ -1,5 +1,6 @@
 package listeners;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -10,7 +11,9 @@ import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import Animations.Comportement;
 import Animations.GestionAnimation;
+import affichage.Edition;
 import affichage.Item;
 import affichage.Toile;
 import formes.ObjetGeometrique;
@@ -68,9 +71,16 @@ public class ListeObjGeoSelectListener extends MouseAdapter implements ListSelec
 				int index = liste.locationToIndex(e.getPoint());
 				ListModel<?> lm = liste.getModel();
 				Item item = (Item)lm.getElementAt(index);
-				ObjetGeometrique geo = gestionnaire.getObject(item.getId(), 0.); //TODO: recup le temps courant
+				Comportement comp = (Comportement) item.getValeur();
 				
-				create_obj_listener.actionPerformed("modif_"+geo.getNom(),geo);
+				//On va creer un action event pour informer le listener de creation d'objets qu'on veut modifier un objet
+				//Commande : modif_+nomObj
+				ModifObjEvent event = new ModifObjEvent(this, ActionEvent.ACTION_PERFORMED, comp.getObjGeo());
+				this.create_obj_listener.actionPerformed(event);
+				//create_obj_listener.actionPerformed("modif_"+comp.getObjGeo().getNom(),comp);
+				
+				Edition frame = (Edition) liste.getRootPane().getParent();
+				frame.MAJListeObjGeo();
 				
 				System.out.println("Double clic sur "+item+ "id : "+ item.getId());
 			}

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JList;
 
+import Animations.Comportement;
 import Animations.GestionAnimation;
 import affichage.Toile;
 
@@ -18,16 +19,20 @@ public class CreateObjGeoListener implements ActionListener{
 	
 	private ObjetGeometrique objGeoAModifier;
 	
-	public CreateObjGeoListener(Toile toile/*ref sur le itemSelect*/, GestionAnimation gestionnaire) {
+	public CreateObjGeoListener(Toile toile, GestionAnimation gestionnaire) {
 		this.toile = toile;
 		this.gestionnaire = gestionnaire;
-		this.objGeoAModifier = null;
 	}
 	
 
 	@Override
 	//forme de la commande (create_+nomObj) (modif_+nomObj)
 	public void actionPerformed(ActionEvent e) {
+		if(e instanceof ModifObjEvent) {
+			ModifObjEvent event = (ModifObjEvent) e;
+			//On recupere l'objet geometrique a modifier dans notre event
+			this.objGeoAModifier = event.getObjGeoAModif();
+		}
 		String[] commands = getCommands(e.getActionCommand());
 		__Action(commands);
 	}
@@ -35,11 +40,6 @@ public class CreateObjGeoListener implements ActionListener{
 	public void actionPerformed(String Command){
 		String[] commands = getCommands(Command);
 		__Action(commands);
-	}
-	
-	public void actionPerformed(String Command, ObjetGeometrique geoAModifier) {
-		this.objGeoAModifier = geoAModifier;
-		this.actionPerformed(Command);
 	}
 	
 	/**
@@ -82,6 +82,8 @@ public class CreateObjGeoListener implements ActionListener{
 			}
 			else {
 				this.gestionnaire.refreshDessin();
+				//On s'assure qu'il ne reste rien dans l'objet geometrique en création
+				this.gestionnaire.resetObjGeoEnCreation();
 				this.objGeoAModifier = null;
 			}
 		}

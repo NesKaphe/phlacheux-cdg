@@ -19,7 +19,7 @@ public class Triangle extends ObjetGeometrique {
 	
 	//TODO faire une taille minimum de 2 ou 3 sinon probable bug (raison : division entière de 1 par 2 = 0)
 	public Triangle(Point2D.Double centre,int taille) {
-		super("triangle", null, Color.yellow, Color.black);
+		super("Triangle", null, Color.yellow, Color.black);
 		this.translation_centre = centre;//impossible de positionner le centre directement
 										 //cette opération est faite dans generateShape()
 		this.taille = taille;
@@ -77,6 +77,7 @@ public class Triangle extends ObjetGeometrique {
 	
 	public void setTaille(double t){
 		this.taille = (int) t;
+		this.generateShape();
 	}
 	
 	public double getTaille(){

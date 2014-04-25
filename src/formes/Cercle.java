@@ -40,6 +40,7 @@ public class Cercle extends ObjetGeometrique {
 			this.rayon = rayon;
 		else
 			this.rayon = 0;
+		this.generateShape();
 	}
 	
 	public double getRayon() {

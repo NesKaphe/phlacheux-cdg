@@ -39,6 +39,9 @@ public class SegmentDroite extends ObjetGeometrique {
 		default: //On ne fait rien car un segment n'a que deux points
 			break;
 		}
+		//On recalcule le centre du segment si les deux points sont initialisés
+		if(p1 != null && p2 != null)
+			this.setCentre(new Point2D.Double((p1.getX() + p2.getX())/2, (p1.getY() + p2.getY())/2));
 	}
 
 	public Point2D getCoord() {

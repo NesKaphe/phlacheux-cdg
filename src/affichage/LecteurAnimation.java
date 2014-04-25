@@ -1,24 +1,26 @@
 package affichage;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.AbstractAction;
+import javax.swing.Timer;
 import javax.swing.event.EventListenerList;
 
 import listeners.LectureAnimationListener;
 
 import Animations.GestionAnimation;
 
-public class LecteurAnimation implements Runnable {
+public class LecteurAnimation implements ActionListener {
 
 	private GestionAnimation gestionnaire;
 	private int fps;
-	private long delay;
+	private int delay;
 	private double step; //Pas de l'animation
 	private double tempsLecture;
-	private boolean lecture;
 	
 	protected EventListenerList listeners;
+	
+	private Timer timer;
 	
 	public LecteurAnimation(GestionAnimation gestionnaire) {
 		this.gestionnaire = gestionnaire;
@@ -26,8 +28,8 @@ public class LecteurAnimation implements Runnable {
 		this.step = 30./this.fps;
 		this.delay = 1000/this.fps;
 		this.tempsLecture = 0.;
-		this.lecture = false;
-		this.listeners = new EventListenerList(); 
+		this.listeners = new EventListenerList();
+		this.timer = new Timer(delay, this);
 	}
 	
 	public void addLectureAnimationListener(LectureAnimationListener listener) {
@@ -58,46 +60,33 @@ public class LecteurAnimation implements Runnable {
 	}
 	
 	public void stop() {
-		this.lecture = false;
+		this.timer.stop();
 	}
 	
-	public void run() {
-		this.lecture = true;
-		double tempsAnimation = this.gestionnaire.getEndAnimations();
-		System.out.println(tempsAnimation);
-		while(this.lecture) {
-			long debut = System.nanoTime();
-			
-			this.gestionnaire.refreshDessin();
-			this.tempsLecture += this.step;
-			
-			if(this.tempsLecture > tempsAnimation) {
-				this.stop(); //On va s'arreter au prochain tour car on est arrivé a la fin
-				this.tempsLecture = tempsAnimation; //On se place a la vraie fin de l'animation
-				
-				//On va maintenant generer un action command pour signaler au listener qu'on a terminé la lecture
-				ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "fin");
-				this.fireEvent(event); //On declenche l'evenement sur nos listeners
-			}
-			
-			long ecoule = System.nanoTime() - debut;
-			
-			long calcDelay = this.delay - ecoule/1000000;
-			//System.out.println("le delais etait "+this.delay+ "et maintenant "+ calcDelay);
-			if(calcDelay > 0) {
-				try {
-					Thread.sleep(calcDelay);
-				}
-				catch(InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
+	public void lire() {
+		this.timer.start();
 	}
-
+	
 	public double getTempsCourant() {
 		return this.tempsLecture;
+	}
+
+	/**
+	 * Evenements du timer
+	 */
+	public void actionPerformed(ActionEvent e) {
+		double tempsAnimation = this.gestionnaire.getEndAnimations();
+		this.gestionnaire.refreshDessin();
+		this.tempsLecture += this.step;
+		
+		if(this.tempsLecture > tempsAnimation) {
+			this.stop(); //On va s'arreter au prochain tour car on est arrivé a la fin
+			this.tempsLecture = tempsAnimation; //On se place a la vraie fin de l'animation
+			
+			//On va maintenant generer un action command pour signaler au listener qu'on a terminé la lecture
+			ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "fin");
+			this.fireEvent(event); //On declenche l'evenement sur nos listeners
+		}	
 	}
 
 }

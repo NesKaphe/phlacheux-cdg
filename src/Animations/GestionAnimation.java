@@ -96,6 +96,10 @@ public class GestionAnimation {
 		this.Comportements.remove(cle);
 	}
 	
+	public void modifierComportement(Comportement comp) {
+		this.Comportements.put(comp.getId(), comp);
+	}
+	
 	public void modifierObjetComportement(int cle, ObjetGeometrique geo) {
 		Comportement comp = this.Comportements.get(cle);
 		if(comp != null) {
@@ -184,5 +188,9 @@ public class GestionAnimation {
 				t_fin = anim.getT_fin();
 		}
 		return t_fin;
+	}
+	
+	public double getTempsCourant() {
+		return this.lecteur.getTempsCourant();
 	}
 }

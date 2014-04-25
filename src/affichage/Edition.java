@@ -138,8 +138,6 @@ public class Edition extends JFrame {
     	menuBarEditionMode.add(menu_L);
     	
     	//création et ajout du listener des menuItem :
-    	//ce listener nous crée une alerte box pour créer un objGeométrique:
-    	create_obj_listener = new CreateObjGeoListener(this.toile, this.gestionnaire);
     	    	
     	lectureListener = new LectureAnimationListener(this);
     	    	
@@ -151,7 +149,8 @@ public class Edition extends JFrame {
     	mi_Carre.setActionCommand("create_Carre");
     	mi_Segment.setActionCommand("create_Segment");
     	mi_Etoile.setActionCommand("create_Etoile");
-    	mi_Croix.setActionCommand("create_croix");
+    	mi_Croix.setActionCommand("create_Croix");
+    	mi_Hexagone.setActionCommand("create_Hexagone");
     	
     	mi_lecture_debut.setActionCommand("lecture_debut");
     	mi_arret_lecture.setActionCommand("arret_lecture");
@@ -187,6 +186,9 @@ public class Edition extends JFrame {
     	
     	//Liste de comportements
     	liste = new JList<Item>();
+    	
+    	//ce listener nous crée une alerte box pour créer un objGeométrique:
+    	create_obj_listener = new CreateObjGeoListener(this.toile, this.gestionnaire);
     	
     	liste.setBackground(Color.lightGray);
     	
@@ -269,6 +271,7 @@ public class Edition extends JFrame {
     	mi_Segment.addActionListener(create_obj_listener);
     	mi_Etoile.addActionListener(create_obj_listener);
     	mi_Croix.addActionListener(create_obj_listener);
+    	mi_Hexagone.addActionListener(create_obj_listener);
 		
     	mi_lecture_debut.addActionListener(lectureListener);
     	mi_arret_lecture.addActionListener(lectureListener);
@@ -299,7 +302,7 @@ public class Edition extends JFrame {
 		mi_lecture_debut.setEnabled(true);
     	mi_arret_lecture.setEnabled(false);
     	mi_pause_lecture.setEnabled(false);
-    	if(this.lecteur.getTempsCourant()>0.)
+    	if(this.lecteur.getTempsCourant()>0. && this.lecteur.getTempsCourant()<this.gestionnaire.getEndAnimations())
     		mi_reprendre_lecture.setEnabled(true);
     	else
     		mi_reprendre_lecture.setEnabled(false);
