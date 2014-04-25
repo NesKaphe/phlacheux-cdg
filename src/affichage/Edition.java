@@ -27,6 +27,7 @@ import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import listeners.CreateAnimationListener;
 import listeners.CreateObjGeoListener;
+import listeners.LectureAnimationListener;
 import listeners.ListeObjGeoSelectListener;
 import listeners.MouseToileListener;
 
@@ -66,9 +67,13 @@ public class Edition extends JFrame {
 	
 	private VisionneuseAnimation visionneuse;
 	
+	private LecteurAnimation lecteur;
 	
 	// menu création d'objet
 	JMenu menu_C = new JMenu("Création d'objet");
+	
+	// menu lecture
+	JMenu menu_L = new JMenu("Lecture");
 	
 	// Item du menu création d'objet
 	JMenuItem mi_Cercle = new JMenuItem("Cercle");
@@ -80,6 +85,8 @@ public class Edition extends JFrame {
 	JMenuItem mi_Hexagone = new JMenuItem("Hexagone");
 	JMenuItem mi_Croix = new JMenuItem("Croix");
 	
+	JMenuItem mi_lecture_debut = new JMenuItem("Lecture depuis le debut");
+	JMenuItem mi_arret_lecture = new JMenuItem("Arret lecture");
 	
 	public Edition() {
 		super("Edition");
@@ -122,6 +129,11 @@ public class Edition extends JFrame {
     	menu_C.add(mi_Croix);
     	menuBarEditionMode.add(menu_C);
     	
+    	// menu lecture
+    	menu_L.add(mi_lecture_debut);
+    	menu_L.add(mi_arret_lecture);
+    	menuBarEditionMode.add(menu_L);
+    	
     	//création et ajout du listener des menuItem :
     	//ce listener nous crée une alerte box pour créer un objGeométrique:
     	final CreateObjGeoListener create_obj_listener = new CreateObjGeoListener(this.toile, this.gestionnaire);
@@ -132,6 +144,11 @@ public class Edition extends JFrame {
     	mi_Segment.addActionListener(create_obj_listener);
     	mi_Etoile.addActionListener(create_obj_listener);
     	
+    	final LectureAnimationListener lectureListener = new LectureAnimationListener(this);
+    	mi_lecture_debut.addActionListener(lectureListener);
+    	mi_arret_lecture.addActionListener(lectureListener);
+    	mi_arret_lecture.setEnabled(false); //On ne peut pas arreter l'animation si on ne lit pas
+    	
     	//ajoute de la commande assosier:
     	mi_Cercle.setActionCommand("create_Cercle");
     	mi_Triangle.setActionCommand("create_Triangle");
@@ -139,6 +156,9 @@ public class Edition extends JFrame {
     	mi_Carre.setActionCommand("create_Carre");
     	mi_Segment.setActionCommand("create_Segment");
     	mi_Etoile.setActionCommand("create_Etoile");
+    	
+    	mi_lecture_debut.setActionCommand("lecture_debut");
+    	mi_arret_lecture.setActionCommand("arret_lecture");
     	 	
     	//Formes
     	// menu d'ajout d'objet
@@ -163,6 +183,10 @@ public class Edition extends JFrame {
     	this.visionneuse = new VisionneuseAnimation(this, gestionnaire, 2000);
     	this.visionneuse.dessineAnimation();
     	this.add(this.visionneuse, BorderLayout.SOUTH);
+    	
+    	//Lecteur d'animation
+    	this.lecteur = new LecteurAnimation(this.gestionnaire);
+    	this.lecteur.addLectureAnimationListener(lectureListener);
     	
     	//Liste de comportements
     	liste = new JList<Item>();
@@ -270,6 +294,18 @@ public class Edition extends JFrame {
 	
 	public GestionAnimation getGestionAnimation() {
 		return this.gestionnaire;
+	}
+	
+	public LecteurAnimation getLecteur() {
+		return this.lecteur;
+	}
+	
+	public JMenuItem getMenuLectureDebut() {
+		return this.mi_lecture_debut;
+	}
+	
+	public JMenuItem getMenuArretLecture() {
+		return this.mi_arret_lecture;
 	}
 
 }

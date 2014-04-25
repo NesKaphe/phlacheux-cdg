@@ -3,6 +3,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import affichage.Edition;
+import affichage.LecteurAnimation;
 
 
 public class Main implements Runnable {
@@ -17,7 +18,7 @@ public class Main implements Runnable {
 	}
 
 	public void run() {
-		JFrame edition = new Edition();
+		Edition edition = new Edition();
 		edition.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		edition.setVisible(true);
 		edition.pack();

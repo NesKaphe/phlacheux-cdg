@@ -149,4 +149,18 @@ public class GestionAnimation {
 	public void resetObjGeoEnCreation() {
 		this.objEnCreation = null;
 	}
+	
+	/**
+	 * Va parcourir tous les comportement pour trouver le temps final de toutes les animations
+	 * @return un double representant le temps final le plus grand de tous les comportements
+	 */
+	public double getEndAnimations() {
+		double t_fin = 0.;
+		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {
+			Animation anim = entry.getValue().getAnimation();
+			if(anim.getT_fin() > t_fin)
+				t_fin = anim.getT_fin();
+		}
+		return t_fin;
+	}
 }
