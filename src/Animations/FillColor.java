@@ -12,7 +12,7 @@ import formes.Rectangle;
 public class FillColor extends ColorAnimation {
 
 	public FillColor(Double t_debut, Double t_fin, int easing, int incrR, int incrG, int incrB) {
-		super(t_debut, t_fin, easing, "StrokeColor", incrR, incrG, incrB);
+		super(t_debut, t_fin, easing, "FillColor", incrR, incrG, incrB);
 	}
 
 	@Override

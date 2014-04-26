@@ -292,7 +292,7 @@ public class CreateObjGeoBox{
 				else { //mode modification
 					return null;
 				}
-				
+				break;
 			case "Hexagone":
 				CreateChamp champ_he;
 				if(this.objGeo == null) {
@@ -306,13 +306,14 @@ public class CreateObjGeoBox{
 				//ajout du champ dans le panel d'affichage
 				config_forme.add(champ_he, BorderLayout.CENTER);
 			champ_strokeW.Value();
-			if(createBox(config_forme)) {
-				((Hexagone)this.objGeo).setTaille(champ_he.Value()/2);
-				objGeo.setStrokeWidth((float)champ_strokeW.Value());
-			}
-			else { //mode modification
-				return null;
-			}
+				if(createBox(config_forme)) {
+					((Hexagone)this.objGeo).setTaille(champ_he.Value()/2);
+					objGeo.setStrokeWidth((float)champ_strokeW.Value());
+				}
+				else { //mode modification
+					return null;
+				}
+				break;
 			default :
 				System.out.println("Le type :\""+type+"\" n'a pas encore été implémenté CreateObjBox");
 		}
