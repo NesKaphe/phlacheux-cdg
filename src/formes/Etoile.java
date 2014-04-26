@@ -66,6 +66,7 @@ public class Etoile extends ObjetGeometrique{
 	
 	public void setTaille(double t){
 		this.taille = (int) t;
+		this.generateShape();
 	}
 	
 	public double getTaille(){

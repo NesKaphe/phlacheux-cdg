@@ -5,14 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -21,18 +18,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import listeners.CreateAnimationListener;
 import listeners.CreateObjGeoListener;
 import listeners.LectureAnimationListener;
 import listeners.ListeObjGeoSelectListener;
 import listeners.MouseToileListener;
+import listeners.SuppressionComportementListener;
 
-
-import formes.*;
 
 import Animations.Comportement;
 import Animations.GestionAnimation;
@@ -62,8 +56,15 @@ public class Edition extends JFrame {
 	
 	//Bouton d'ajout d'animation
 	private JButton boutonAjoutAnimation;
+	private JButton boutonSuppressionComportement;
 	
 	private CreateAnimationListener listenerAnimations;
+	
+	private CreateObjGeoListener create_obj_listener;
+	
+	private SuppressionComportementListener suppressionComportementListener;
+	
+	private LectureAnimationListener lectureListener;
 	
 	private VisionneuseAnimation visionneuse;
 	
@@ -87,6 +88,8 @@ public class Edition extends JFrame {
 	
 	JMenuItem mi_lecture_debut = new JMenuItem("Lecture depuis le debut");
 	JMenuItem mi_arret_lecture = new JMenuItem("Arret lecture");
+	JMenuItem mi_pause_lecture = new JMenuItem("Pause");
+	JMenuItem mi_reprendre_lecture = new JMenuItem("Reprendre lecture");
 	
 	public Edition() {
 		super("Edition");
@@ -102,6 +105,8 @@ public class Edition extends JFrame {
 		
 		//Creation du gestionnaire d'animation
 		this.gestionnaire = new GestionAnimation(this.toile);
+		this.lecteur = new LecteurAnimation(this.gestionnaire);
+		this.gestionnaire.setLecteurAnimation(this.lecteur);
 		
 		//Creation des menus
 		this.menuBarEditionMode = new JMenuBar();
@@ -132,22 +137,14 @@ public class Edition extends JFrame {
     	// menu lecture
     	menu_L.add(mi_lecture_debut);
     	menu_L.add(mi_arret_lecture);
+    	menu_L.add(mi_pause_lecture);
+    	menu_L.add(mi_reprendre_lecture);
     	menuBarEditionMode.add(menu_L);
     	
     	//création et ajout du listener des menuItem :
-    	//ce listener nous crée une alerte box pour créer un objGeométrique:
-    	final CreateObjGeoListener create_obj_listener = new CreateObjGeoListener(this.toile, this.gestionnaire);
-    	mi_Cercle.addActionListener(create_obj_listener);
-    	mi_Triangle.addActionListener(create_obj_listener);
-    	mi_Rectangle.addActionListener(create_obj_listener);
-    	mi_Carre.addActionListener(create_obj_listener);
-    	mi_Segment.addActionListener(create_obj_listener);
-    	mi_Etoile.addActionListener(create_obj_listener);
-    	
-    	final LectureAnimationListener lectureListener = new LectureAnimationListener(this);
-    	mi_lecture_debut.addActionListener(lectureListener);
-    	mi_arret_lecture.addActionListener(lectureListener);
-    	mi_arret_lecture.setEnabled(false); //On ne peut pas arreter l'animation si on ne lit pas
+    	    	
+    	lectureListener = new LectureAnimationListener(this);
+    	    	
     	
     	//ajoute de la commande assosier:
     	mi_Cercle.setActionCommand("create_Cercle");
@@ -156,9 +153,13 @@ public class Edition extends JFrame {
     	mi_Carre.setActionCommand("create_Carre");
     	mi_Segment.setActionCommand("create_Segment");
     	mi_Etoile.setActionCommand("create_Etoile");
+    	mi_Croix.setActionCommand("create_Croix");
+    	mi_Hexagone.setActionCommand("create_Hexagone");
     	
     	mi_lecture_debut.setActionCommand("lecture_debut");
     	mi_arret_lecture.setActionCommand("arret_lecture");
+    	mi_pause_lecture.setActionCommand("pause_lecture");
+    	mi_reprendre_lecture.setActionCommand("reprendre_lecture");
     	 	
     	//Formes
     	// menu d'ajout d'objet
@@ -184,31 +185,16 @@ public class Edition extends JFrame {
     	this.visionneuse.dessineAnimation();
     	this.add(this.visionneuse, BorderLayout.SOUTH);
     	
-    	//Lecteur d'animation
-    	this.lecteur = new LecteurAnimation(this.gestionnaire);
+    	//Listener du lecteur d'animation
     	this.lecteur.addLectureAnimationListener(lectureListener);
     	
     	//Liste de comportements
     	liste = new JList<Item>();
-
-    	liste.addMouseListener(new MouseAdapter() {//TODO : implémenter une classe si code trop grand
-    		//TODO : EN FAIT ÇA MARCHE PAS !!!!!!!!!!!!!!!!!!!
-
-    		public void mouseClicked(MouseEvent e) {
-    			//On est interessé par le double clic sur la liste
-    			if(e.getClickCount() == 2) {
-    				int index = liste.locationToIndex(e.getPoint());
-    				ListModel<Item> lm = liste.getModel();
-    				Item item = lm.getElementAt(index);
-    				ObjetGeometrique geo = gestionnaire.getObject(item.getId(), 0.); //TODO: recup le temps courant
-    				
-    				create_obj_listener.actionPerformed("modif_"+geo.getNom());
-    				
-    				System.out.println("Double clic sur "+item+ "id : "+ item.getId());
-    			}
-    		}
-    		
-		});
+    	
+    	//ce listener nous crée une alerte box pour créer un objGeométrique:
+    	create_obj_listener = new CreateObjGeoListener(this.toile, this.gestionnaire);
+    	
+    	suppressionComportementListener = new SuppressionComportementListener(this, create_obj_listener);
     	
     	liste.setBackground(Color.lightGray);
     	
@@ -216,10 +202,13 @@ public class Edition extends JFrame {
     	
     	boutonAjoutAnimation = new JButton("Creer animation");
     	boutonAjoutAnimation.setEnabled(false);
-    	boutonAjoutAnimation.addActionListener(listenerAnimations);
     	boutonAjoutAnimation.setActionCommand("creation");
-    	listenerListeObjet = new ListeObjGeoSelectListener(this.gestionnaire, this.toile, this.boutonAjoutAnimation);
-    	liste.addListSelectionListener(listenerListeObjet);
+    	
+    	boutonSuppressionComportement = new JButton("Supprimer selection");
+    	boutonSuppressionComportement.setEnabled(false);
+    	boutonSuppressionComportement.setActionCommand("suppression");
+    	
+    	listenerListeObjet = new ListeObjGeoSelectListener(this, this.create_obj_listener);
     	
     	JPanel east = new JPanel();
     	BorderLayout grid = new BorderLayout();
@@ -233,12 +222,21 @@ public class Edition extends JFrame {
     	JScrollPane scrollPane = new JScrollPane(liste);
     	scrollPane.setPreferredSize(new Dimension(0,0));
     	
+    	JPanel east_south = new JPanel();
+    	BorderLayout grid_south = new BorderLayout();
+    	east_south.setLayout(grid_south);
+    	
+    	east_south.add(boutonSuppressionComportement, BorderLayout.NORTH);
+    	east_south.add(boutonAjoutAnimation, BorderLayout.SOUTH);
+    	
     	east.add(titre, BorderLayout.NORTH);
     	east.add(scrollPane, BorderLayout.CENTER);
-    	east.add(boutonAjoutAnimation, BorderLayout.SOUTH);
+    	east.add(east_south, BorderLayout.SOUTH);
     	this.add(east, BorderLayout.EAST);
     	
-    	
+    	//On est par defaut en mode edition
+    	this.initListeners();
+    	this.modeEdition();
     	
     	//TODO : on va voir si c'est vraiment utile ========================================
     	mi_new.addActionListener(new ActionListener() {
@@ -278,6 +276,96 @@ public class Edition extends JFrame {
 			lm.addElement(new Item(entry.getValue().getId(), entry.getValue()));
 		}
 		liste.setModel(lm);
+	}
+	
+	/**
+	 * C'est cette methode qui va lier tous les elements de la frame a un listener
+	 */
+	public void initListeners() {
+		mi_Cercle.addActionListener(create_obj_listener);
+    	mi_Triangle.addActionListener(create_obj_listener);
+    	mi_Rectangle.addActionListener(create_obj_listener);
+    	mi_Carre.addActionListener(create_obj_listener);
+    	mi_Segment.addActionListener(create_obj_listener);
+    	mi_Etoile.addActionListener(create_obj_listener);
+    	mi_Croix.addActionListener(create_obj_listener);
+    	mi_Hexagone.addActionListener(create_obj_listener);
+		
+    	mi_lecture_debut.addActionListener(lectureListener);
+    	mi_arret_lecture.addActionListener(lectureListener);
+    	mi_pause_lecture.addActionListener(lectureListener);
+    	mi_reprendre_lecture.addActionListener(lectureListener);
+    	
+    	boutonAjoutAnimation.addActionListener(listenerAnimations);
+    	boutonSuppressionComportement.addActionListener(suppressionComportementListener);
+    	
+		liste.addListSelectionListener(listenerListeObjet);
+		liste.addMouseListener(listenerListeObjet);
+	}
+	
+	/**
+	 * Va passer la fenetre en mode edition, c'est a dire activer tous les boutons d'edition
+	 * sur les elements
+	 */
+	public void modeEdition() {
+		
+		mi_Cercle.setEnabled(true);
+		mi_Triangle.setEnabled(true);
+		mi_Rectangle.setEnabled(true);
+		mi_Carre.setEnabled(true);
+		mi_Segment.setEnabled(true);
+		mi_Etoile.setEnabled(true);
+		mi_Hexagone.setEnabled(true);
+		mi_Croix.setEnabled(true);
+		
+		mi_lecture_debut.setEnabled(true);
+    	mi_arret_lecture.setEnabled(false);
+    	mi_pause_lecture.setEnabled(false);
+    	if(this.lecteur.getTempsCourant()>0. && this.lecteur.getTempsCourant()<this.gestionnaire.getEndAnimations())
+    		mi_reprendre_lecture.setEnabled(true);
+    	else
+    		mi_reprendre_lecture.setEnabled(false);
+		    	
+    	liste.addListSelectionListener(listenerListeObjet);
+		this.toile.modeSelection();
+	}
+	
+	/**
+	 * Va passer la fenetre en mode lecture, c'est a dire desactiver tous les boutons d'edition
+	 * et ne laisser que les listeners de lecture
+	 */
+	public void modeLecture() {
+		
+		mi_Cercle.setEnabled(false);
+		mi_Triangle.setEnabled(false);
+		mi_Rectangle.setEnabled(false);
+		mi_Carre.setEnabled(false);
+		mi_Segment.setEnabled(false);
+		mi_Etoile.setEnabled(false);
+		mi_Hexagone.setEnabled(false);
+		mi_Croix.setEnabled(false);
+		
+		mi_lecture_debut.setEnabled(false);
+    	mi_arret_lecture.setEnabled(true);
+    	mi_pause_lecture.setEnabled(true);
+    	
+    	mi_reprendre_lecture.setEnabled(false);
+		
+    	//On deselectionne tous les elements de la liste et retire le listener
+    	liste.removeListSelectionListener(listenerListeObjet);
+    	liste.clearSelection();
+		
+		this.toile.modeLecture();
+	}
+	
+	public void activerAjoutSuppression() {
+		this.boutonAjoutAnimation.setEnabled(true);
+		this.boutonSuppressionComportement.setEnabled(true);
+	}
+	
+	public void desactiverAjoutSuppression() {
+		this.boutonAjoutAnimation.setEnabled(false);
+		this.boutonSuppressionComportement.setEnabled(false);
 	}
 	
 	public JList<Item> getListe() {

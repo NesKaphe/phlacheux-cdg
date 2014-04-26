@@ -3,6 +3,9 @@ package listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JList;
+
+import Animations.Comportement;
 import Animations.GestionAnimation;
 import affichage.Toile;
 
@@ -14,7 +17,9 @@ public class CreateObjGeoListener implements ActionListener{
 	private Toile toile;
 	private GestionAnimation gestionnaire;
 	
-	public CreateObjGeoListener(Toile toile/*ref sur le itemSelect*/, GestionAnimation gestionnaire) {
+	private Comportement objGeoAModifier;
+	
+	public CreateObjGeoListener(Toile toile, GestionAnimation gestionnaire) {
 		this.toile = toile;
 		this.gestionnaire = gestionnaire;
 	}
@@ -23,6 +28,11 @@ public class CreateObjGeoListener implements ActionListener{
 	@Override
 	//forme de la commande (create_+nomObj) (modif_+nomObj)
 	public void actionPerformed(ActionEvent e) {
+		if(e instanceof ModifComportementEvent) {
+			ModifComportementEvent event = (ModifComportementEvent) e;
+			//On recupere l'objet geometrique a modifier dans notre event
+			this.objGeoAModifier = event.compAModif();
+		}
 		String[] commands = getCommands(e.getActionCommand());
 		__Action(commands);
 	}
@@ -55,7 +65,7 @@ public class CreateObjGeoListener implements ActionListener{
 				break ;
 			case "modif" :
 				System.out.println("Alert box modif");
-				//alert_box = new createObjGeoBox(toile,/*get du itemSelect*/);//TODO : a finir
+				alert_box = new CreateObjGeoBox(gestionnaire, this.objGeoAModifier.getObjGeo());//TODO : a finir
 				break;
 			default:
 				System.err.println("\n\ncommande\""+commands[0]+//TODO : une fois modifier changer ça
@@ -65,9 +75,17 @@ public class CreateObjGeoListener implements ActionListener{
 		//TODO : attention rajouter une suppresion si c'est une modification d'objet
 		//si geo est a null c'est que l'action est annulée
 		if (geo != null){
-			this.toile.modeAjout();
-			//toile.setObjTemporaire(geo);//la toile va se chager de dessiner l'objet
-			this.gestionnaire.setObjGeoEnCreation(geo);
+			if(this.objGeoAModifier == null) {
+				this.toile.modeAjout();
+				//toile.setObjTemporaire(geo);//la toile va se chager de dessiner l'objet
+				this.gestionnaire.setObjGeoEnCreation(geo);
+			}
+			else {
+				this.gestionnaire.refreshDessin();
+				//On s'assure qu'il ne reste rien dans l'objet geometrique en création
+				this.gestionnaire.resetObjGeoEnCreation();
+				this.objGeoAModifier = null;
+			}
 		}
 	}
 }

@@ -19,6 +19,7 @@ import Animations.Animation;
 import Animations.Comportement;
 import Animations.CompositeAnimation;
 import Animations.FillColor;
+import Animations.GestionAnimation;
 import Animations.Rotation;
 import Animations.StrokeColor;
 import Animations.StrokeWidth;
@@ -48,6 +49,8 @@ public class CreateAnimationListener implements ActionListener {
 	MyColorChooser colorChooser;
 	
 	JOptionPane optionPane;
+	
+	GestionAnimation gestionnaire;
 	
 	public CreateAnimationListener(JList<Item> liste, VisionneuseAnimation visionneuse) {
 		this.liste = liste;
@@ -110,6 +113,7 @@ public class CreateAnimationListener implements ActionListener {
 		}
 		else if (selection.equals("Couleur de fond")) {
 			Object[] m = {"Nouvelle conleur de fond", this.colorChooser};
+			message = m;
 		}
 		
 		Object[] messageFinal = new Object[message.length+4];
@@ -170,7 +174,7 @@ public class CreateAnimationListener implements ActionListener {
 		//On ne va créer que des animations valides (avec un temps de fin apres le temps debut)
 		if(tempsFin > tempsDebut) {
 			//On recupere l'objet geometrique
-			ObjetGeometrique obj = comp.getEtatObjGeo(0.); //TODO: recup le temps courant de l'edition
+			ObjetGeometrique obj = comp.getEtatObjGeo(tempsDebut);
 			
 			switch(selection) {
 			case "Rotation":
@@ -214,23 +218,4 @@ public class CreateAnimationListener implements ActionListener {
 			this.visionneuse.dessineAnimation();
 		}
 	}
-	
-	/*
-	private void createChamps() {
-		this.champsDynamiques = new JPanel();
-		this.champsDynamiques.setLayout(new FlowLayout());
-		this.angle = new JTextField("0");
-		this.strokeWidth = new JTextField("0");
-	}
-	
-	/**
-	 * Va creer et initialiser l'optionPane afin d'afficher une option box 
-	 * pour que l'utilisateur puisse faire son choix d'animation et valider
-	 * /!\ Cette methode doit être appelée apres avoir crée la JcomboBox des animations
-	 */
-	/*
-	private void createOptionPane() {
-		this.optionPane = new JOptionPane(this.comboBoxAnimations, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-	}
-	*/
 }

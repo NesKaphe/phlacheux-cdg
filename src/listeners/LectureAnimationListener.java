@@ -9,53 +9,38 @@ import affichage.LecteurAnimation;
 public class LectureAnimationListener implements ActionListener {
 
 	private Edition frame;
-	
-	private Thread threadLecture;
-	
+		
 	public LectureAnimationListener(Edition frame) {
 		this.frame = frame;
-		this.threadLecture = null;
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		frame.getGestionAnimation().resetObjGeoEnCreation(); //Si on avait un objet en création, on le supprime
 		String commande = e.getActionCommand();
 		LecteurAnimation lecteur = this.frame.getLecteur();
 		switch(commande) {
 		case "lecture_debut":
-			//On desactive le bouton de lecture et active le bouton d'arret
-			this.frame.getMenuLectureDebut().setEnabled(false);
-			this.frame.getMenuArretLecture().setEnabled(true);
 			lecteur.setTempsLecture(0.); //On se place au debut avant de commencer la lecture
-			this.threadLecture = new Thread(lecteur); //On lance notre lecteur
-			this.threadLecture.start();
+		case "reprendre_lecture":
+			//On passe la frame en mode lecture (va desactiver les menus qu'il faut)
+			this.frame.modeLecture();
+			
+			//On desactive le bouton d'ajout d'animation
+			this.frame.getBoutonAjoutAnimation().setEnabled(false);
+		
+			lecteur.lire(); //On lance notre lecteur
 			break;
 		case "arret_lecture":
-			//On desactive le bouton d'arret et active le bouton de lecture
-			this.frame.getMenuArretLecture().setEnabled(false);
-			this.frame.getMenuLectureDebut().setEnabled(true);
+			lecteur.stop();
+			lecteur.setTempsLecture(0.); //On se remet au debut
+		case "pause_lecture":
 			lecteur.stop(); //On demande a notre lecteur de se terminer
-			
-			try {
-				this.threadLecture.join();
-				this.threadLecture = null;
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			
+		case "fin": //TODO: Redondance avec le arret_lecture, peut etre utilisr la même commande
+			//On passe la frame en mode edition (va reactiver les menus qu'il faut)
+			this.frame.modeEdition();
+			this.frame.getGestionAnimation().refreshDessin();
 			break;
-		case "fin":
-			//On desactuve le bouton d'arret et active le bouton de lecture
-			this.frame.getMenuArretLecture().setEnabled(false);
-			this.frame.getMenuLectureDebut().setEnabled(true);
-			try {
-				this.threadLecture.join();
-				this.threadLecture = null;
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			
-			break;
-		}
+		}	
 	}
 
 }

@@ -69,6 +69,11 @@ public class Toile extends JPanel {
 		this.removeMouseMotionListener((MouseMotionListener)this.listener);
 	}
 	
+	public void modeLecture() {
+		this.mode = "lecture";
+		this.removeMouseMotionListener((MouseMotionListener)this.listener);
+	}
+	
 	public void paintComponent(Graphics g) {
 		//Le buffer n'existe pas encore au moment du dessin
 		if(this.backBuffer == null)
@@ -79,7 +84,7 @@ public class Toile extends JPanel {
 			this.backBuffer = null;
 			this.initBuffer();
 			if (parent != null)
-				this.parent.getGestionAnimation().dessinerToile(0.); //TODO: recup temps courant //COMMENT clem : savoir si on garde ça ou non (ça ressemble à du teste pour moi)
+				this.parent.getGestionAnimation().refreshDessin(); //TODO: recup temps courant //COMMENT clem : savoir si on garde ça ou non (ça ressemble à du teste pour moi)
 		}
 		
 		Graphics2D g2 = (Graphics2D) g;

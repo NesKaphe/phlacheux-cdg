@@ -12,7 +12,9 @@ import Animations.GestionAnimation;
 
 import formes.Carre;
 import formes.Cercle;
+import formes.Croix;
 import formes.Etoile;
+import formes.Hexagone;
 import formes.ObjetGeometrique;
 import formes.Rectangle;
 import formes.SegmentDroite;
@@ -162,15 +164,15 @@ public class CreateObjGeoBox{
 			case "Cercle":
 				CreateChamp champ_rayon;
 				if(objGeo == null){//mode création
-					champ_rayon = new CreateChamp("Rayon :", default_taille);
+					champ_rayon = new CreateChamp("Diamètre :", default_taille);
 					objGeo = new Cercle(new Point2D.Double(0,0),default_taille);
 				}
 				else//mode modification
-					champ_rayon = new CreateChamp("Rayon :", ((Cercle)objGeo).getRayon());
+					champ_rayon = new CreateChamp("Diamètre :", ((Cercle)objGeo).getRayon()*2);
 				//ajout du champ dans le panel d'affichage
 				config_forme.add(champ_rayon, BorderLayout.CENTER);
 				if(createBox(config_forme)){
-					((Cercle)objGeo).setRayon(champ_rayon.Value());//modifrayon
+					((Cercle)objGeo).setRayon(champ_rayon.Value()/2);//modifrayon
 					objGeo.setStrokeWidth((float)champ_strokeW.Value());//modif strokeW
 				}else{
 					return null;
@@ -263,13 +265,54 @@ public class CreateObjGeoBox{
 				config_forme.add(champ_te, BorderLayout.CENTER);
 			champ_strokeW.Value();
 				if(createBox(config_forme)){
-					((Etoile)this.objGeo).setTaille(champ_te.Value());
+					((Etoile)this.objGeo).setTaille(champ_te.Value()/2);
 					objGeo.setStrokeWidth((float)champ_strokeW.Value());//modif strokeW
 				}else{
 					return null;
 				}
 				break;
 				
+			case "Croix":
+				CreateChamp champ_cr;
+				if(this.objGeo == null) { //mode création
+					champ_cr = new CreateChamp("Taille :", default_taille);
+					this.objGeo = new Croix(new Point2D.Double(0,0), (int)default_taille);
+					objGeo.setStrokeWidth((float)champ_strokeW.Value());
+				}
+				else { //mode modification
+					champ_cr = new CreateChamp("Taille :", ((Croix)objGeo).getTaille()*2);
+				}
+				//ajout du champ dans le panel d'affichage
+				config_forme.add(champ_cr, BorderLayout.CENTER);
+			champ_strokeW.Value();
+				if(createBox(config_forme)){
+					((Croix)this.objGeo).setTaille(champ_cr.Value()/2);
+					objGeo.setStrokeWidth((float)champ_strokeW.Value());
+				}
+				else { //mode modification
+					return null;
+				}
+				
+			case "Hexagone":
+				CreateChamp champ_he;
+				if(this.objGeo == null) {
+					champ_he = new CreateChamp("Taille :", default_taille);
+					this.objGeo = new Hexagone(new Point2D.Double(0,0), (int)default_taille);
+					objGeo.setStrokeWidth((float)champ_strokeW.Value());
+				}
+				else {
+					champ_he = new CreateChamp("Taille :", ((Hexagone)objGeo).getTaille()*2);
+				}
+				//ajout du champ dans le panel d'affichage
+				config_forme.add(champ_he, BorderLayout.CENTER);
+			champ_strokeW.Value();
+			if(createBox(config_forme)) {
+				((Hexagone)this.objGeo).setTaille(champ_he.Value()/2);
+				objGeo.setStrokeWidth((float)champ_strokeW.Value());
+			}
+			else { //mode modification
+				return null;
+			}
 			default :
 				System.out.println("Le type :\""+type+"\" n'a pas encore été implémenté CreateObjBox");
 		}

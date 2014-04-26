@@ -23,5 +23,6 @@ public class Carre extends Rectangle {
 	public void setcote(double cote){
 		this.setHeight(cote);
 		this.setWidth(cote);
+		this.generateShape();
 	}
 }

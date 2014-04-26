@@ -47,7 +47,7 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 				this.frame.getGestionAnimation().setObjGeoEnCreation(seg);
 				
 				//Et on raffraichi le dessin des objets
-				this.frame.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+				this.frame.getGestionAnimation().refreshDessin(); //TODO: recup le temps courant
     		}
     	}
 		
@@ -69,7 +69,7 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 				geo.setCentre(point);
 				
 				//On raffraichi le dessin des objets
-				this.frame.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+				this.frame.getGestionAnimation().refreshDessin(); //TODO: recup le temps courant
 			}
     	}
 		
@@ -100,7 +100,7 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 				this.frame.MAJListeObjGeo();
 	    	}
 		}
-    	else { //Si on est pas en mode listener, le clic signifie selection
+    	else if(toile.getMode().equals("selection")) { //Si on est pas en mode listener, on regarde si on est en mode selection
     		
     		//Si l'objet temporaire n'est pas null (Cas du segment après le dessin
     		if(this.frame.getGestionAnimation().getObjGeoEnCreation() != null) {
@@ -110,7 +110,8 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
     		else { //Sinon, on va essayer de detecter le clic sur les objets geometriques dessinés
     			
 	    		//On va demander au gestion animation si un objet contient les coordonnées du clic
-	    		Entry<Integer, ObjetGeometrique> entry = this.frame.getGestionAnimation().getObjectAt(e.getX(), e.getY(),0.);
+	    		Entry<Integer, ObjetGeometrique> entry = this.frame.getGestionAnimation().getObjectAt(e.getX(), e.getY(),
+	    				this.frame.getGestionAnimation().getLecteurAnimation().getTempsCourant());
 	
 	    		//On deselectionne tous les elements de la liste
 	    		this.frame.getListe().clearSelection();
@@ -185,7 +186,7 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
     			
     			//On va maintenant enregistrer notre objet dans le gestionnaire d'animation
     			this.frame.getGestionAnimation().ajouterComportement(geo, null);
-				this.frame.getGestionAnimation().dessinerToile(0.); //TODO: recup le temps courant
+				this.frame.getGestionAnimation().refreshDessin(); //TODO: recup le temps courant
 				
 				//On a terminé la creation de la ligne, on ne reste pas en mode listener
 				//toile.removeMouseMotionListener((MouseMotionListener) this);
