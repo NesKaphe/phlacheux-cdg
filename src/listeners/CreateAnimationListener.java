@@ -19,6 +19,7 @@ import Animations.Animation;
 import Animations.Comportement;
 import Animations.CompositeAnimation;
 import Animations.FillColor;
+import Animations.GestionAnimation;
 import Animations.Rotation;
 import Animations.StrokeColor;
 import Animations.StrokeWidth;
@@ -48,6 +49,8 @@ public class CreateAnimationListener implements ActionListener {
 	MyColorChooser colorChooser;
 	
 	JOptionPane optionPane;
+	
+	GestionAnimation gestionnaire;
 	
 	public CreateAnimationListener(JList<Item> liste, VisionneuseAnimation visionneuse) {
 		this.liste = liste;
@@ -171,7 +174,7 @@ public class CreateAnimationListener implements ActionListener {
 		//On ne va créer que des animations valides (avec un temps de fin apres le temps debut)
 		if(tempsFin > tempsDebut) {
 			//On recupere l'objet geometrique
-			ObjetGeometrique obj = comp.getEtatObjGeo(0.); //TODO: recup le temps courant de l'edition
+			ObjetGeometrique obj = comp.getEtatObjGeo(tempsDebut);
 			
 			switch(selection) {
 			case "Rotation":

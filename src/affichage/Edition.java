@@ -25,6 +25,7 @@ import listeners.CreateObjGeoListener;
 import listeners.LectureAnimationListener;
 import listeners.ListeObjGeoSelectListener;
 import listeners.MouseToileListener;
+import listeners.SuppressionComportementListener;
 
 
 import Animations.Comportement;
@@ -55,10 +56,13 @@ public class Edition extends JFrame {
 	
 	//Bouton d'ajout d'animation
 	private JButton boutonAjoutAnimation;
+	private JButton boutonSuppressionComportement;
 	
 	private CreateAnimationListener listenerAnimations;
 	
 	private CreateObjGeoListener create_obj_listener;
+	
+	private SuppressionComportementListener suppressionComportementListener;
 	
 	private LectureAnimationListener lectureListener;
 	
@@ -190,6 +194,8 @@ public class Edition extends JFrame {
     	//ce listener nous crée une alerte box pour créer un objGeométrique:
     	create_obj_listener = new CreateObjGeoListener(this.toile, this.gestionnaire);
     	
+    	suppressionComportementListener = new SuppressionComportementListener(this, create_obj_listener);
+    	
     	liste.setBackground(Color.lightGray);
     	
     	listenerAnimations = new CreateAnimationListener(liste, this.visionneuse);
@@ -197,7 +203,12 @@ public class Edition extends JFrame {
     	boutonAjoutAnimation = new JButton("Creer animation");
     	boutonAjoutAnimation.setEnabled(false);
     	boutonAjoutAnimation.setActionCommand("creation");
-    	listenerListeObjet = new ListeObjGeoSelectListener(this.gestionnaire, this.toile, this.boutonAjoutAnimation, this.create_obj_listener);
+    	
+    	boutonSuppressionComportement = new JButton("Supprimer selection");
+    	boutonSuppressionComportement.setEnabled(false);
+    	boutonSuppressionComportement.setActionCommand("suppression");
+    	
+    	listenerListeObjet = new ListeObjGeoSelectListener(this, this.create_obj_listener);
     	
     	JPanel east = new JPanel();
     	BorderLayout grid = new BorderLayout();
@@ -211,9 +222,16 @@ public class Edition extends JFrame {
     	JScrollPane scrollPane = new JScrollPane(liste);
     	scrollPane.setPreferredSize(new Dimension(0,0));
     	
+    	JPanel east_south = new JPanel();
+    	BorderLayout grid_south = new BorderLayout();
+    	east_south.setLayout(grid_south);
+    	
+    	east_south.add(boutonSuppressionComportement, BorderLayout.NORTH);
+    	east_south.add(boutonAjoutAnimation, BorderLayout.SOUTH);
+    	
     	east.add(titre, BorderLayout.NORTH);
     	east.add(scrollPane, BorderLayout.CENTER);
-    	east.add(boutonAjoutAnimation, BorderLayout.SOUTH);
+    	east.add(east_south, BorderLayout.SOUTH);
     	this.add(east, BorderLayout.EAST);
     	
     	//On est par defaut en mode edition
@@ -279,6 +297,7 @@ public class Edition extends JFrame {
     	mi_reprendre_lecture.addActionListener(lectureListener);
     	
     	boutonAjoutAnimation.addActionListener(listenerAnimations);
+    	boutonSuppressionComportement.addActionListener(suppressionComportementListener);
     	
 		liste.addListSelectionListener(listenerListeObjet);
 		liste.addMouseListener(listenerListeObjet);
@@ -332,9 +351,21 @@ public class Edition extends JFrame {
     	
     	mi_reprendre_lecture.setEnabled(false);
 		
+    	//On deselectionne tous les elements de la liste et retire le listener
     	liste.removeListSelectionListener(listenerListeObjet);
+    	liste.clearSelection();
 		
 		this.toile.modeLecture();
+	}
+	
+	public void activerAjoutSuppression() {
+		this.boutonAjoutAnimation.setEnabled(true);
+		this.boutonSuppressionComportement.setEnabled(true);
+	}
+	
+	public void desactiverAjoutSuppression() {
+		this.boutonAjoutAnimation.setEnabled(false);
+		this.boutonSuppressionComportement.setEnabled(false);
 	}
 	
 	public JList<Item> getListe() {

@@ -24,41 +24,38 @@ import formes.ObjetGeometrique;
  */
 public class ListeObjGeoSelectListener extends MouseAdapter implements ListSelectionListener {
 
-	private GestionAnimation gestionnaire;
-	private Toile toile;
-	private JButton boutonEnableDisable;
 	private CreateObjGeoListener create_obj_listener;
+	
+	private Edition frame;
 	
 	/**
 	 * 
 	 * @param frame la fenetre d'edition
 	 */
-	public ListeObjGeoSelectListener(GestionAnimation gest, Toile t, JButton boutonEnableDisable, CreateObjGeoListener listener) {
-		this.gestionnaire = gest;
-		this.toile = t;
-		this.boutonEnableDisable = boutonEnableDisable;
-		this.create_obj_listener = listener;
+	public ListeObjGeoSelectListener(Edition frame, CreateObjGeoListener create_obj_listener) {
+		this.frame = frame;
+		this.create_obj_listener = create_obj_listener;
 	}
 	
 	public void valueChanged(ListSelectionEvent e) {
-		this.gestionnaire.refreshDessin();
+		this.frame.getGestionAnimation().refreshDessin();
 		if (e.getSource() instanceof JList<?>) {
 			JList<?> liste = (JList<?>) e.getSource();
 			List<?> listeItemSelected = liste.getSelectedValuesList();
 			
 			if(listeItemSelected.size()>0) { //Si on a au moins un element selectionné
 				//On va rendre cliquable le bouton d'ajout d'animations
-				this.boutonEnableDisable.setEnabled(true);
+				this.frame.activerAjoutSuppression();
 				
 				//On va boucler sur tous les elements de la liste pour les selectionner sur la toile
 				for(Object item : listeItemSelected) {
-					ObjetGeometrique geo = this.gestionnaire.getObject(((Item) item).getId(), this.gestionnaire.getLecteurAnimation().getTempsCourant());
-					this.toile.dessineSelectionOf(geo);
+					ObjetGeometrique geo = this.frame.getGestionAnimation().getObject(((Item) item).getId(), this.frame.getGestionAnimation().getLecteurAnimation().getTempsCourant());
+					this.frame.getToile().dessineSelectionOf(geo);
 				}
 			}
 			else {
 				//Sinon, on desactive le bouton car aucun objet n'est selectionné dans la liste
-				this.boutonEnableDisable.setEnabled(false);
+				this.frame.desactiverAjoutSuppression();
 			}
 		}
 	}
@@ -75,7 +72,7 @@ public class ListeObjGeoSelectListener extends MouseAdapter implements ListSelec
 				
 				//On va creer un action event pour informer le listener de creation d'objets qu'on veut modifier un objet
 				//Commande : modif_+nomObj
-				ModifObjEvent event = new ModifObjEvent(this, ActionEvent.ACTION_PERFORMED, comp.getObjGeo());
+				ModifComportementEvent event = new ModifComportementEvent(this, ActionEvent.ACTION_PERFORMED, "modif_"+comp.getObjGeo().getNom(), comp);
 				this.create_obj_listener.actionPerformed(event);
 				//create_obj_listener.actionPerformed("modif_"+comp.getObjGeo().getNom(),comp);
 				

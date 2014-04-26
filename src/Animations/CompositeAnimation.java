@@ -72,8 +72,10 @@ public class CompositeAnimation extends Animation{
 					at_retour.concatenate(atmp);
 				
 			}else if(a.getT_fin() < t_courant){
-				
-				at_retour = a.getAffineTransform(a.getT_fin());
+				AffineTransform atmp = a.getAffineTransform(a.getT_fin());
+				if (atmp != null)
+					at_retour.concatenate(atmp);
+				//at_retour = a.getAffineTransform(a.getT_fin());
 			}
 		}
 		

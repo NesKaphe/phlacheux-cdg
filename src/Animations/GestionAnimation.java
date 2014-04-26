@@ -73,12 +73,11 @@ public class GestionAnimation {
 		System.out.println("ajoutComportement "+geo.getStroke().getLineWidth());
 		Comportement comp = null;
 		int i = 0;
-		while(i < this.Comportements.size()) {
-			if(this.Comportements.get(i).getObjGeo().equals(geo)) {
-				comp = this.Comportements.get(i);
-				break;
+
+		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {
+			if(entry.getValue().getObjGeo().equals(geo)) {
+				comp = entry.getValue();
 			}
-			i++;
 		}
 		
 		//Si on n'a pas trouvé l'objet geometrique, on l'ajoute
@@ -121,10 +120,8 @@ public class GestionAnimation {
 		this.t.initBuffer();
 		
 		//On dessine les objets dans le buffer
-		for(int i = 0; i < this.Comportements.size(); i++) {
-			//t.dessineObjet(this.Comportements.get(i).getEtatObjGeo(t_courant));
-			//System.out.println(this.Comportements.get(i));
-			t.dessineObjet(this.Comportements.get(i).getEtatObjGeo(t_courant));
+		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {
+			t.dessineObjet(entry.getValue().getEtatObjGeo(t_courant));
 		}
 		
 		//On dessine l'objet temporaire s'il existe

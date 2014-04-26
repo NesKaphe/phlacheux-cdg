@@ -17,7 +17,7 @@ public class CreateObjGeoListener implements ActionListener{
 	private Toile toile;
 	private GestionAnimation gestionnaire;
 	
-	private ObjetGeometrique objGeoAModifier;
+	private Comportement objGeoAModifier;
 	
 	public CreateObjGeoListener(Toile toile, GestionAnimation gestionnaire) {
 		this.toile = toile;
@@ -28,10 +28,10 @@ public class CreateObjGeoListener implements ActionListener{
 	@Override
 	//forme de la commande (create_+nomObj) (modif_+nomObj)
 	public void actionPerformed(ActionEvent e) {
-		if(e instanceof ModifObjEvent) {
-			ModifObjEvent event = (ModifObjEvent) e;
+		if(e instanceof ModifComportementEvent) {
+			ModifComportementEvent event = (ModifComportementEvent) e;
 			//On recupere l'objet geometrique a modifier dans notre event
-			this.objGeoAModifier = event.getObjGeoAModif();
+			this.objGeoAModifier = event.compAModif();
 		}
 		String[] commands = getCommands(e.getActionCommand());
 		__Action(commands);
@@ -65,7 +65,7 @@ public class CreateObjGeoListener implements ActionListener{
 				break ;
 			case "modif" :
 				System.out.println("Alert box modif");
-				alert_box = new CreateObjGeoBox(gestionnaire, this.objGeoAModifier);//TODO : a finir
+				alert_box = new CreateObjGeoBox(gestionnaire, this.objGeoAModifier.getObjGeo());//TODO : a finir
 				break;
 			default:
 				System.err.println("\n\ncommande\""+commands[0]+//TODO : une fois modifier changer ça
