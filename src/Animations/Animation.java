@@ -237,15 +237,32 @@ public abstract class Animation {
 	 * attention à utiliser que si vraiment nécéssaire
 	 * @param t_debut
 	 */
-	protected void setT_debut(Double t_debut) {
+	public void setT_debut(Double t_debut) {
 		this.t_debut = t_debut;
+	}
+	
+	/*
+	 * pour changer t_debut et t_fin en même temps
+	 * le paramètre déplacement correcpond au changement
+	 * cette méthode ne decendre pas t_debut en dessous de zero
+	 * on block tout au zero
+	 */
+	public void changePeriode(double déplacement){
+		double test = this.t_debut + déplacement;
+		if (test < 0){
+			this.t_fin-=this.t_debut;
+			this.t_debut= 0.;
+		}else{
+			this.t_debut+= déplacement;
+			this.t_fin+= déplacement;
+		}
 	}
 	
 	/**
 	 * attention à utiliser que si vraiment nécéssaire
 	 * @param t_fin
 	 */
-	protected void setT_fin(Double t_fin) {
+	public void setT_fin(Double t_fin) {
 		this.t_fin = t_fin;
 	}
 

@@ -131,7 +131,6 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 	    		}
     		}
     	}
-		
 	}
 
 	@Override
