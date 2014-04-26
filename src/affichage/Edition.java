@@ -183,6 +183,7 @@ public class Edition extends JFrame {
     	//Visionneuse
     	this.visionneuse = new VisionneuseAnimation(this, gestionnaire, 2000);
     	this.visionneuse.dessineAnimation();
+    	this.gestionnaire.setVisionneuse(this.visionneuse);
     	this.add(this.visionneuse, BorderLayout.SOUTH);
     	
     	//Listener du lecteur d'animation
