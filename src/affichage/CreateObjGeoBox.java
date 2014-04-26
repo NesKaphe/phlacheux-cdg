@@ -32,7 +32,7 @@ public class CreateObjGeoBox{
 									//si l'objetGeo est non null nous sommes en mode modification
 	private double default_taille ;
 	private String nomBox;
-	//consytructeur pour le mode création
+	//constructeur pour le mode création
 	public CreateObjGeoBox(GestionAnimation gestionnaire,String type){
 		System.out.println("INFO - constructeur création");
 		this.gestionnaire = gestionnaire;
