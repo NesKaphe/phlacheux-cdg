@@ -87,7 +87,6 @@ public class VisionneuseAnimation extends JScrollPane{
 		
 		this.setPreferredSize(new Dimension(screenSize.width,screenSize.height/4));//va prendre 1/4  de la hauteur de l'écran
 		this.setViewportView(parentPan);
-		//this.getCorner(LOWER_LEFT_CORNER).addMouseListener(l)//TODO à faire si on veux que l'affichage soit parfait
 		this.getVerticalScrollBar().addAdjustmentListener(new myAdjustmentListener(this));//ajout du ajustment listener
 	}
 
