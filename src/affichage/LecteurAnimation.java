@@ -18,6 +18,7 @@ public class LecteurAnimation implements ActionListener {
 	private double step; //Pas de l'animation
 	private double tempsLecture;
 	
+	
 	protected EventListenerList listeners;
 	
 	private Timer timer;
@@ -86,7 +87,8 @@ public class LecteurAnimation implements ActionListener {
 			//On va maintenant generer un action command pour signaler au listener qu'on a terminé la lecture
 			ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "fin");
 			this.fireEvent(event); //On declenche l'evenement sur nos listeners
-		}	
+		}
+		
 	}
 
 }

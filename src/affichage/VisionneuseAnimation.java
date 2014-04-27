@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseAdapter;
@@ -26,8 +28,12 @@ import java.util.Map.Entry;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import formes.ObjetGeometrique;
 import formes.Rectangle;
@@ -254,6 +260,9 @@ class BlockAnimation extends JPanel {
 	private Rectangle2D.Double rectSelection;//ça va être le rectangle qui nous permet de représenté une animation sélectionné si null (aucune sélection)
 	private boolean rectSelecOK;
 	
+	private BlockMouseListener bml;
+	private JPopupMenu popupMenu; //menu pour le clic droit
+	
 	BlockAnimation(Comportement C,VisionneuseAnimation parent,int cursorPos){
 		this.Comp = C;
 		this.CA = (CompositeAnimation) C.getAnimation();
@@ -264,7 +273,7 @@ class BlockAnimation extends JPanel {
 		this.cursorPos = cursorPos;
 		creationLLA();
 		//TODO : faire un listener commun au 2 :
-		BlockMouseListener bml = new BlockMouseListener(lla,this);
+		bml = new BlockMouseListener(lla,this);
 		this.addMouseListener(bml);
 		this.addMouseMotionListener(bml);
 		this.nbNiveaux = lla.size();
@@ -286,6 +295,18 @@ class BlockAnimation extends JPanel {
 		else
 			backgroundColor = Color.gray;
 		this.dessinOK = true;
+		
+		//Menu textuel du clic droit
+		popupMenuListener popupListener = new popupMenuListener(this);
+		popupMenu = new JPopupMenu();
+		JMenuItem menuItem_Suppression = new JMenuItem("Suppression");
+		menuItem_Suppression.setActionCommand("suppression");
+		menuItem_Suppression.addActionListener(popupListener);
+		popupMenu.add(menuItem_Suppression);
+	}
+	
+	public JPopupMenu getPopupMenu() {
+		return this.popupMenu;
 	}
 	
 	/**
@@ -456,6 +477,37 @@ class BlockAnimation extends JPanel {
 		*/
 		return null;
 	}
+	
+	
+	//inner class pour le popup listener
+	class popupMenuListener implements ActionListener {
+
+		BlockAnimation parent;
+		
+		public popupMenuListener(BlockAnimation parent) {
+			this.parent = parent;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			switch(e.getActionCommand()) {
+			case "suppression":
+				Animation anim = bml.getSelectedAnim();
+				if(anim != null) {
+					//On va supprimer l'animation apres avoir demandé confirmation
+					int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment supprimer l'animation ?", "Suppression", JOptionPane.OK_CANCEL_OPTION);
+					if(reponse == JOptionPane.OK_OPTION) {
+						CA.remove(anim);
+						parent.la = parent.CA.getAllChilds();
+						parent.creationLLA();
+						parent.repaint();	
+					}
+				}
+				break;
+			//On pourra faire la modif ici
+			}
+		}
+		
+	}
 }
 
 
@@ -497,8 +549,28 @@ class  BlockMouseListener implements MouseListener,MouseMotionListener {
 				if(aas.contains(e.getPoint())){
 					//System.out.println("vous avez cliqué sur : id="+aas.getAnimation().getId()+" "+aas.getAnimation().getType()+" e.getClickCount()"+e.getClickCount());
 					this.a = aas;
-					if(e.getClickCount() > 1){
-						//TODO: ouvrir une fenetre de modification
+					if(e.isPopupTrigger()) {
+						parent.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
+					}
+					else {
+						if(e.getClickCount() > 1){
+							JTextField tempsDebut = new JTextField(a.getAnimation().getT_debut().toString());
+							Double dureeAnim = a.getAnimation().getT_fin() - a.getAnimation().getT_debut();
+							JTextField Duree = new JTextField(dureeAnim.toString());
+							Object[] message = {"Debut animation :", tempsDebut, "Duree :", Duree};
+							int reponse = JOptionPane.showConfirmDialog(null, message, "Modification "+a.getAnimation().getType(), JOptionPane.OK_CANCEL_OPTION);
+							if(reponse == JOptionPane.OK_OPTION) {
+								double debut = Double.parseDouble(tempsDebut.getText());
+								double fin = debut + Double.parseDouble(Duree.getText());
+								
+								if(fin > debut) {
+									a.getAnimation().setT_debut(debut);
+									a.getAnimation().setT_fin(fin);
+									parent.creationLLA();
+									parent.repaint();
+								}
+							}
+						}
 					}
 				}
 			}
@@ -509,16 +581,24 @@ class  BlockMouseListener implements MouseListener,MouseMotionListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		System.out.println("mouseReleased");
-		//on applique le changement de période de temps :
-		if(changePeriode != 0){
-			a.getAnimation().changePeriode(changePeriode);
-			changePeriode = 0;//on remet à zero le période
-			parent.creationLLA();
-			parent.repaint();
+		if(e.isPopupTrigger()) {
+			parent.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
 		}
-		this.a = null;
-		this.startDrag =false;
-		parent.setSelectionRect(null);//on n'affiche plus le rectangle selectionné
+		else {
+			if(!parent.getPopupMenu().isShowing()) {
+				System.out.println("Pas de menu");
+				//on applique le changement de période de temps :
+				if(changePeriode != 0){
+					a.getAnimation().changePeriode(changePeriode);
+					changePeriode = 0;//on remet à zero le période
+					parent.creationLLA();
+					parent.repaint();
+				}
+				this.a = null;
+				this.startDrag =false;
+				parent.setSelectionRect(null);//on n'affiche plus le rectangle selectionné
+			}
+		}
 	}
 	
 	@Override
@@ -544,9 +624,14 @@ class  BlockMouseListener implements MouseListener,MouseMotionListener {
 		}
 	}
 
+	public Animation getSelectedAnim() {
+		return this.a.getAnimation();
+	}
+	
 	@Override
 	public void mouseMoved(MouseEvent e) {}
 	@Override
+	
 	public void mouseClicked(MouseEvent e) {}
 	@Override
 	public void mouseEntered(MouseEvent e) {}
@@ -613,9 +698,9 @@ class testeVisionAnim{
 		f.setPreferredSize(new Dimension(450,450));
 		Toile t = new Toile(new Dimension(400,400));
 		
-		
+		VisionneuseAnimation vi = null;
 		GestionAnimation GA = new GestionAnimation(t);
-		VisionneuseAnimation vi = new VisionneuseAnimation(f,GA,2000.0);
+		vi = new VisionneuseAnimation(f,GA,2000.0);
 		
 
 		

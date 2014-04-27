@@ -12,12 +12,14 @@ import listeners.LectureAnimationListener;
 import formes.ObjetGeometrique;
 import affichage.LecteurAnimation;
 import affichage.Toile;
+import affichage.VisionneuseAnimation;
 
 public class GestionAnimation {
 	private HashMap<Integer, Comportement> Comportements;
 	private Toile t;
 	private LecteurAnimation lecteur; //Pour recuperer le temps courant du dessin
 	private int idComportement; //un comportement par objet
+	private VisionneuseAnimation visionneuse;
 	private ObjetGeometrique objEnCreation;
 	private boolean isDraw;
 	
@@ -40,6 +42,10 @@ public class GestionAnimation {
 	
 	public void setLecteurAnimation(LecteurAnimation lecteur) {
 		this.lecteur = lecteur;
+	}
+	
+	public void setVisionneuse(VisionneuseAnimation visionneuse) {
+		this.visionneuse = visionneuse;
 	}
 	
 	public LecteurAnimation getLecteurAnimation() {
@@ -143,6 +149,7 @@ public class GestionAnimation {
 	public void refreshDessin() {
 		double t_courant = this.lecteur.getTempsCourant();
 		this.dessinerToile(t_courant);
+		this.visionneuse.changeCursorPosition((int) t_courant);
 	}
 
 	//TODO : renommer en getObjetAt en getObjetIdAt
@@ -191,6 +198,10 @@ public class GestionAnimation {
 	public double getTempsCourant() {
 		return this.lecteur.getTempsCourant();
 	}
+
+	public void setTempCourant(double temps) {
+		this.lecteur.setTempsLecture(temps);
+	}
 	
 	/**
 	 * retourne une copie visuel de la toile
@@ -204,4 +215,7 @@ public class GestionAnimation {
 			return this.t.getCopyBackBuffer();
 		}
 	}
+	
+	
+
 }

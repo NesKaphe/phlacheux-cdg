@@ -32,7 +32,16 @@ public class CompositeAnimation extends Animation{
 	public boolean remove(Animation a){
 		//TODO : éventuellement faire un message contenant tout ce qui à été supprimé
 		a.setParent(null);//on lui détruit sa référence sur le parent
-		return this.ChildAnimations.remove(a);
+		boolean suppression = this.ChildAnimations.remove(a);
+		
+		//On va maintenant refresh le temps
+		this.setT_debut(0.);
+		this.setT_fin(0.);
+		for(Animation anim : ChildAnimations) {
+			this.ChangeTminTmax(anim.getT_debut(), anim.getT_fin());
+		}
+		
+		return suppression;
 	}
 	
 	/**
