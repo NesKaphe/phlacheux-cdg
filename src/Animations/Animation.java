@@ -190,7 +190,16 @@ public abstract class Animation {
 	 */
 	public void setT_debut(Double t_debut) {
 		this.t_debut = t_debut;
-		//ChangeTminTmax(t_debut , t_fin);//TODO : changer les temps de l'anilation parent
+		//ChangeTminTmax(t_debut , t_fin);//TODO : à faire fonctionner (bug quand on termine une translation)
+	}
+	
+	/**
+	 * attention à utiliser que si vraiment nécéssaire
+	 * @param t_fin
+	 */
+	public void setT_fin(Double t_fin) {
+		this.t_fin = t_fin;
+		//ChangeTminTmax(t_debut , t_fin);//TODO : à faire fonctionner (bug quand on termine une translation)
 	}
 	
 	/*
@@ -208,17 +217,9 @@ public abstract class Animation {
 			this.t_debut+= déplacement;
 			this.t_fin+= déplacement;
 		}
-		//ChangeTminTmax(t_debut , t_fin);//TODO : changer les temps de l'anilation parent
+		ChangeTminTmax(t_debut , t_fin);
 	}
 	
-	/**
-	 * attention à utiliser que si vraiment nécéssaire
-	 * @param t_fin
-	 */
-	public void setT_fin(Double t_fin) {
-		this.t_fin = t_fin;
-		//ChangeTminTmax(t_debut , t_fin);//TODO : changer les temps de l'anilation parent
-	}
 
 	@Override
 	public String toString() {//TODO : faire une noivelle version
