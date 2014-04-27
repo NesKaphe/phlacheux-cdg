@@ -28,6 +28,15 @@ public abstract class Animation {
 	}
 	//TODO : il serait utile de faire un constructeur par recopie
 	
+	public Animation(Animation anim) {
+		this.t_debut = anim.t_debut;
+		this.t_fin = anim.t_fin;
+		this.easing = anim.easing;
+		this.parent = anim.parent;
+		this.type = anim.type;
+		this.id = anim.id;
+		this.trans = anim.trans;
+	}
 	/**
 	 * AffineTransform getAffineTransform(Double t_courant) :
 	 * ------------------------------------------------------

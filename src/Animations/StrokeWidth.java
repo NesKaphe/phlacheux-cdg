@@ -12,6 +12,12 @@ public class StrokeWidth extends Animation {
 	}
 
 	
+	public StrokeWidth(StrokeWidth anim) {
+		super(anim);
+		this.strokeWidthIncrement = anim.strokeWidthIncrement;
+	}
+
+
 	public AffineTransform getAffineTransform(Double t_courant) {	
 		return null;
 	}
@@ -25,4 +31,7 @@ public class StrokeWidth extends Animation {
 		return (float) (pu * this.strokeWidthIncrement);
 	}
 
+	public void setStrokeWidthIncrement(float increment) {
+		this.strokeWidthIncrement = increment;
+	}
 }

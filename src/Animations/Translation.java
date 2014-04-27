@@ -42,7 +42,7 @@ public class Translation extends Animation {
 	private Set<Point2D.Double> cur_list_points;//pour savoir si nous avons des points en double dans un segment
 	
 	public Translation(double t_debut, double t_fin, int easing,ArrayList<Point2D.Double> listPoint) {
-		super(t_debut, t_fin, easing, "translation");
+		super(t_debut, t_fin, easing, "Translation");
 		if(listPoint.size() <2){
 			//TODO : lancer une exception à la place du message d'erreur
 			//throw new ListPointException()//il faut détruire l'objet translation et recommencer

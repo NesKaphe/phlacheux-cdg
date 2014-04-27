@@ -24,6 +24,11 @@ public class MyColorChooser extends JColorChooser{
 		}
 	}
 
+	public void setColor(int[] strokeColor) {
+		this.setColor(strokeColor[0], strokeColor[1], strokeColor[2]);
+		
+	}
+
 }
 
 

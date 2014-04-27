@@ -15,6 +15,10 @@ public class FillColor extends ColorAnimation {
 		super(t_debut, t_fin, easing, "FillColor", incrR, incrG, incrB);
 	}
 
+	public FillColor(FillColor anim) {
+		super(anim);
+	}
+
 	@Override
 	public int[] getStrokeColor(Double t_courant) {
 		return null;

@@ -62,6 +62,12 @@ public class CompositeAnimation extends Animation{
 		}
 		return listA;
 	}
+	
+	public void refreshTime() {
+		for(Animation a : ChildAnimations) {
+			this.ChangeTminTmax(a.getT_debut(), a.getT_fin());
+		}
+	}
 
 	@Override
 	public AffineTransform getAffineTransform(double t_courant) {

@@ -46,6 +46,8 @@ public class CreateTrajectoire extends JPanel {
 	private JButton Terminer;
 	private JButton Annuler;
 
+	private boolean Fini;
+	
 	public CreateTrajectoire(Edition edition,Comportement comportement,double tempsDebut,double tempsFin) {
 		super(new BorderLayout());
 		this.edition = edition;

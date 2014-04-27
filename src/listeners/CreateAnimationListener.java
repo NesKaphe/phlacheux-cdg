@@ -91,9 +91,6 @@ public class CreateAnimationListener implements ActionListener {
 				}
 			}
 			break;
-		case "modification": //Pas sur mais je prefere le prevoir TODO : a retirer 
-			
-			break;
 		}
 	}
 	
