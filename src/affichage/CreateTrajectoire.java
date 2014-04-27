@@ -2,9 +2,12 @@ package affichage;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -12,7 +15,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -35,12 +37,14 @@ public class CreateTrajectoire extends JPanel {
 	private Toile toile;//pour sauvegarde la toile
 	private ArrayList<PointAndShape> listPoint;
 	private Point pointOrg;
-	private MouseListener mouseListener;
+	private CTMouseListener mouseListener;
 	private ActionListener actionListener;
 	private GeneralPath dessinTraj;
 	private JToolBar menu;
 	private JButton Terminer;
 	private JButton Annuler;
+	private Dimension screenSize;
+	private PointAndShape Select;//carré selectionné pour le drag and drog d'un point
 
 
 	public CreateTrajectoire(Edition edition,Comportement comportement,double tempsDebut,double tempsFin, int easing) {
@@ -53,6 +57,7 @@ public class CreateTrajectoire extends JPanel {
 		this.buff = edition.getGestionAnimation().getCopyBackBuffer();
 		this.setPreferredSize(edition.getToile().getPreferredSize());
 		this.listPoint = new ArrayList<PointAndShape>();
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		//positionner le premier point ou le point d'origine :
 		pointOrg = new Point();
 		pointOrg.setLocation(comp.getObjGeo().getCentre());
@@ -63,7 +68,8 @@ public class CreateTrajectoire extends JPanel {
 		this.actionListener = new TrajListener(this); 
 		this.dessinTraj = new GeneralPath();
 		this.addMouseListener(mouseListener);
-
+		this.addMouseMotionListener(mouseListener);
+		this.Select = null;
 		initMenuBouton();
 		
 		//on échange la toile par notre JPanel :
@@ -77,6 +83,8 @@ public class CreateTrajectoire extends JPanel {
 	public void paintComponent(Graphics g) {
 		System.out.println("DEBUG -repaint trajectoire");
 		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(Color.white);
+		g2.fillRect(0, 0, screenSize.width, screenSize.height);
 		//dessin de l'arrière plan :
 		g2.drawImage(buff, null, 0, 0);
 		
@@ -86,6 +94,13 @@ public class CreateTrajectoire extends JPanel {
 			g2.draw(pas.getRect());
 			g2.setColor(Color.green);
 			g2.fill(pas.getRect());
+		}
+		
+		//dessiner la section :
+		if(Select != null){
+			System.out.println("select dessiné");
+			g2.setColor(Color.orange);
+			g2.fill(Select.getRect());
 		}
 		
 		//dessin de du chemin :
@@ -149,8 +164,15 @@ public class CreateTrajectoire extends JPanel {
 		menu.setRollover(true);//??
 		menu.add(Terminer);
 		menu.add(Annuler);
-		this.add(menu, BorderLayout.NORTH);// à voir 
+		this.add(menu, BorderLayout.NORTH);
 	}
+
+
+	public void setSelect(PointAndShape select) {
+		Select = select;
+	}
+	
+	
 }
 
 
@@ -170,16 +192,14 @@ class CTMouseListener implements MouseListener,MouseMotionListener{
 	
 	private ArrayList<PointAndShape> list_pas;
 	private CreateTrajectoire parent;
-	private Point oldPos;
-	private boolean startDrag;
 	private boolean generatePoint;
-	private Rectangle2D.Double rectSelec;
+	private PointAndShape Selec;
 	
 	public CTMouseListener(ArrayList<PointAndShape> list_pas,CreateTrajectoire parent) {
 		this.list_pas = list_pas;
 		this.parent = parent;
-		this.startDrag = false;
 		this.generatePoint =true;
+		this.Selec = new PointAndShape(new Point());
 	}
 	
 	@Override
@@ -188,12 +208,14 @@ class CTMouseListener implements MouseListener,MouseMotionListener{
 	 * ou sinon c'est que nous voulons déplacer un point (drag)
 	 * @param e
 	 */
-	public void mouseClicked(MouseEvent e) {
+	public void mousePressed(MouseEvent e) {
 		System.out.println("mouseClicked");
 		for(PointAndShape pas : list_pas){
 			//si nous cliquons sur un point c'est que nous voulons le déplacer
 			if(pas.contains(e.getPoint())){
-				generatePoint = false;//TODO : nous voulons déplacer un point existant
+				System.out.println("contien ok");
+				generatePoint = false;
+				Selec = pas;
 			}
 		}
 		//si la recherche de point n'a pas aboutie nous ajoutons un nouveau point dans la liste
@@ -207,13 +229,26 @@ class CTMouseListener implements MouseListener,MouseMotionListener{
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		this.generatePoint = true;//raz
-		//TODO : à finir
-		//this.startDrag = ??
+		generatePoint = true;//raz
+		this.Selec = null;
+		parent.GenerateDessinTraj();
+		parent.setSelect(null);
+		parent.repaint();
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {}
+	public void mouseDragged(MouseEvent e) {
+		System.out.println("mouseDragged ");
+		if (!generatePoint){
+			System.out.println("point "+e.getPoint());
+			//if(Selec == null)
+			//	Selec = new PointAndShape(e.getPoint());
+			parent.GenerateDessinTraj();
+			Selec.setPoint(e.getPoint());
+			parent.setSelect(Selec);
+			parent.repaint();
+		}
+	}
 	@Override
 	public void mouseMoved(MouseEvent e) {}
 	@Override
@@ -221,7 +256,7 @@ class CTMouseListener implements MouseListener,MouseMotionListener{
 	@Override
 	public void mouseExited(MouseEvent e) {}
 	@Override
-	public void mousePressed(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {}
 }
 
 
