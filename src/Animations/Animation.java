@@ -12,9 +12,9 @@ public abstract class Animation {
 	protected Animation parent;//pour connaitre sont parent
 	private Double t_debut;
 	private Double t_fin;
-	private int easing;//TODO : pour l'instant c'est un int plus tard on fera une vrai classe
-	//---------------------trans : obsolète ---------------------------------------------
-	private AffineTransform trans;//sera la mémoire de la position de l'objet (seule une racine peux le modifier)
+	private int easing;
+	private EasingFunction easingFunction;
+
 	
 	public Animation(Double t_debut,Double t_fin,int easing,String type) {
 		this.t_debut = t_debut;
@@ -23,7 +23,7 @@ public abstract class Animation {
 		this.parent = null;
 		this.type = type;
 		this.id = Animation.cpt_id++;
-		this.trans = null;
+		this.easingFunction = new EasingFunction(easing);
 
 	}
 	//TODO : il serait utile de faire un constructeur par recopie
@@ -102,14 +102,18 @@ public abstract class Animation {
 	 * à parcouru "pour un". Autrement dit c'est équivalent
 	 * à "pourcent" sauf que c'est "pourun".
 	 * Si le temps "t_courant" est en dehord des limites une valeur négative est renvoyé.
-	 *
+	 * Ajout récent : l'easing function agit sur le résultat
 	 * @param tmp
 	 * @return
 	 */
 	public Double getPourun(double t_courant){
-		if (!tmpOk(t_courant))
+		if (!tmpOk(t_courant)){
 			return -1.;
-		return ((t_courant- t_debut) / ( t_fin - t_debut));
+		}else{
+			double x = ((t_courant- t_debut) / ( t_fin - t_debut));
+			return easingFunction.getEasing(x);
+			//return ((t_courant- t_debut) / ( t_fin - t_debut));
+		}
 	}
 	
 	/**
@@ -131,15 +135,6 @@ public abstract class Animation {
 				a_parent = a_parent.getParent();//passé a l'aïeux suivant
 		}
 		return i;
-	}
-	
-	/**
-	 * void resetTrans():
-	 * 
-	 * pour remettre l'obejet dans l'état ou on l'a trouvé
-	 */
-	protected void resetTrans(){
-		this.trans = new AffineTransform();
 	}
 	
 	
@@ -196,50 +191,6 @@ public abstract class Animation {
 
 	protected void setEasing(int easing) {
 		this.easing = easing;
-	}
-
-	protected AffineTransform getTrans() {
-		if (this.parent == null){
-			//l'alocation ce fait ici parceque on est le parent
-			if(this.trans == null){
-				this.trans = new AffineTransform();
-			}
-			return trans;
-		}
-		else
-			return this.parent.getTrans();
-	}
-	
-
-	/**
-	 * On ne peux changer trans (AffineTransform)
-	 * que si on est une racine.
-	 * renvoi faux si la modification n'est pas effectué (car this n'est pas la racine)
-	 * 
-	 * @param trans 
-	 * @return
-	 */
-	protected boolean setTrans(AffineTransform trans) {
-		if (this.getMyLevel()==0){
-			//l'alocation ce fait ici
-			if(this.trans == null){
-				this.trans = new AffineTransform();
-			}
-			
-			if (trans != null)
-				//this.trans = trans;
-				this.trans.concatenate(trans);
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * met à null l'objet trans.
-	 * à utiliser dans le cas ou l'animation devien l'enfant d'une autre
-	 */
-	protected void setNullTrans(){
-		this.trans =null;
 	}
 	
 	/**

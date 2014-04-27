@@ -22,7 +22,6 @@ public class CompositeAnimation extends Animation{
 		
 		//modifications de références pour l'enfant :
 		a.setParent(this);//modification du parent
-		a.setNullTrans();//comme "a" n'est plus racine on supprime l'utilisation de trans
 		//modification des temps du parent qui est calé sur le temps min et temps max de ses enfants:
 		this.ChangeTminTmax(a.getT_debut(), a.getT_fin());
 		

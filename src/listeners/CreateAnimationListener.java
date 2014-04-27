@@ -20,6 +20,7 @@ import formes.SegmentDroite;
 import Animations.Animation;
 import Animations.Comportement;
 import Animations.CompositeAnimation;
+import Animations.EasingFunction;
 import Animations.FillColor;
 import Animations.GestionAnimation;
 import Animations.Rotation;
@@ -185,13 +186,9 @@ public class CreateAnimationListener implements ActionListener {
 				anim = new Rotation(tempsDebut,tempsFin, 0, angleRad, obj.getCentre());
 				break;
 			case "Translation":
-				//on passe la toile en mode trajectoire :
-				//ICI DU CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				//création d'un objet spécialement dédié à la création de trajectoire
 				Point p = new Point();
 				p.setLocation(comp.getObjGeo().getCentre());
-				CreateTrajectoire ct = new CreateTrajectoire(edition,comp,tempsDebut,tempsFin);
-				//appelle d'une méthode qui retourne une animation trajectoire ou null
+				CreateTrajectoire ct = new CreateTrajectoire(edition,comp,tempsDebut,tempsFin,EasingFunction.CUBE);//TODO : à changer dans la nouvelle version
 				break;
 			case "Epaisseur de trait":
 				//On va calculer la difference entre l'epaisseur demandée et l'epaisseur de l'objet
