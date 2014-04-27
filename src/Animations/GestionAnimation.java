@@ -2,6 +2,7 @@ package Animations;
 import Animations.Comportement;
 
 import java.awt.Shape;
+import java.awt.image.BufferedImage;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -17,14 +18,15 @@ public class GestionAnimation {
 	private Toile t;
 	private LecteurAnimation lecteur; //Pour recuperer le temps courant du dessin
 	private int idComportement; //un comportement par objet
-	
 	private ObjetGeometrique objEnCreation;
+	private boolean isDraw;
 	
 	public GestionAnimation(Toile t) {
 		this.Comportements = new HashMap<Integer, Comportement>();
 		this.setToile(t);
 		this.idComportement = 0;//identifiant/clé associer aux comportements ajouté dans le HashMap "Comportements"
 		this.lecteur = null;
+		this.isDraw = false;//pour savoir si le dessin est complement fini
 	}
 	
 	public void viderComportements() {
@@ -115,7 +117,7 @@ public class GestionAnimation {
 		//On va parcourir notre liste de comportements pour demander l'etat de l'objet a l'instant t
 		//On demande ensuite a la toile de dessiner chaque objets dans son buffer puis on appelle repaint()
 		
-		
+		isDraw = false;
 		//On vide le buffer
 		this.t.initBuffer();
 		
@@ -127,10 +129,9 @@ public class GestionAnimation {
 		//On dessine l'objet temporaire s'il existe
 		ObjetGeometrique tmpGeo = this.getObjGeoEnCreation();
 		if(tmpGeo != null) {
-			System.out.println("\t"+tmpGeo.getCentre());
 			t.dessineObjet(tmpGeo);
 		}
-		
+		isDraw = true;
 		//On demande le raffraichissement de la toile
 		t.repaint();
 	}
@@ -189,5 +190,18 @@ public class GestionAnimation {
 	
 	public double getTempsCourant() {
 		return this.lecteur.getTempsCourant();
+	}
+	
+	/**
+	 * retourne une copie visuel de la toile
+	 * @return
+	 */
+	public BufferedImage getCopyBackBuffer() {
+		if(isDraw)
+			return this.t.getCopyBackBuffer();
+		else{
+			this.dessinerToile(this.getTempsCourant());
+			return this.t.getCopyBackBuffer();
+		}
 	}
 }

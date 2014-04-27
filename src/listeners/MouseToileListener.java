@@ -132,6 +132,10 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 	    		}
     		}
     	}
+    	else if(toile.getMode().equals("trajectoire")){//TODO : finalement c'est pas utile à virer
+    		System.out.println("INFO MouseToileListener- vous êtes en mode trajectoire");
+    		
+    	}
 	}
 
 	@Override

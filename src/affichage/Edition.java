@@ -198,7 +198,7 @@ public class Edition extends JFrame {
     	
     	liste.setBackground(Color.lightGray);
     	
-    	listenerAnimations = new CreateAnimationListener(liste, this.visionneuse);
+    	listenerAnimations = new CreateAnimationListener(liste, this.visionneuse,this);//TODO changer le constructeur pour qu'il ne récupère que l'editions puis que toile contient liste et visioneuse
     	
     	boutonAjoutAnimation = new JButton("Creer animation");
     	boutonAjoutAnimation.setEnabled(false);
@@ -396,4 +396,8 @@ public class Edition extends JFrame {
 		return this.mi_arret_lecture;
 	}
 
+	public VisionneuseAnimation getVisionneuse() {
+		return visionneuse;
+	}
+	
 }

@@ -28,6 +28,8 @@ public class Toile extends JPanel {
 	
 	private MouseToileListener listener;
 	
+	private Shape trajectoire;//pour dessiner la trajectoire sur la toile
+	
 	/**
 	 * Ancien constructeur
 	 * @param dim : La dimension de la toile
@@ -37,6 +39,7 @@ public class Toile extends JPanel {
 		this.setDoubleBuffered(true);
 		this.setPreferredSize(dim);
 		this.setSize(dim);//TODO : probablement remplacer par setMinSize 
+		this.trajectoire = null;
 	}
 	
 	/**
@@ -49,6 +52,7 @@ public class Toile extends JPanel {
 		this.parent = frame;
 		this.listener = listener;
 		this.modeSelection(); //par defaut on est en mode selection
+		this.trajectoire = null;
 	}
 	
 	
@@ -74,6 +78,11 @@ public class Toile extends JPanel {
 		this.removeMouseMotionListener((MouseMotionListener)this.listener);
 	}
 	
+	public void modeTrajectoire(){
+		this.mode = "trajectoire";
+		this.addMouseMotionListener((MouseMotionListener)this.listener);//TODO : modifier le listener de MouseToileListener
+	}
+	
 	public void paintComponent(Graphics g) {
 		//Le buffer n'existe pas encore au moment du dessin
 		if(this.backBuffer == null)
@@ -84,7 +93,7 @@ public class Toile extends JPanel {
 			this.backBuffer = null;
 			this.initBuffer();
 			if (parent != null)
-				this.parent.getGestionAnimation().refreshDessin(); //TODO: recup temps courant //COMMENT clem : savoir si on garde ça ou non (ça ressemble à du teste pour moi)
+				this.parent.getGestionAnimation().refreshDessin();
 		}
 		
 		Graphics2D g2 = (Graphics2D) g;
@@ -110,6 +119,7 @@ public class Toile extends JPanel {
 	
 	/**
 	 * @param geo l'objet geometrique autour duquel on va dessiner un rectangle de selection
+	 * va dessiner aussi la trajecoire si on est en mode trajectoire
 	 */
 	public void dessineSelectionOf(ObjetGeometrique geo) {
 		//On cherche le shape qui contient l'objet geometrique (rectangle entourant)
@@ -126,7 +136,6 @@ public class Toile extends JPanel {
 		g.setStroke(stroke);
 		g.setColor(Color.blue);
 		g.draw(shape);
-		
 		this.repaint();
 	}
 	
@@ -144,54 +153,19 @@ public class Toile extends JPanel {
 		g.setColor(this.getBackground());
 		g.fillRect(0, 0, this.getSize().width, this.getSize().height);
 	}
+
+	/**
+	 * cette méthode ne donne aucunne garantie que le dessin soit complet
+	 * c'est pourquoi il faut passer par GestionAnimation
+	 * @return
+	 */
+	public BufferedImage getCopyBackBuffer() {
+		BufferedImage bi  = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = (Graphics2D) bi.getGraphics();
+		g2.drawImage((BufferedImage) this.backBuffer, null, 0, 0);
+		return bi;
+
+	}
 	
-	/*
-	 ancienne version et pas correct avec les buffered Images 
-	public void paintComponent(Graphics g) {
-		//Initialisation des buffers
-		if(this.backBuffer == null) {
-			this.primarySurface = createImage(this.getWidth(), this.getHeight());
-			this.backBuffer = createImage(this.getWidth(), this.getHeight());
-		}
-		
-		//On recupère le graphics du backBuffer pour dessiner dessus
-		Graphics2D g2dImage = (Graphics2D) this.backBuffer.getGraphics();
-		Graphics2D g2d = (Graphics2D) g;
-		
-		//On affiche l'image principale
-		g2d.drawImage(this.primarySurface,0,0,null);
-		
-		//On vide notre backBuffer
-		g2dImage.setColor(getBackground());
-		g2dImage.fillRect(0, 0, this.getSize().width, this.getSize().height);
-		
-		//Ici le dessin sur le backBuffer
-		for(int i = 0; i < this.liste.size(); i++) {
-			g2dImage.setStroke(liste.get(i).getStroke());
-			g2dImage.setColor(liste.get(i).getStrokeColor());
-			g2dImage.draw(liste.get(i).getShape());
-			System.out.println("draw!!"+i+"  parent :"+this.getParent()+"\nshape ="+liste.get(i).getShape());//DEBUG
-			
-			if(this.liste.get(i).getFillColor() != null) {
-				g2dImage.setColor(this.liste.get(i).getFillColor());
-				g2dImage.fill(this.liste.get(i).getShape());
-			}
-		}
-		
-		//On echange nos deux buffers
-		this.switchBuffers();
-		g2dImage.dispose();
-		
-		if(this.flag)
-			this.liste.clear();
-	}
-	 //Echange les deux buffers, pour permettre d'alterner le dessin et l'affichage
-	 
-	protected void switchBuffers() {
-		Image temp = this.backBuffer;
-		
-		this.backBuffer = this.primarySurface;
-		this.primarySurface = temp;
-	}
-	*/
+	
 }

@@ -1,8 +1,10 @@
 package listeners;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Vector;
 
@@ -23,8 +25,11 @@ import Animations.GestionAnimation;
 import Animations.Rotation;
 import Animations.StrokeColor;
 import Animations.StrokeWidth;
+import affichage.CreateTrajectoire;
+import affichage.Edition;
 import affichage.Item;
 import affichage.MyColorChooser;
+import affichage.Toile;
 import affichage.VisionneuseAnimation;
 
 /**
@@ -34,29 +39,30 @@ import affichage.VisionneuseAnimation;
  */
 public class CreateAnimationListener implements ActionListener {
 
-	JList<Item> liste;
-	VisionneuseAnimation visionneuse;
-
-	JComboBox<String> comboBoxAnimations;
-	
+	private JList<Item> liste;
+	private VisionneuseAnimation visionneuse;
+	private JComboBox<String> comboBoxAnimations;
+	private Edition edition;
+	private Comportement comp;
 	
 	//Champs
-	JPanel champsDynamiques;
-	JTextField angle;
-	JTextField epaisseur;
-	JTextField t_debut;
-	JTextField t_fin;
-	MyColorChooser colorChooser;
+	private JPanel champsDynamiques;
+	private JTextField angle;
+	private JTextField epaisseur;
+	private JTextField t_debut;
+	private JTextField t_fin;
+	private MyColorChooser colorChooser;
 	
-	JOptionPane optionPane;
+	private JOptionPane optionPane;
 	
-	GestionAnimation gestionnaire;
+	private GestionAnimation gestionnaire;
 	
-	public CreateAnimationListener(JList<Item> liste, VisionneuseAnimation visionneuse) {
+	public CreateAnimationListener(JList<Item> liste, VisionneuseAnimation visionneuse,Edition edition) {//TODO changer le constructeur pour qu'il ne récupère que l'editions puis que toile contient liste et visioneuse
 		this.liste = liste;
 		this.comboBoxAnimations = null;
 		this.visionneuse = visionneuse;
 		this.colorChooser = new MyColorChooser();
+		this.edition = edition;
 	}
 	
 	
@@ -67,7 +73,7 @@ public class CreateAnimationListener implements ActionListener {
 		switch (commande) {
 		case "creation":
 			//On va recuperer une liste des comportements selectionnés dans la JList
-			Comportement comp = (Comportement) liste.getSelectedValue().getValeur(); //Pour l'instant je prends qu'un seul
+			comp = (Comportement) liste.getSelectedValue().getValeur(); //Pour l'instant je prends qu'un seul
 			
 			//On va initialiser la combobox
 			this.initComboBox(comp);
@@ -85,7 +91,7 @@ public class CreateAnimationListener implements ActionListener {
 				}
 			}
 			break;
-		case "modification": //Pas sur mais je prefere le prevoir
+		case "modification": //Pas sur mais je prefere le prevoir TODO : a retirer 
 			
 			break;
 		}
@@ -182,7 +188,13 @@ public class CreateAnimationListener implements ActionListener {
 				anim = new Rotation(tempsDebut,tempsFin, 0, angleRad, obj.getCentre());
 				break;
 			case "Translation":
-				//TODO: je sais pas comment le faire
+				//on passe la toile en mode trajectoire :
+				//ICI DU CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				//création d'un objet spécialement dédié à la création de trajectoire
+				Point p = new Point();
+				p.setLocation(comp.getObjGeo().getCentre());
+				CreateTrajectoire ct = new CreateTrajectoire(edition,comp,tempsDebut,tempsFin);
+				//appelle d'une méthode qui retourne une animation trajectoire ou null
 				break;
 			case "Epaisseur de trait":
 				//On va calculer la difference entre l'epaisseur demandée et l'epaisseur de l'objet
@@ -211,8 +223,10 @@ public class CreateAnimationListener implements ActionListener {
 			}
 			
 			//On ajoute maintenant l'animation au comportement
-			CompositeAnimation ca = (CompositeAnimation) comp.getAnimation();
-			ca.add(anim);
+			if(anim !=null){
+				CompositeAnimation ca = (CompositeAnimation) comp.getAnimation();
+				ca.add(anim);
+			}
 			
 			//Et on met a jour le dessin de notre visionneuse d'animation
 			this.visionneuse.dessineAnimation();

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -17,6 +18,7 @@ import javax.swing.JPanel;
 
 import formes.Rectangle;
 
+import affichage.PointAndShape;
 import affichage.Toile;
 
 public class Translation extends Animation {
@@ -161,9 +163,40 @@ public class Translation extends Animation {
 			chemin.lineTo(listPoint.get(limite-1).x, listPoint.get(limite-1).y);
 		}
 		//chemin.closePath();//ne pas fermer le chemin
-		
 	}
 	
+	/**
+	 * cette version va nous permettre de dessiner le chemin à partir d'un liste de points
+	 * retourne null si LP ne comporte pas au moins 2 points
+	 * @param LP
+	 * @return
+	 */
+	public static GeneralPath generatePath(ArrayList<PointAndShape> LP){
+		int limite = LP.size();
+		if (limite < 2){
+			return null;
+		}
+		GeneralPath trajectoire = new GeneralPath();
+		boolean paire = true;
+		//savoir si nous sommes paire ou impaire :
+		if(LP.size()%2 == 1){
+			paire=false;
+		}
+		//DESSIN CHEMIN :=====================
+		//on place le premier point :
+		trajectoire.moveTo(LP.get(0).getPoint().x,LP.get(0).getPoint().y);
+		//on fait des quadCurve pour les points (sauf le dernier si c'est paire):
+		for(int i=1 ; limite!=2 && i < limite-1;i+=2){
+			trajectoire.quadTo(LP.get(i).getPoint().x, LP.get(i).getPoint().y, LP.get(i+1).getPoint().x, LP.get(i+1).getPoint().y);
+		}
+		//si nous sommes paire le dernier point est une ligne
+		if (paire){
+			trajectoire.lineTo(LP.get(limite-1).getPoint().x, LP.get(limite-1).getPoint().y);
+		}
+		//chemin.closePath();//ne pas fermer le chemin
+		
+		return trajectoire;
+	}
 	
 	/**
 	 * GeneralPath generateSegmentPath(ArrayList<Point2D.Double> LP):
