@@ -412,10 +412,14 @@ class BlockAnimation extends JPanel {
 				for (AnimAndShape aas : list_a){
 					Animation a = aas.getAnimation();
 					//donner une couleur au rectangle :
+					Color couleurRect = this.getAnimationColor(a);
+					/*
 					if(a.getType().equals("rotation"))
 						g2.setColor(Color.blue);
 					if(a.getType().equals("translation"))
 						g2.setColor(Color.red);
+					*/
+					g2.setColor(couleurRect);
 					//dessine rectangle à la bonne position:
 					aas.setShape(new Rectangle2D.Double(a.getT_debut(), i*(levelSize), a.getT_fin()-a.getT_debut(), 15));
 					g2.fill(aas.getShape());//dessiner le rectangle
@@ -466,26 +470,29 @@ class BlockAnimation extends JPanel {
 	 */
 	public Color getAnimationColor(Animation a){
 		String type = a.getType();
-		/*
+		Color couleur = null;
 		//TODO : a faire !!
 		switch (type) {
-		case value:
-			
+		case "Rotation":
+			couleur = Color.blue;
 			break;
-		case value:
-			
+		case "Translation":
+			couleur = Color.red;			
 			break;
-		case value:
-			
+		case "StrokeWidth":
+			couleur = Color.black;
 			break;
-		case value:
-			
+		case "StrokeColor":
+			couleur = Color.green;
+			break;
+		case "FillColor":
+			couleur = Color.magenta;
 			break;
 		default:
-			break;
+			couleur = Color.pink;
 		}
-		*/
-		return null;
+		
+		return couleur;
 	}
 	
 	public JFrame getFrame() {

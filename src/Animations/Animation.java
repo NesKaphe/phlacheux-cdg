@@ -35,7 +35,7 @@ public abstract class Animation {
 		this.parent = anim.parent;
 		this.type = anim.type;
 		this.id = anim.id;
-		this.trans = anim.trans;
+		this.easingFunction = anim.easingFunction;
 	}
 	/**
 	 * AffineTransform getAffineTransform(Double t_courant) :
@@ -183,14 +183,13 @@ public abstract class Animation {
 		return t_fin;
 	}
 	
-	
-	
-	protected int getEasing() {
+	public int getEasing() {
 		return easing;
 	}
 
-	protected void setEasing(int easing) {
+	public void setEasing(int easing) {
 		this.easing = easing;
+		this.easingFunction.setType(easing);
 	}
 	
 	/**

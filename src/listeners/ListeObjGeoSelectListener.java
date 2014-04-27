@@ -64,7 +64,7 @@ public class ListeObjGeoSelectListener extends MouseAdapter implements ListSelec
 		//On est interessé par le double clic sur la liste
 		if (e.getSource() instanceof JList<?>) {
 			JList<?> liste = (JList<?>) e.getSource();
-			if(e.getClickCount() == 2) {
+			if(e.getClickCount() >= 2) {
 				int index = liste.locationToIndex(e.getPoint());
 				ListModel<?> lm = liste.getModel();
 				Item item = (Item)lm.getElementAt(index);
