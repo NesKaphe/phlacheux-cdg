@@ -14,6 +14,7 @@ public class EasingFunction {
 	public static final int POWER = 7;
 	public static final int POWER_SQUARE = 8;
 	public static final int POWER_CUBE = 9;
+	
 	EasingFunction(int type){
 		this.type = type;
 	}

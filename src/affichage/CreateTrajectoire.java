@@ -2,11 +2,13 @@ package affichage;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -47,6 +49,7 @@ public class CreateTrajectoire extends JPanel {
 	private JToolBar menu;
 	private JButton Terminer;
 	private JButton Annuler;
+	private Dimension screenSize;
 
 	public CreateTrajectoire(Edition edition,Comportement comportement,double tempsDebut,double tempsFin, int easing) {
 		super(new BorderLayout());
@@ -58,6 +61,7 @@ public class CreateTrajectoire extends JPanel {
 		this.buff = edition.getGestionAnimation().getCopyBackBuffer();
 		this.setPreferredSize(edition.getToile().getPreferredSize());
 		this.listPoint = new ArrayList<PointAndShape>();
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		//positionner le premier point ou le point d'origine :
 		pointOrg = new Point();
 		pointOrg.setLocation(comp.getObjGeo().getCentre());
@@ -68,7 +72,6 @@ public class CreateTrajectoire extends JPanel {
 		this.actionListener = new TrajListener(this); 
 		this.dessinTraj = new GeneralPath();
 		this.addMouseListener(mouseListener);
-
 		initMenuBouton();
 		
 		//on échange la toile par notre JPanel :
@@ -82,6 +85,8 @@ public class CreateTrajectoire extends JPanel {
 	public void paintComponent(Graphics g) {
 		System.out.println("DEBUG -repaint trajectoire");
 		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(Color.white);
+		g2.fillRect(0, 0, screenSize.width, screenSize.height);
 		//dessin de l'arrière plan :
 		g2.drawImage(buff, null, 0, 0);
 		
