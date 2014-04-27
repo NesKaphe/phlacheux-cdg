@@ -27,6 +27,7 @@ import javax.swing.SwingWorker;
 
 import Animations.Comportement;
 import Animations.CompositeAnimation;
+import Animations.EasingFunction;
 import Animations.Translation;
 
 @SuppressWarnings("serial")
@@ -35,6 +36,7 @@ public class CreateTrajectoire extends JPanel {
 	private Edition edition;
 	private Comportement comp;
 	private double tdeb,tfin;
+	private int easing;
 	private BufferedImage buff;
 	private Toile toile;//pour sauvegarde la toile
 	private ArrayList<PointAndShape> listPoint;
@@ -46,12 +48,13 @@ public class CreateTrajectoire extends JPanel {
 	private JButton Terminer;
 	private JButton Annuler;
 
-	public CreateTrajectoire(Edition edition,Comportement comportement,double tempsDebut,double tempsFin) {
+	public CreateTrajectoire(Edition edition,Comportement comportement,double tempsDebut,double tempsFin, int easing) {
 		super(new BorderLayout());
 		this.edition = edition;
 		this.comp = comportement;
 		this.tdeb = tempsDebut;
 		this.tfin = tempsFin;
+		this.easing = easing;
 		this.buff = edition.getGestionAnimation().getCopyBackBuffer();
 		this.setPreferredSize(edition.getToile().getPreferredSize());
 		this.listPoint = new ArrayList<PointAndShape>();
@@ -123,7 +126,7 @@ public class CreateTrajectoire extends JPanel {
 	 * quand l'utilisateur à terminer on ajoute l'animation au comportement passé en paramètre
 	 */
 	public void AjouterAnimation(){
-		Translation tr = new Translation(tdeb, tfin, 0, generateListPoint());
+		Translation tr = new Translation(tdeb, tfin, easing, generateListPoint());
 		((CompositeAnimation)comp.getAnimation()).add(tr);
 		edition.getVisionneuse().dessineAnimation();
 		putBackToile();
@@ -210,36 +213,20 @@ class CTMouseListener implements MouseListener,MouseMotionListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		this.generatePoint = true;//raz
+		//TODO : à finir
 		//this.startDrag = ??
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		
-	}
-
+	public void mouseDragged(MouseEvent e) {}
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseMoved(MouseEvent e) {}
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseEntered(MouseEvent e) {}
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseExited(MouseEvent e) {}
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 }
 
 
