@@ -207,13 +207,12 @@ class Tempo extends JPanel{
 		Graphics2D g2 = (Graphics2D)g;
 		g2.drawString("0", 0, 10);//dessiner le zero
 		int m = this.maxTime;
-		while (m > 0){
-			g2.drawString(Integer.toString(m), m, 10);
-			m-=50;
+		int secondes = m / 30;
+		while (m >= 0){
+			m-=30;
+			g2.drawString(Integer.toString(secondes--), m, 10);
 		}
 	}
-	
-	
 }
 
 
