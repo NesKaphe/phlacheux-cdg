@@ -2,6 +2,8 @@ package Animations;
 
 import java.awt.geom.AffineTransform;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 //une Animation simple est une feuille
 public abstract class Animation {
@@ -147,10 +149,12 @@ public abstract class Animation {
 	 * cette méthode est récursive et change tout les parents
 	 */
 	public void ChangeTminTmax(double t_min,double t_max){
-		this.setT_debut(Math.min(this.getT_debut(), t_min));//affectation du temps min
-		this.setT_fin(Math.max(this.getT_fin(), t_max));//affectation du temps max
+		this.setT_debut(t_min);//affectation du temps min
+		this.setT_fin(t_max);//affectation du temps max
+		/*
 		if(parent != null)
 			parent.ChangeTminTmax(t_min, t_max);
+		*/
 	}
 	
 	/**
@@ -222,8 +226,8 @@ public abstract class Animation {
 			this.t_fin-=this.t_debut;
 			this.t_debut= 0.;
 		}else{
-			this.t_debut+= déplacement;
-			this.t_fin+= déplacement;
+			this.t_debut += déplacement;
+			this.t_fin += déplacement;
 		}
 		ChangeTminTmax(t_debut , t_fin);
 	}
@@ -236,6 +240,12 @@ public abstract class Animation {
 				+ easing + "]";
 	}
 	
+	
+	/**
+	 * @param domDocument pour la création d'elements fils
+	 * @return un element qui sera ajouté au fichier xml final
+	 */
+	public abstract Element toXml(Document domDocument);
 }
 
 

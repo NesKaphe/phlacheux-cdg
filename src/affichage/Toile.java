@@ -9,7 +9,11 @@ import java.awt.Image;
 import java.awt.Shape;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
 import listeners.MouseToileListener;
 
 import formes.ObjetGeometrique;
@@ -30,6 +34,8 @@ public class Toile extends JPanel {
 	
 	private Shape trajectoire;//pour dessiner la trajectoire sur la toile
 	
+	private JPopupMenu popupMenu; //Menu clic droit
+	
 	/**
 	 * Ancien constructeur
 	 * @param dim : La dimension de la toile
@@ -40,6 +46,11 @@ public class Toile extends JPanel {
 		this.setPreferredSize(dim);
 		this.setSize(dim);//TODO : probablement remplacer par setMinSize 
 		this.trajectoire = null;
+		
+		this.popupMenu = new JPopupMenu();
+		
+		JMenuItem menuItem_modification = new JMenuItem("Modifier");
+		menuItem_modification.setActionCommand("modification");
 	}
 	
 	/**

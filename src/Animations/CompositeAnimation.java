@@ -3,6 +3,12 @@ package Animations;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 public class CompositeAnimation extends Animation{
 	
 	private ArrayList<Animation> ChildAnimations;//list des animations enfants
@@ -11,6 +17,22 @@ public class CompositeAnimation extends Animation{
 		super(t_debut,t_fin,easing,"composite");
 		this.ChildAnimations = new ArrayList<Animation>();
 		//par défaut notre parent est à null car nous ne somme relier à personne
+	}
+	
+	
+	/**
+	 * void ChangeTminTmax(double t_min,double t_max):
+	 * 
+	 * pour changer le temps debut et fin
+	 * Si t_min < this.t_debut alors t_debut = t_min
+	 * Si t_max > this.t_fin alors t_debut = t_max
+	 * cette méthode est récursive et change tout les parents
+	 */
+	public void ChangeTminTmax(double t_min,double t_max){
+		this.setT_debut(Math.min(this.getT_debut(), t_min));//affectation du temps min
+		this.setT_fin(Math.max(this.getT_fin(), t_max));//affectation du temps max
+		if(parent != null)
+			parent.ChangeTminTmax(t_min, t_max);
 	}
 	
 	
@@ -63,7 +85,11 @@ public class CompositeAnimation extends Animation{
 	}
 	
 	public void refreshTime() {
+		this.setT_debut(0.);
+		this.setT_fin(0.);
 		for(Animation a : ChildAnimations) {
+			if(a instanceof CompositeAnimation)
+				((CompositeAnimation) a).refreshTime();
 			this.ChangeTminTmax(a.getT_debut(), a.getT_fin());
 		}
 	}
@@ -213,5 +239,17 @@ public class CompositeAnimation extends Animation{
 		c[2] = b;
 		
 		return c;
+	}
+
+
+	public Element toXml(Document domDocument) {
+		Element elem = domDocument.createElement("CompositeAnimation");
+		for(Animation a : ChildAnimations) {
+			//On demande a notre fils de generer son element
+			Element fils = a.toXml(domDocument);
+			//On ajoute le fils a notre element
+			elem.appendChild(fils);
+		}
+		return elem;
 	}
 }

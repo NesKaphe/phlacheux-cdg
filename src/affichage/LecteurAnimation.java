@@ -12,6 +12,8 @@ import Animations.GestionAnimation;
 
 public class LecteurAnimation implements ActionListener {
 
+	public static final int CONSTANTE_TEMPS = 30;
+	
 	private GestionAnimation gestionnaire;
 	private int fps;
 	private int delay;
@@ -77,6 +79,7 @@ public class LecteurAnimation implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		double tempsAnimation = this.gestionnaire.getEndAnimations();
+		System.out.println(tempsAnimation);
 		this.gestionnaire.refreshDessin();
 		this.tempsLecture += this.step;
 		

@@ -626,6 +626,7 @@ class  BlockMouseListener implements MouseListener,MouseMotionListener {
 				//on applique le changement de période de temps :
 				if(changePeriode != 0){
 					a.getAnimation().changePeriode(changePeriode);
+					((CompositeAnimation)parent.getComp().getAnimation()).refreshTime();
 					changePeriode = 0;//on remet à zero le période
 					parent.creationLLA();
 					parent.repaint();

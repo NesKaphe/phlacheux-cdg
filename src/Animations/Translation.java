@@ -16,6 +16,9 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import formes.Rectangle;
 
 import affichage.PointAndShape;
@@ -412,6 +415,23 @@ public class Translation extends Animation {
 			nxt_pt = nextPoint();
 		}
 		return nxt_pt;
+	}
+
+	public Element toXml(Document domDocument) {
+		Element elem = domDocument.createElement("Translation");
+		
+		elem.setAttribute("debut", this.getT_debut().toString());
+		elem.setAttribute("fin", this.getT_fin().toString());
+		elem.setAttribute("easing", String.valueOf(this.getEasing()));
+		
+		//On va maintenant a partir de la liste de point creer l'arborescence xml
+		for(Point2D.Double p : this.listPoint) {
+			Element elemFils = domDocument.createElement("Point");
+			elemFils.setAttribute("x", String.valueOf(p.getX()));
+			elemFils.setAttribute("y", String.valueOf(p.getY()));
+			elem.appendChild(elemFils);
+		}
+		return elem;
 	}
 	
 }

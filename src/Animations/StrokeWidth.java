@@ -2,6 +2,9 @@ package Animations;
 
 import java.awt.geom.AffineTransform;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 public class StrokeWidth extends Animation {
 
 	private float strokeWidthIncrement;
@@ -33,5 +36,17 @@ public class StrokeWidth extends Animation {
 
 	public void setStrokeWidthIncrement(float increment) {
 		this.strokeWidthIncrement = increment;
+	}
+
+
+	public Element toXml(Document domDocument) {
+		Element elem = domDocument.createElement("StrokeWidth");
+		
+		elem.setAttribute("debut", this.getT_debut().toString());
+		elem.setAttribute("fin", this.getT_fin().toString());
+		elem.setAttribute("easing", String.valueOf(this.getEasing()));
+		elem.setAttribute("incrWidth", String.valueOf(this.strokeWidthIncrement));
+		
+		return elem;
 	}
 }
