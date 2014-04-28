@@ -15,7 +15,7 @@
 			<Translation debut="" fin="" easing="">
 				<Point x="" y="" />
 				<Point x="" y="" />
-				...
+					...
 				<Point x="" y="" />
 			</Translation>
 		</CompositeAnimation>

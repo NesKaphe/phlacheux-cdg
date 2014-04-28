@@ -185,6 +185,7 @@ public class CreateAnimationListener implements ActionListener {
 			switch(selection) {
 			case "Rotation":
 				double angleRad = Math.toRadians(Double.parseDouble(this.angle.getText()));
+				System.out.println("DEBUG - angle radian = "+angleRad);
 				anim = new Rotation(tempsDebut,tempsFin, easing, angleRad, obj.getCentre());
 				break;
 			case "Translation":
