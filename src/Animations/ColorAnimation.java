@@ -12,6 +12,14 @@ public abstract class ColorAnimation extends Animation {
 	}
 
 
+	public ColorAnimation(ColorAnimation anim) {
+		super(anim);
+		this.r = anim.r;
+		this.g = anim.g;
+		this.b = anim.b;
+	}
+
+
 	protected int[] getColor(Double t_courant) {
 		Double pu = this.getPourun(t_courant);
 		//si pu est négatif c'est que notre temps courant n'est pas bon
@@ -27,5 +35,11 @@ public abstract class ColorAnimation extends Animation {
 		c[1] = g;
 		c[2] = b;
 		return c;
+	}
+	
+	public void setColor(int incrR, int incrG, int incrB) {
+		this.r = incrR;
+		this.g = incrG;
+		this.b = incrB;
 	}
 }

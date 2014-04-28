@@ -1,0 +1,23 @@
+<Comportements>
+    <Comportement id="1">
+		<ObjetGeometrique>
+			<Cercle rayon="10">
+				<EpaisseurTrai epaisseur="1" />
+				<CouleurTrai red="100" green="100" blue="100" />
+				<CouleurFond red="50" green="50" blue="50" />
+			</Cercle>
+		</ObjetGeometrique>
+		<CompositeAnimation>
+			<Rotation debut="" fin="" easing="" centreX="" centreY="" />
+			<StrokeWidth debut="" fin="" easing="" widthIncrement="" />
+			<StrokeColor debut="" fin="" easing="" incrR="" incrG="" incrB="" />
+			<FillColor debut="" fin="" easing="" incrR="" incrG="" incrB="" />
+			<Translation debut="" fin="" easing="">
+				<Point x="" y="" />
+				<Point x="" y="" />
+				...
+				<Point x="" y="" />
+			</Translation>
+		</CompositeAnimation>
+	</Comportement>
+</Comportements>

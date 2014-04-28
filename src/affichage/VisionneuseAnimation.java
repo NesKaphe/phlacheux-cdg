@@ -152,7 +152,7 @@ public class VisionneuseAnimation extends JScrollPane{
 		int hauteurChildPan = 0;
 		for(Entry<Integer, Comportement> entry : listComp.entrySet()){
 			Comportement c = entry.getValue();
-			BlockAnimation ba = new BlockAnimation(c, this,cursorPosition);
+			BlockAnimation ba = new BlockAnimation(c, this,cursorPosition, this.f);
 			hauteurChildPan += ba.getTotalHeight();
 			childPan.add(ba);
 		}
@@ -255,7 +255,9 @@ class BlockAnimation extends JPanel {
 	private BlockMouseListener bml;
 	private JPopupMenu popupMenu; //menu pour le clic droit
 	
-	BlockAnimation(Comportement C,VisionneuseAnimation parent,int cursorPos){
+	private JFrame f;
+	
+	BlockAnimation(Comportement C,VisionneuseAnimation parent,int cursorPos, JFrame f){
 		this.Comp = C;
 		this.CA = (CompositeAnimation) C.getAnimation();
 		this.id = C.getId();
@@ -274,7 +276,8 @@ class BlockAnimation extends JPanel {
 		this.rectSelection = new Rectangle2D.Double();
 		this.rectSelecOK = false;
 		
-
+		this.f = f;
+		
 		//dessiner dans le panel
 		this.totalHeight=((nbNiveaux+1)*(levelSize));//calcul de la hauteur du block (15 = hauteur d'un rectangle)
 		
@@ -291,9 +294,15 @@ class BlockAnimation extends JPanel {
 		//Menu textuel du clic droit
 		popupMenuListener popupListener = new popupMenuListener(this);
 		popupMenu = new JPopupMenu();
+		
+		JMenuItem menuItem_modification = new JMenuItem("Modifier");
+		menuItem_modification.setActionCommand("modification");
+		menuItem_modification.addActionListener(popupListener);
+		
 		JMenuItem menuItem_Suppression = new JMenuItem("Suppression");
 		menuItem_Suppression.setActionCommand("suppression");
 		menuItem_Suppression.addActionListener(popupListener);
+		popupMenu.add(menuItem_modification);
 		popupMenu.add(menuItem_Suppression);
 	}
 	
@@ -307,6 +316,7 @@ class BlockAnimation extends JPanel {
 	 * permet de remplir la liste "lla"
 	 */
 	public void creationLLA(){
+		this.la = CA.getAllChilds();
 		lla.removeAll(lla);
 		insertionListe(la,0);
 	}
@@ -394,10 +404,14 @@ class BlockAnimation extends JPanel {
 				for (AnimAndShape aas : list_a){
 					Animation a = aas.getAnimation();
 					//donner une couleur au rectangle :
+					Color couleurRect = this.getAnimationColor(a);
+					/*
 					if(a.getType().equals("rotation"))
 						g2.setColor(Color.blue);
 					if(a.getType().equals("translation"))
 						g2.setColor(Color.red);
+					*/
+					g2.setColor(couleurRect);
 					//dessine rectangle à la bonne position:
 					aas.setShape(new Rectangle2D.Double(a.getT_debut(), i*(levelSize), a.getT_fin()-a.getT_debut(), 15));
 					g2.fill(aas.getShape());//dessiner le rectangle
@@ -448,28 +462,42 @@ class BlockAnimation extends JPanel {
 	 */
 	public Color getAnimationColor(Animation a){
 		String type = a.getType();
-		/*
+		Color couleur = null;
 		//TODO : a faire !!
 		switch (type) {
-		case value:
-			
+		case "Rotation":
+			couleur = Color.blue;
 			break;
-		case value:
-			
+		case "Translation":
+			couleur = Color.red;			
 			break;
-		case value:
-			
+		case "StrokeWidth":
+			couleur = Color.black;
 			break;
-		case value:
-			
+		case "StrokeColor":
+			couleur = Color.green;
+			break;
+		case "FillColor":
+			couleur = Color.magenta;
 			break;
 		default:
-			break;
+			couleur = Color.pink;
 		}
-		*/
-		return null;
+		
+		return couleur;
 	}
 	
+	public JFrame getFrame() {
+		return this.f;
+	}
+	
+	public int getCursorPos() {
+		return this.cursorPos;
+	}
+	
+	public Comportement getComp() {
+		return this.Comp;
+	}
 	
 	//inner class pour le popup listener
 	class popupMenuListener implements ActionListener {
@@ -481,21 +509,36 @@ class BlockAnimation extends JPanel {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
+			AnimAndShape anim = bml.getSelectedAnimAndShape();
+			System.out.println(anim);
 			switch(e.getActionCommand()) {
 			case "suppression":
-				Animation anim = bml.getSelectedAnim();
 				if(anim != null) {
 					//On va supprimer l'animation apres avoir demandé confirmation
 					int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment supprimer l'animation ?", "Suppression", JOptionPane.OK_CANCEL_OPTION);
 					if(reponse == JOptionPane.OK_OPTION) {
-						CA.remove(anim);
+						CA.remove(anim.getAnimation());
 						parent.la = parent.CA.getAllChilds();
 						parent.creationLLA();
 						parent.repaint();	
 					}
 				}
 				break;
-			//On pourra faire la modif ici
+			case "modification":
+				if(anim != null) {
+					//On va montrer l'alertbox pour modifier l'objet
+					Animation changement = ModifAnimBox.createBoxAndModify(anim.getAnimation(), parent.getComp(), (double)parent.getCursorPos(), parent.getFrame());
+					
+					if(changement != null) {
+						((CompositeAnimation)Comp.getAnimation()).remove(anim.getAnimation());
+						((CompositeAnimation)Comp.getAnimation()).add(changement);
+					}
+					
+					((CompositeAnimation)Comp.getAnimation()).refreshTime();
+					parent.creationLLA();
+					parent.repaint();
+				}
+				break;
 			}
 		}
 		
@@ -546,22 +589,17 @@ class  BlockMouseListener implements MouseListener,MouseMotionListener {
 					}
 					else {
 						if(e.getClickCount() > 1){
-							JTextField tempsDebut = new JTextField(a.getAnimation().getT_debut().toString());
-							Double dureeAnim = a.getAnimation().getT_fin() - a.getAnimation().getT_debut();
-							JTextField Duree = new JTextField(dureeAnim.toString());
-							Object[] message = {"Debut animation :", tempsDebut, "Duree :", Duree};
-							int reponse = JOptionPane.showConfirmDialog(null, message, "Modification "+a.getAnimation().getType(), JOptionPane.OK_CANCEL_OPTION);
-							if(reponse == JOptionPane.OK_OPTION) {
-								double debut = Double.parseDouble(tempsDebut.getText());
-								double fin = debut + Double.parseDouble(Duree.getText());
-								
-								if(fin > debut) {
-									a.getAnimation().setT_debut(debut);
-									a.getAnimation().setT_fin(fin);
-									parent.creationLLA();
-									parent.repaint();
-								}
+							Animation anim = a.getAnimation();
+							Animation changement = ModifAnimBox.createBoxAndModify(anim, parent.getComp(), (double)parent.getCursorPos(), parent.getFrame());
+							
+							if(changement != null) {
+								((CompositeAnimation)parent.getComp().getAnimation()).remove(a.getAnimation());
+								((CompositeAnimation)parent.getComp().getAnimation()).add(changement);
 							}
+							
+							((CompositeAnimation)parent.getComp().getAnimation()).refreshTime();
+							parent.creationLLA();
+							parent.repaint();
 						}
 					}
 				}
@@ -616,8 +654,8 @@ class  BlockMouseListener implements MouseListener,MouseMotionListener {
 		}
 	}
 
-	public Animation getSelectedAnim() {
-		return this.a.getAnimation();
+	public AnimAndShape getSelectedAnimAndShape() {
+		return this.a;
 	}
 	
 	@Override
@@ -662,6 +700,11 @@ class AnimAndShape{
 	public AnimAndShape(Animation a, Shape sh) {
 		this.a = a;
 		this.sh = sh;
+	}
+
+	public void setAnimation(Animation changement) {
+		this.a = changement;
+		
 	}
 
 	public Animation getAnimation() {

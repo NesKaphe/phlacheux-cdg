@@ -61,6 +61,12 @@ public class CompositeAnimation extends Animation{
 		}
 		return listA;
 	}
+	
+	public void refreshTime() {
+		for(Animation a : ChildAnimations) {
+			this.ChangeTminTmax(a.getT_debut(), a.getT_fin());
+		}
+	}
 
 	@Override
 	public AffineTransform getAffineTransform(double t_courant) {
@@ -71,22 +77,36 @@ public class CompositeAnimation extends Animation{
 			return null;
 		
 		AffineTransform at_retour = new AffineTransform();//va contenir les transformations
+		AffineTransform rotation = new AffineTransform();
+		
 		//parcourir la liste des enfants pour connaitre toute leurs transformations :
 		for(Animation a : this.ChildAnimations){
 			//si notre enfant est conserné :
 			if (a.tmpOk(t_courant)){
 				AffineTransform atmp = a.getAffineTransform(t_courant);
-				if (atmp != null)
-					at_retour.concatenate(atmp);
+				if (atmp != null) {
+					if(a instanceof Rotation) {
+						rotation.concatenate(atmp);
+					}
+					else {
+						at_retour.concatenate(atmp);
+					}
+				}
 				
 			}else if(a.getT_fin() < t_courant){
 				AffineTransform atmp = a.getAffineTransform(a.getT_fin());
-				if (atmp != null)
-					at_retour.concatenate(atmp);
-				//at_retour = a.getAffineTransform(a.getT_fin());
+				if (atmp != null) {
+					if(a instanceof Rotation) {
+						rotation.concatenate(atmp);
+					}
+					else {
+						at_retour.concatenate(atmp);
+					}
+				}
 			}
 		}
 		
+		at_retour.concatenate(rotation); //On ne fait la rotation "concretement" qu'a la fin
 		//setTrans(at_retour);
 		return at_retour;
 	}

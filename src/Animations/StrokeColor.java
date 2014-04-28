@@ -15,6 +15,10 @@ public class StrokeColor extends ColorAnimation {
 		super(t_debut, t_fin, easing, "StrokeColor", incrR, incrG, incrB);
 	}
 
+	public StrokeColor(StrokeColor anim) {
+		super(anim);
+	}
+
 	@Override
 	public int[] getStrokeColor(Double t_courant) {
 		return this.getColor(t_courant);

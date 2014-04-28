@@ -22,13 +22,13 @@ public class Rotation extends Animation{
 	Double ttt = 0.;//debug//TODO : a virer
 	
 	public Rotation(Double t_debut, Double t_fin, int easing,Double angle,Point2D.Double centre) {
-		super(t_debut, t_fin, easing, "rotation");
+		super(t_debut, t_fin, easing, "Rotation");
 		this.angle = angle;
 		this.centre = centre;
 	}
 	
 	public Rotation(Rotation r){
-		super(r.getT_debut(), r.getT_fin(), 0, "rotation");
+		super(r.getT_debut(), r.getT_fin(), 0, "Rotation");
 		this.angle = r.getAngle();
 		this.centre = r.getCentre();
 	}
@@ -69,6 +69,11 @@ public class Rotation extends Animation{
 
 	public void setCentre(Point2D.Double centre) {
 		this.centre = centre;
+	}
+	
+	public void setAngle(double angle) {
+		if(angle > 0)
+			this.angle = angle;
 	}
 
 }
