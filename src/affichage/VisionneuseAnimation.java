@@ -233,12 +233,6 @@ class Tempo extends JPanel{
 
 
 
-
-
-
-
-
-
 //TODO : tout les commentaires sont modifier pour la nouvelle version avec AnimAndShape
 
 class BlockAnimation extends JPanel {
