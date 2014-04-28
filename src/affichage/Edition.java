@@ -1,5 +1,8 @@
 package affichage;
 
+import importExport.ExportXML;
+import importExport.ImportXML;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -70,11 +73,20 @@ public class Edition extends JFrame {
 	
 	private LecteurAnimation lecteur;
 	
+	// menu fichier
+	JMenu menu_F = new JMenu("Fichier");
+	
 	// menu création d'objet
 	JMenu menu_C = new JMenu("Création d'objet");
 	
 	// menu lecture
 	JMenu menu_L = new JMenu("Lecture");
+	
+	JMenuItem mi_new = new JMenuItem("Nouvelle Toile");
+	JMenuItem mi_refresh = new JMenuItem("Rafraichir");
+	JMenuItem mi_export_xml = new JMenuItem("Exporter au format xml");
+	JMenuItem mi_import_xml = new JMenuItem("Importer xml");
+	JMenuItem mi_exit = new JMenuItem("Quitter");
 	
 	// Item du menu création d'objet
 	JMenuItem mi_Cercle = new JMenuItem("Cercle");
@@ -115,11 +127,13 @@ public class Edition extends JFrame {
     	JMenu menu_F = new JMenu("Fichier");
     	JMenuItem mi_new = new JMenuItem("Nouvelle Toile");
     	JMenuItem mi_refresh = new JMenuItem("Rafraichir");
-    	JMenuItem mi_add_object = new JMenuItem("Ajouter un forme");
+    	JMenuItem mi_export_xml = new JMenuItem("Exporter au format xml");
+    	JMenuItem mi_import_xml = new JMenuItem("Importer xml");
     	JMenuItem mi_exit = new JMenuItem("Quitter");
     	menu_F.add(mi_new);
     	menu_F.add(mi_refresh);
-    	menu_F.add(mi_add_object);
+    	menu_F.add(mi_export_xml);
+    	menu_F.add(mi_import_xml);
     	menu_F.add(mi_exit);
     	menuBarEditionMode.add(menu_F);
     	  
@@ -242,18 +256,38 @@ public class Edition extends JFrame {
     	//TODO : on va voir si c'est vraiment utile ========================================
     	mi_new.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
+    			gestionnaire.viderComportements();
+    			gestionnaire.refreshDessin();
+    			MAJListeObjGeo();
+    			lecteur.setTempsLecture(0.);
     		}
     	});
     	
     	mi_refresh.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
+    			gestionnaire.refreshDessin();
     		}
     	});
     	
-    	mi_add_object.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    		}
-    	});
+    	mi_export_xml.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//creer un objet ExportXML
+					//Lui dire de sauvegarder le fichier xml
+				ExportXML export = new ExportXML(gestionnaire);
+				export.doExport();
+			}
+		});
+    	
+    	mi_import_xml.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ImportXML parser = new ImportXML(gestionnaire);
+				parser.doImport();
+	
+				gestionnaire.refreshDessin();
+				MAJListeObjGeo();
+					
+			}
+		});
     	
     	// le champ quitter du menu ferme tout
     	mi_exit.addActionListener(new ActionListener() {
@@ -310,6 +344,11 @@ public class Edition extends JFrame {
 	 */
 	public void modeEdition() {
 		
+		mi_new.setEnabled(true);
+		mi_refresh.setEnabled(true);
+		mi_export_xml.setEnabled(true);
+		mi_import_xml.setEnabled(true);
+		
 		mi_Cercle.setEnabled(true);
 		mi_Triangle.setEnabled(true);
 		mi_Rectangle.setEnabled(true);
@@ -336,6 +375,11 @@ public class Edition extends JFrame {
 	 * et ne laisser que les listeners de lecture
 	 */
 	public void modeLecture() {
+		
+		mi_new.setEnabled(false);
+		mi_refresh.setEnabled(false);
+		mi_export_xml.setEnabled(true);
+		mi_import_xml.setEnabled(false);
 		
 		mi_Cercle.setEnabled(false);
 		mi_Triangle.setEnabled(false);

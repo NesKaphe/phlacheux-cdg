@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 public class Cercle extends ObjetGeometrique {
 
 	protected double rayon;
@@ -45,6 +48,30 @@ public class Cercle extends ObjetGeometrique {
 	
 	public double getRayon() {
 		return this.rayon;
+	}
+
+	public Element toXml(Document domDocument) {
+		Element elem = domDocument.createElement("Cercle");
+		elem.setAttribute("Rayon", String.valueOf(this.rayon));
+		elem.setAttribute("centreX", String.valueOf(this.centre.getX()));
+		elem.setAttribute("centreY", String.valueOf(this.centre.getY()));
+		
+		//On va maintenant creer un fils par attribut spécial (couleur fond, Trait)
+		Element stroke = domDocument.createElement("Trait");
+		stroke.setAttribute("epaisseur", String.valueOf(this.getStroke().getLineWidth()));
+		stroke.setAttribute("red", String.valueOf(this.getStrokeColor().getRed()));
+		stroke.setAttribute("green", String.valueOf(this.getStrokeColor().getGreen()));
+		stroke.setAttribute("blue", String.valueOf(this.getStrokeColor().getBlue()));
+		
+		Element fond = domDocument.createElement("Fond");
+		fond.setAttribute("red", String.valueOf(this.getFillColor().getRed()));
+		fond.setAttribute("green", String.valueOf(this.getFillColor().getGreen()));
+		fond.setAttribute("blue", String.valueOf(this.getFillColor().getBlue()));
+		
+		elem.appendChild(stroke);
+		elem.appendChild(fond);
+		
+		return elem;
 	}
 
 

@@ -6,6 +6,9 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import affichage.Toile;
 import formes.Rectangle;
 
@@ -25,6 +28,18 @@ public class StrokeColor extends ColorAnimation {
 	}
 
 
+	public Element toXml(Document domDocument) {
+		Element elem = domDocument.createElement("StrokeColor");
+		
+		elem.setAttribute("debut", this.getT_debut().toString());
+		elem.setAttribute("fin", this.getT_fin().toString());
+		elem.setAttribute("easing", String.valueOf(this.getEasing()));
+		elem.setAttribute("incrR", String.valueOf(this.r));
+		elem.setAttribute("incrG", String.valueOf(this.g));
+		elem.setAttribute("incrB", String.valueOf(this.b));
+		
+		return elem;
+	}
 }
 
 class testeStrokeColor{

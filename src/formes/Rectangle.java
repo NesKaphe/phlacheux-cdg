@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 
 public class Rectangle extends ObjetGeometrique {
 
@@ -60,6 +63,29 @@ public class Rectangle extends ObjetGeometrique {
 		this.forme = new Rectangle2D.Double(p.getX(),p.getY(), this.width, this.height);
 	}
 
-
+	public Element toXml(Document domDocument) {
+		Element elem = domDocument.createElement("Rectangle");
+		elem.setAttribute("Width", String.valueOf(this.width));
+		elem.setAttribute("Height", String.valueOf(this.height));
+		elem.setAttribute("centreX", String.valueOf(this.centre.getX()));
+		elem.setAttribute("centreY", String.valueOf(this.centre.getY()));
+		
+		//On va maintenant creer un fils par attribut spécial (couleur fond, Trait)
+		Element stroke = domDocument.createElement("Trait");
+		stroke.setAttribute("epaisseur", String.valueOf(this.getStroke().getLineWidth()));
+		stroke.setAttribute("red", String.valueOf(this.getStrokeColor().getRed()));
+		stroke.setAttribute("green", String.valueOf(this.getStrokeColor().getGreen()));
+		stroke.setAttribute("blue", String.valueOf(this.getStrokeColor().getBlue()));
+		
+		Element fond = domDocument.createElement("Fond");
+		fond.setAttribute("red", String.valueOf(this.getFillColor().getRed()));
+		fond.setAttribute("green", String.valueOf(this.getFillColor().getGreen()));
+		fond.setAttribute("blue", String.valueOf(this.getFillColor().getBlue()));
+		
+		elem.appendChild(stroke);
+		elem.appendChild(fond);
+		
+		return elem;
+	}
 
 }

@@ -6,6 +6,9 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 public abstract class ObjetGeometrique {
 
 	protected String nom;
@@ -168,6 +171,6 @@ public abstract class ObjetGeometrique {
 				+ ", strokeColor=" + strokeColor + ", forme=" + forme + "]";
 	}
 	
-	
+	public abstract Element toXml(Document domDocument);
 	
 }

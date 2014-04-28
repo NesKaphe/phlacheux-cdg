@@ -5,6 +5,10 @@ import java.awt.Dimension;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import javax.swing.JFrame;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import affichage.Toile;//juste pour teste
 import formes.Rectangle;
 import formes.SegmentDroite;
@@ -74,6 +78,20 @@ public class Rotation extends Animation{
 	public void setAngle(double angle) {
 		if(angle > 0)
 			this.angle = angle;
+	}
+
+	
+	public Element toXml(Document domDocument) {
+		Element elem = domDocument.createElement("Rotation");
+		
+		elem.setAttribute("debut", this.getT_debut().toString());
+		elem.setAttribute("fin", this.getT_fin().toString());
+		elem.setAttribute("easing", String.valueOf(this.getEasing()));
+		elem.setAttribute("angle", String.valueOf(Math.toDegrees(this.angle)));
+		elem.setAttribute("centreX", String.valueOf(this.centre.getX()));
+		elem.setAttribute("centreY", String.valueOf(this.centre.getY()));
+		
+		return elem;
 	}
 
 }

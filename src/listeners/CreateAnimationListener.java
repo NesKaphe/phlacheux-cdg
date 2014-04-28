@@ -25,6 +25,7 @@ import Animations.StrokeWidth;
 import affichage.CreateTrajectoire;
 import affichage.Edition;
 import affichage.Item;
+import affichage.LecteurAnimation;
 import affichage.ModifAnimBox;
 import affichage.MyColorChooser;
 import affichage.VisionneuseAnimation;
@@ -123,9 +124,9 @@ public class CreateAnimationListener implements ActionListener {
 		this.t_debut = new JTextField("0");
 		this.t_fin = new JTextField("0");
 		
-		messageFinal[messageFinal.length-4] = "Temps debut";
+		messageFinal[messageFinal.length-4] = "Temps debut (secondes)";
 		messageFinal[messageFinal.length-3] = this.t_debut;
-		messageFinal[messageFinal.length-2] = "Temps fin";
+		messageFinal[messageFinal.length-2] = "Duree (secondes)";
 		messageFinal[messageFinal.length-1] = this.t_fin;
 		return JOptionPane.showConfirmDialog(null, messageFinal, "Paramètres "+selection, JOptionPane.OK_CANCEL_OPTION);
 	}
@@ -170,8 +171,11 @@ public class CreateAnimationListener implements ActionListener {
 	//TODO: peut etre le rendre public ou non pour la translation (=non si on peut envoyer un action command depuis le clavier)
 	private void creerAnimation(Comportement comp, String selection, int easing) {
 		Animation anim = null;
-		double tempsDebut = Double.parseDouble(this.t_debut.getText());
-		double tempsFin = Double.parseDouble(this.t_fin.getText());
+		double tempsDebut = LecteurAnimation.CONSTANTE_TEMPS *Double.parseDouble(this.t_debut.getText());
+		
+		double duree = LecteurAnimation.CONSTANTE_TEMPS * Double.parseDouble(this.t_fin.getText());
+		
+		double tempsFin = tempsDebut + duree;
 		
 		//On ne va créer que des animations valides (avec un temps de fin apres le temps debut)
 		if(tempsFin > tempsDebut) {

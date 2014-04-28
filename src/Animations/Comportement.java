@@ -4,6 +4,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import formes.ObjetGeometrique;
 
 public class Comportement {
@@ -128,4 +131,19 @@ public class Comportement {
 		return this.objGeo.getNom()+" - "+this.getId();
 	}
 	
+	
+	public Element toXml(Document domDocument) {
+		Element elem = domDocument.createElement("Comportement");
+		elem.setAttribute("id", String.valueOf(this.id));
+		
+		Element objGeo = domDocument.createElement("objGeo");
+		Element filsObjGeo = this.objGeo.toXml(domDocument);
+		objGeo.appendChild(filsObjGeo);
+		
+		Element filsAnimation = this.a.toXml(domDocument);
+		
+		elem.appendChild(objGeo);
+		elem.appendChild(filsAnimation);
+		return elem;
+	}
 }
