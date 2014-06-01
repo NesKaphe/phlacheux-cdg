@@ -103,7 +103,6 @@ class testeFill{
 			try {
 				Thread.sleep((long) (5000));
 			} catch (InterruptedException e) {
-				// TODO Bloc catch généré automatiquement
 				e.printStackTrace();
 			}
 		}

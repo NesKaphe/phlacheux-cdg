@@ -44,7 +44,6 @@ public class Toile extends JPanel {
 		super();
 		this.setDoubleBuffered(true);
 		this.setPreferredSize(dim);
-		this.setSize(dim);//TODO : probablement remplacer par setMinSize 
 		this.trajectoire = null;
 		
 		this.popupMenu = new JPopupMenu();
@@ -88,12 +87,7 @@ public class Toile extends JPanel {
 		this.mode = "lecture";
 		this.removeMouseMotionListener((MouseMotionListener)this.listener);
 	}
-	
-	public void modeTrajectoire(){
-		this.mode = "trajectoire";
-		this.addMouseMotionListener((MouseMotionListener)this.listener);//TODO : modifier le listener de MouseToileListener
-	}
-	
+		
 	public void paintComponent(Graphics g) {
 		//Le buffer n'existe pas encore au moment du dessin
 		if(this.backBuffer == null)
@@ -118,14 +112,15 @@ public class Toile extends JPanel {
 	public void dessineObjet(ObjetGeometrique geo) {		
 		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
 
-		g.setStroke(geo.getStroke());
-		g.setColor(geo.getStrokeColor());
-		g.draw(geo.getShape());
-		
 		if(geo.getFillColor() != null) {
 			g.setColor(geo.getFillColor());
 			g.fill(geo.getShape());
 		}
+		
+		g.setStroke(geo.getStroke());
+		g.setColor(geo.getStrokeColor());
+		g.draw(geo.getShape());
+		
 	}
 	
 	/**

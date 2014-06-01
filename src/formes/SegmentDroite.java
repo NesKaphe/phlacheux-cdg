@@ -10,8 +10,8 @@ import org.w3c.dom.Element;
 
 public class SegmentDroite extends ObjetGeometrique {
 
-	protected Point2D.Double p1;        //TODO : modifier en Point2D.Double
-	protected Point2D.Double p2; //TODO               //
+	protected Point2D.Double p1;
+	protected Point2D.Double p2;
 	
 	public SegmentDroite(Point2D.Double p1, Point2D.Double p2) {
 		super("Segment", new Point2D.Double((p1.getX() + p2.getX())/2, (p1.getY() + p2.getY())/2), null, Color.black);

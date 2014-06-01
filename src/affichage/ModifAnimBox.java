@@ -138,6 +138,7 @@ public class ModifAnimBox {
 		String select = ((JComboBox<String>) message[message.length-5]).getSelectedItem().toString();
 		int easingType = ModifAnimBox.getEasingType(select);
 		System.out.println("C'est le easing "+ easingType+ "qui est selectionné");
+		
 		if(selected.getType().equals("Rotation")) {
 			modifie = new Rotation((Rotation) selected);
 			double angleRad = Math.toRadians(Double.parseDouble(((JTextField)message[1]).getText().toString()));

@@ -47,7 +47,7 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 				this.frame.getGestionAnimation().setObjGeoEnCreation(seg);
 				
 				//Et on raffraichi le dessin des objets
-				this.frame.getGestionAnimation().refreshDessin(); //TODO: recup le temps courant
+				this.frame.getGestionAnimation().refreshDessin();
     		}
     	}
 		
@@ -69,7 +69,7 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 				geo.setCentre(point);
 				
 				//On raffraichi le dessin des objets
-				this.frame.getGestionAnimation().refreshDessin(); //TODO: recup le temps courant
+				this.frame.getGestionAnimation().refreshDessin();
 			}
     	}
 		
@@ -132,21 +132,15 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 	    		}
     		}
     	}
-    	else if(toile.getMode().equals("trajectoire")){//TODO : finalement c'est pas utile à virer
-    		System.out.println("INFO MouseToileListener- vous êtes en mode trajectoire");
-    		
-    	}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Stub de la méthode généré automatiquement
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Stub de la méthode généré automatiquement
 		
 	}
 
@@ -190,7 +184,7 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
     			
     			//On va maintenant enregistrer notre objet dans le gestionnaire d'animation
     			this.frame.getGestionAnimation().ajouterComportement(geo, null);
-				this.frame.getGestionAnimation().refreshDessin(); //TODO: recup le temps courant
+				this.frame.getGestionAnimation().refreshDessin();
 				
 				//On a terminé la creation de la ligne, on ne reste pas en mode listener
 				toile.modeSelection();

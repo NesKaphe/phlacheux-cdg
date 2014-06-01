@@ -67,20 +67,18 @@ public class VisionneuseAnimation extends JScrollPane{
 		this.tempo = new Tempo(this.maxTime);
 		this.listBlockA = new ArrayList<BlockAnimation>();
 		this.cursorPosition = 0;
-		this.setOpaque(true);//TODO : voir si utile
+		this.setOpaque(true);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		parentPan = new JPanel(new BorderLayout());//le panel qui va contenir la représentation de l'animation
-		parentPan.setMinimumSize(new Dimension(this.maxTime,screenSize.height/10));//TODO : réfléchir au maxTime
+		parentPan.setMinimumSize(new Dimension(this.maxTime,screenSize.height/10));
 		parentPan.setPreferredSize(new Dimension(this.maxTime,screenSize.height/5));//donne la taille
-		parentPan.setOpaque(true);//TODO : voir si utile
-		//parentPan.setBackground(Color.white);//TODO : voir si utile
+		parentPan.setOpaque(true);
 		
 		childPan = new JPanel();
 		childPan.setBackground(new Color(213,246,213));
 		childPan.setLayout(new BoxLayout(childPan, BoxLayout.Y_AXIS));
-		childPan.setOpaque(true);//TODO : voir si utile
-		//childPan.setBackground(Color.white);//TODO : voir si utile
+		childPan.setOpaque(true);
 		
 		parentPan.add(childPan,BorderLayout.CENTER);
 		parentPan.add(tempo,BorderLayout.NORTH);
@@ -265,7 +263,7 @@ class BlockAnimation extends JPanel {
 		this.lla = new ArrayList<ArrayList<AnimAndShape>>();
 		this.cursorPos = cursorPos;
 		creationLLA();
-		//TODO : faire un listener commun au 2 :
+
 		bml = new BlockMouseListener(lla,this);
 		this.addMouseListener(bml);
 		this.addMouseMotionListener(bml);
@@ -281,7 +279,7 @@ class BlockAnimation extends JPanel {
 		this.totalHeight=((nbNiveaux+1)*(levelSize));//calcul de la hauteur du block (15 = hauteur d'un rectangle)
 		
 		this.setSize(parent.getMaxTime(), this.totalHeight);
-		this.setPreferredSize(new Dimension(parent.getMaxTime(), this.totalHeight));//TODO changer cette dimension
+		this.setPreferredSize(new Dimension(parent.getMaxTime(), this.totalHeight));
 		
 		//attribuer une couleur de font au block :
 		if(Comp.getId() % 2 == 0)
@@ -462,7 +460,6 @@ class BlockAnimation extends JPanel {
 	public Color getAnimationColor(Animation a){
 		String type = a.getType();
 		Color couleur = null;
-		//TODO : a faire !!
 		switch (type) {
 		case "Rotation":
 			couleur = Color.blue;

@@ -50,10 +50,10 @@ public class CreateAnimationListener implements ActionListener {
 	private JTextField t_fin;
 	private MyColorChooser colorChooser;
 	
-	public CreateAnimationListener(JList<Item> liste, VisionneuseAnimation visionneuse,Edition edition) {//TODO changer le constructeur pour qu'il ne récupère que l'editions puis que toile contient liste et visioneuse
-		this.liste = liste;
+	public CreateAnimationListener(Edition edition) {
+		this.liste = edition.getListe();
 		this.comboBoxAnimations = null;
-		this.visionneuse = visionneuse;
+		this.visionneuse = edition.getVisionneuse();
 		this.colorChooser = new MyColorChooser();
 		this.edition = edition;
 	}
@@ -158,17 +158,7 @@ public class CreateAnimationListener implements ActionListener {
 		this.comboBoxEasing = ModifAnimBox.generateComboBoxEasing();
 	}
 	
-	/**
-	 * Va regarder parmis tous les Comportement pour creer une JComboBox adaptée aux 
-	 * animations disponibles pour l'utilisateur avec les Comportements selectionnés
-	 * @param Une liste de comportements pour lesquels on devra proposer des animations
-	 * @return une JComboBox contenant toutes les animations possibles
-	 */
-	private void initComboBox(List<Comportement> lComp) {
-		//A implementer plus tard
-	}
 	
-	//TODO: peut etre le rendre public ou non pour la translation (=non si on peut envoyer un action command depuis le clavier)
 	private void creerAnimation(Comportement comp, String selection, int easing) {
 		Animation anim = null;
 		double tempsDebut = LecteurAnimation.CONSTANTE_TEMPS *Double.parseDouble(this.t_debut.getText());
@@ -185,7 +175,6 @@ public class CreateAnimationListener implements ActionListener {
 			switch(selection) {
 			case "Rotation":
 				double angleRad = Math.toRadians(Double.parseDouble(this.angle.getText()));
-				System.out.println("DEBUG - angle radian = "+angleRad);
 				anim = new Rotation(tempsDebut,tempsFin, easing, angleRad, obj.getCentre());
 				break;
 			case "Translation":

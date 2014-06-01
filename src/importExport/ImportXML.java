@@ -111,7 +111,7 @@ public class ImportXML {
 				}
 			}
 			//Chaque comportement n'a que deux fils
-			System.out.println("nbfils  =   "+nbFils);
+			System.out.println("[XML import : Comportement] nbfils  =   "+nbFils);
 			if(nbFils  != 2) {
 				throw new Exception("xml mal formé");
 			}
