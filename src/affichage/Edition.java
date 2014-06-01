@@ -280,6 +280,7 @@ public class Edition extends JFrame {
     	
     	mi_import_xml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				gestionnaire.viderComportements();
 				ImportXML parser = new ImportXML(gestionnaire);
 				parser.doImport();
 	

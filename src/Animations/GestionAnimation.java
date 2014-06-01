@@ -68,14 +68,6 @@ public class GestionAnimation {
 		return objets;
 	}
 	
-	public HashMap<Integer, Animation> getAllAnimationsOf(int id) {
-		HashMap<Integer, Animation> animations = new HashMap<Integer, Animation>();
-		Animation anim = this.Comportements.get(id).getAnimation();
-		//Ici les opérations pour recup toutes les animations du comportement "id"
-		return animations;
-	}
-		
-	//TODO : (nom un peux long)
 	public void ajouterComportement(ObjetGeometrique geo, Animation anim) {
 		//On va rechercher dans la liste si l'objet est deja present
 		System.out.println("ajoutComportement "+geo.getStroke().getLineWidth());

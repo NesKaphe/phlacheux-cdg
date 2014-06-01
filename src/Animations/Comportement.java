@@ -134,7 +134,6 @@ public class Comportement {
 	
 	public Element toXml(Document domDocument) {
 		Element elem = domDocument.createElement("Comportement");
-		elem.setAttribute("id", String.valueOf(this.id));
 		
 		Element objGeo = domDocument.createElement("objGeo");
 		Element filsObjGeo = this.objGeo.toXml(domDocument);

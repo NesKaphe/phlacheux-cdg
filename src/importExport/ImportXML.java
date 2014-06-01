@@ -26,7 +26,6 @@ import formes.SegmentDroite;
 import formes.Triangle;
 
 import Animations.Animation;
-import Animations.Comportement;
 import Animations.CompositeAnimation;
 import Animations.FillColor;
 import Animations.GestionAnimation;
@@ -98,7 +97,15 @@ public class ImportXML {
 						}
 						else if (filsElement.getTagName().equals("CompositeAnimation")) {
 							nbFils++;
-							anim = filsElement;
+							NodeList nodesobj = filsElement.getChildNodes();
+							int k = 0;
+							while(k < nodesobj.getLength()) {
+								if(nodesobj.item(k).getNodeType() == Node.ELEMENT_NODE) {
+									anim = (Element) nodesobj.item(k);
+									break;
+								}
+								k++;
+							}
 						}
 					}
 				}
@@ -112,14 +119,9 @@ public class ImportXML {
 			
 			ObjetGeometrique geo = this.getObj(obj);
 			Animation animation = this.getAnim(anim);
+						
 			
-			System.out.println(geo);
-			System.out.println(animation);
-			
-			int id = Integer.parseInt(e.getAttribute("id"));
-			
-			Comportement comp = new Comportement(geo, animation, id);
-			this.gestionnaire.modifierComportement(comp);
+			this.gestionnaire.ajouterComportement(geo, animation);
 		}
 		
 		}
@@ -208,7 +210,7 @@ public class ImportXML {
 			
 			geo.setFillColor(fillColor);
 		}
-		System.out.println("???????????????");
+
 		return geo;
 	}
 	

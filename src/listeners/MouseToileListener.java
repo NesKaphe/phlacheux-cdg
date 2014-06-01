@@ -193,8 +193,8 @@ public class MouseToileListener implements MouseListener, MouseMotionListener {
 				this.frame.getGestionAnimation().refreshDessin(); //TODO: recup le temps courant
 				
 				//On a terminé la creation de la ligne, on ne reste pas en mode listener
-				//toile.removeMouseMotionListener((MouseMotionListener) this);
 				toile.modeSelection();
+				this.frame.getGestionAnimation().resetObjGeoEnCreation();
 				this.frame.MAJListeObjGeo();
     		}
     	}
