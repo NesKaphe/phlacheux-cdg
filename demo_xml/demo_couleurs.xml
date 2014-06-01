@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Comportements>
+<Comportement>
+<objGeo>
+<Hexagone centreX="369.0" centreY="257.0" taille="75">
+<Trait blue="82" epaisseur="20.0" green="173" red="0"/>
+<Fond blue="0" green="39" red="252"/>
+</Hexagone>
+</objGeo>
+<CompositeAnimation>
+<Rotation angle="360.0" centreX="369.0" centreY="257.0" debut="0.0" easing="1" fin="900.0"/>
+<StrokeWidth debut="0.0" easing="0" fin="300.0" incrWidth="-40.0"/>
+<StrokeWidth debut="161.0" easing="3" fin="371.0" incrWidth="80.0"/>
+<FillColor debut="32.0" easing="7" fin="272.0" incrB="89" incrG="-10" incrR="-164"/>
+<StrokeColor debut="191.0" easing="1" fin="401.0" incrB="96" incrG="40" incrR="120"/>
+</CompositeAnimation>
+</Comportement>
+<Comportement>
+<objGeo>
+<Triangle centreX="829.0" centreY="263.0" taille="300">
+<Trait blue="222" epaisseur="20.0" green="29" red="0"/>
+<Fond blue="30" green="57" red="30"/>
+</Triangle>
+</objGeo>
+<CompositeAnimation>
+<StrokeColor debut="0.0" easing="0" fin="300.0" incrB="-78" incrG="9" incrR="252"/>
+<FillColor debut="0.0" easing="0" fin="300.0" incrB="-115" incrG="127" incrR="101"/>
+<StrokeWidth debut="319.0" easing="0" fin="409.0" incrWidth="-319.62036"/>
+<Rotation angle="-1000.1" centreX="829.0" centreY="263.0" debut="0.0" easing="0" fin="900.0"/>
+<StrokeWidth debut="140.0" easing="5" fin="350.0" incrWidth="60.0"/>
+<StrokeColor debut="346.0" easing="0" fin="436.0" incrB="-190" incrG="-29" incrR="255"/>
+<FillColor debut="223.0" easing="2" fin="433.0" incrB="170" incrG="140" incrR="173"/>
+</CompositeAnimation>
+</Comportement>
+<Comportement>
+<objGeo>
+<Croix centreX="829.0" centreY="256.0" taille="37">
+<Trait blue="11" epaisseur="1.0" green="209" red="0"/>
+<Fond blue="53" green="35" red="64"/>
+</Croix>
+</objGeo>
+<CompositeAnimation>
+<Rotation angle="-1999.9999999999998" centreX="829.0" centreY="256.0" debut="0.0" easing="0" fin="900.0"/>
+<Translation debut="0.0" easing="7" fin="900.0">
+<Point x="0.0" y="0.0"/>
+<Point x="-156.0" y="89.0"/>
+<Point x="79.0" y="76.0"/>
+<Point x="156.0" y="21.0"/>
+<Point x="156.0" y="-86.0"/>
+<Point x="121.0" y="-160.0"/>
+<Point x="48.0" y="-185.0"/>
+<Point x="-35.0" y="-188.0"/>
+<Point x="-125.0" y="-138.0"/>
+<Point x="-161.0" y="-29.0"/>
+<Point x="-155.0" y="50.0"/>
+<Point x="-55.0" y="132.0"/>
+<Point x="58.0" y="122.0"/>
+<Point x="163.0" y="77.0"/>
+<Point x="181.0" y="-36.0"/>
+<Point x="209.0" y="-78.0"/>
+<Point x="245.0" y="-36.0"/>
+<Point x="234.0" y="22.0"/>
+<Point x="208.0" y="64.0"/>
+<Point x="109.0" y="240.0"/>
+<Point x="-184.0" y="100.0"/>
+<Point x="-301.0" y="-70.0"/>
+<Point x="-97.0" y="-74.0"/>
+<Point x="115.0" y="-65.0"/>
+<Point x="251.0" y="-109.0"/>
+<Point x="341.0" y="-142.0"/>
+<Point x="208.0" y="-158.0"/>
+<Point x="52.0" y="-131.0"/>
+<Point x="-112.0" y="-11.0"/>
+<Point x="-228.0" y="85.0"/>
+<Point x="91.0" y="-4.0"/>
+</Translation>
+</CompositeAnimation>
+</Comportement>
+</Comportements>

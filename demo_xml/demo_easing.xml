@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Comportements>
+<Comportement>
+<objGeo>
+<Rectangle Height="700.0" Width="15.0" centreX="33.0" centreY="322.0">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="5" green="1" red="255"/>
+</Rectangle>
+</objGeo>
+<CompositeAnimation/>
+</Comportement>
+<Comportement>
+<objGeo>
+<Rectangle Height="700.0" Width="15.0" centreX="1129.0" centreY="145.0">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="5" green="10" red="255"/>
+</Rectangle>
+</objGeo>
+<CompositeAnimation/>
+</Comportement>
+<Comportement>
+<objGeo>
+<Triangle centreX="32.0" centreY="37.0" taille="50">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="0" green="255" red="255"/>
+</Triangle>
+</objGeo>
+<CompositeAnimation>
+<Translation debut="0.0" easing="0" fin="450.0">
+<Point x="0.0" y="0.0"/>
+<Point x="1096.0" y="-2.0"/>
+</Translation>
+</CompositeAnimation>
+</Comportement>
+<Comportement>
+<objGeo>
+<Triangle centreX="34.0" centreY="92.0" taille="50">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="0" green="255" red="0"/>
+</Triangle>
+</objGeo>
+<CompositeAnimation>
+<Translation debut="0.0" easing="1" fin="450.0">
+<Point x="0.0" y="0.0"/>
+<Point x="1095.0" y="-1.0"/>
+</Translation>
+</CompositeAnimation>
+</Comportement>
+<Comportement>
+<objGeo>
+<Triangle centreX="33.0" centreY="154.0" taille="50">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="255" green="28" red="39"/>
+</Triangle>
+</objGeo>
+<CompositeAnimation>
+<Translation debut="0.0" easing="3" fin="450.0">
+<Point x="0.0" y="0.0"/>
+<Point x="1098.0" y="-1.0"/>
+</Translation>
+</CompositeAnimation>
+</Comportement>
+<Comportement>
+<objGeo>
+<Cercle Rayon="25.0" centreX="33.0" centreY="209.0">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="98" green="150" red="0"/>
+</Cercle>
+</objGeo>
+<CompositeAnimation>
+<Translation debut="0.0" easing="5" fin="450.0">
+<Point x="0.0" y="0.0"/>
+<Point x="1094.0" y="1.0"/>
+</Translation>
+</CompositeAnimation>
+</Comportement>
+<Comportement>
+<objGeo>
+<Cercle Rayon="25.0" centreX="33.0" centreY="273.0">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="26" green="25" red="255"/>
+</Cercle>
+</objGeo>
+<CompositeAnimation>
+<Translation debut="0.0" easing="8" fin="450.0">
+<Point x="0.0" y="0.0"/>
+<Point x="1095.0" y="-1.0"/>
+</Translation>
+</CompositeAnimation>
+</Comportement>
+<Comportement>
+<objGeo>
+<Cercle Rayon="25.0" centreX="33.0" centreY="338.0">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="255" green="0" red="0"/>
+</Cercle>
+</objGeo>
+<CompositeAnimation>
+<Translation debut="0.0" easing="9" fin="450.0">
+<Point x="0.0" y="0.0"/>
+<Point x="1096.0" y="1.0"/>
+</Translation>
+</CompositeAnimation>
+</Comportement>
+<Comportement>
+<objGeo>
+<Etoile centreX="32.0" centreY="412.0" taille="25">
+<Trait blue="0" epaisseur="3.0" green="0" red="0"/>
+<Fond blue="0" green="255" red="255"/>
+</Etoile>
+</objGeo>
+<CompositeAnimation>
+<Translation debut="0.0" easing="3" fin="450.0">
+<Point x="0.0" y="0.0"/>
+<Point x="556.0" y="-58.0"/>
+<Point x="77.0" y="15.0"/>
+<Point x="47.0" y="37.0"/>
+<Point x="769.0" y="-9.0"/>
+<Point x="845.0" y="-22.0"/>
+<Point x="986.0" y="13.0"/>
+<Point x="1086.0" y="12.0"/>
+<Point x="1096.0" y="-4.0"/>
+<Point x="1096.0" y="3.0"/>
+</Translation>
+<Rotation angle="600.0000000000001" centreX="32.0" centreY="412.0" debut="0.0" easing="3" fin="225.0"/>
+<Rotation angle="600.0000000000001" centreX="32.0" centreY="412.0" debut="225.0" easing="9" fin="450.0"/>
+</CompositeAnimation>
+</Comportement>
+</Comportements>
