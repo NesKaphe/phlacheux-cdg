@@ -47,8 +47,6 @@ public class Translation extends Animation {
 	public Translation(double t_debut, double t_fin, int easing,ArrayList<Point2D.Double> listPoint) {
 		super(t_debut, t_fin, easing, "Translation");
 		if(listPoint.size() <2){
-			//TODO : lancer une exception à la place du message d'erreur
-			//throw new ListPointException()//il faut détruire l'objet translation et recommencer
 			System.err.println("\n\nERREUR : Animation-Translation construite mais invalide car la taille listPoint est <2\n\n");
 			this.listPoint = null;
 			this.listToutPoint = null;
@@ -340,7 +338,7 @@ public class Translation extends Animation {
 			//cas pour le dernier segment si c'est une ligne :
 			if((cur_seg == this.nb_seg-1) && nb_points_paire){
 				cur_start_pt = listPoint.get(listPoint.size()-2);
-				cur_end_pt = listPoint.get(listPoint.size()-1);
+				//cur_end_pt = listPoint.get(listPoint.size()-1);
 				cur_point = cur_start_pt;
 				LP.add(listPoint.get(listPoint.size()-2));//avant dernier point
 				LP.add(listPoint.get(listPoint.size()-1));//denier point
@@ -350,7 +348,7 @@ public class Translation extends Animation {
 			}else{//quadCurve
 				
 				cur_start_pt = listPoint.get((cur_seg*2)  );
-				cur_end_pt = listPoint.get((cur_seg*2)+2);
+				//cur_end_pt = listPoint.get((cur_seg*2)+2);
 				cur_point = cur_start_pt;
 				LP.add(  listPoint.get((cur_seg*2)  )  );
 				LP.add(  listPoint.get((cur_seg*2)+1)  );
@@ -424,6 +422,11 @@ public class Translation extends Animation {
 			elem.appendChild(elemFils);
 		}
 		return elem;
+	}
+
+	
+	public ArrayList<Point2D.Double> getListPoint() {
+		return listPoint;
 	}
 	
 }

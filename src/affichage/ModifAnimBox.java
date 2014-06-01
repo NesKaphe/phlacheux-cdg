@@ -177,20 +177,24 @@ public class ModifAnimBox {
 			modifie.setEasing(easingType);
 		}
 		
+		//cas particulier pour modifier une translation :
 		Double debut = Double.parseDouble(((JTextField)message[message.length-3]).getText().toString());
-		modifie.setT_debut(debut * LecteurAnimation.CONSTANTE_TEMPS);
-		
 		Double fin = (debut + Double.parseDouble(((JTextField)message[message.length-1]).getText().toString())) * LecteurAnimation.CONSTANTE_TEMPS;
-		modifie.setT_fin(fin);
-		
-		modifie.setEasing(easingType);
+
 		
 		if (selected.getType().equals("Translation")) {
 			((CompositeAnimation) comp.getAnimation()).remove(selected);
 			Point p = new Point();
 			p.setLocation(comp.getEtatObjGeo(t_courant).getCentre());
-			CreateTrajectoire ct = new CreateTrajectoire((Edition) f,comp,debut,fin, easingType);
+			new CreateTrajectoire((Edition) f,comp,debut,fin, easingType,(Translation) selected);
 			modifie = null;
+		}
+		
+		
+		if (modifie != null){
+			modifie.setT_debut(debut * LecteurAnimation.CONSTANTE_TEMPS);
+			modifie.setT_fin(fin);
+			modifie.setEasing(easingType);
 		}
 		
 		return modifie;

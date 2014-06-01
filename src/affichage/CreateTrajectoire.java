@@ -48,6 +48,11 @@ public class CreateTrajectoire extends JPanel {
 
 
 	public CreateTrajectoire(Edition edition,Comportement comportement,double tempsDebut,double tempsFin, int easing) {
+		this(edition,comportement,tempsDebut,tempsFin,easing,null);
+	}
+	
+	//constructeur qui prend en paramètre une ancienne translation et reprend sa liste de points
+	public CreateTrajectoire(Edition edition,Comportement comportement,double tempsDebut,double tempsFin, int easing,Translation old_translation){
 		super(new BorderLayout());
 		this.edition = edition;
 		this.comp = comportement;
@@ -56,17 +61,30 @@ public class CreateTrajectoire extends JPanel {
 		this.easing = easing;
 		this.buff = edition.getGestionAnimation().getCopyBackBuffer();
 		this.setPreferredSize(edition.getToile().getPreferredSize());
-		this.listPoint = new ArrayList<PointAndShape>();
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.dessinTraj = new GeneralPath();
 		//positionner le premier point ou le point d'origine :
 		pointOrg = new Point();
 		pointOrg.setLocation(comp.getObjGeo().getCentre());
-		listPoint.add(new PointAndShape(pointOrg));
-		//this.fin = new WaitUntilDeath(this);
-		//fin.start();
+		
+		//initialisation de la liste de points de la translation :
+		this.listPoint = new ArrayList<PointAndShape>();
+		if (old_translation == null){
+			listPoint.add(new PointAndShape(pointOrg));
+		}
+		else{
+			ArrayList<Point2D.Double> lp = old_translation.getListPoint();//lp = liste des anciens points
+			for (Point2D.Double p : lp){
+				Point pp = new Point();	//conversion
+				pp.setLocation(p.x+pointOrg.x,p.y+pointOrg.y);
+				this.listPoint.add(new PointAndShape(pp));
+			}
+			GenerateDessinTraj();
+		}
+		
 		this.mouseListener = new CTMouseListener(listPoint,this);
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.actionListener = new TrajListener(this); 
-		this.dessinTraj = new GeneralPath();
+		
 		this.addMouseListener(mouseListener);
 		this.addMouseMotionListener(mouseListener);
 		this.Select = null;
@@ -79,6 +97,7 @@ public class CreateTrajectoire extends JPanel {
 		edition.validate();
 		this.repaint();
 	}
+	
 	
 	public void paintComponent(Graphics g) {
 		System.out.println("DEBUG -repaint trajectoire");
@@ -127,6 +146,7 @@ public class CreateTrajectoire extends JPanel {
 	 * pour générer le dessin de la trajectoire
 	 */
 	public void GenerateDessinTraj(){
+		System.out.println("listPoint.size() = "+listPoint.size());
 		if (listPoint.size() > 1)
 			this.dessinTraj = Translation.generatePath(listPoint);
 	}
