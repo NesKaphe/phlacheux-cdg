@@ -5,17 +5,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Animations.Comportement;
-import Animations.GestionAnimation;
 import affichage.Edition;
 import affichage.Item;
-import affichage.Toile;
 import formes.ObjetGeometrique;
 
 /**

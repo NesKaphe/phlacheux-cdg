@@ -97,21 +97,13 @@ public class ImportXML {
 						}
 						else if (filsElement.getTagName().equals("CompositeAnimation")) {
 							nbFils++;
-							NodeList nodesobj = filsElement.getChildNodes();
-							int k = 0;
-							while(k < nodesobj.getLength()) {
-								if(nodesobj.item(k).getNodeType() == Node.ELEMENT_NODE) {
-									anim = (Element) nodesobj.item(k);
-									break;
-								}
-								k++;
-							}
+							anim = filsElement;
 						}
 					}
 				}
 			}
 			//Chaque comportement n'a que deux fils
-			System.out.println("[XML import : Comportement] nbfils  =   "+nbFils);
+			System.out.println("nbfils  =   "+nbFils);
 			if(nbFils  != 2) {
 				throw new Exception("xml mal formé");
 			}

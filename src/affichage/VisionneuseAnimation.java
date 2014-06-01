@@ -12,15 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -33,9 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 
-import formes.ObjetGeometrique;
 import formes.Rectangle;
 import Animations.Animation;
 import Animations.Comportement;
@@ -49,6 +43,7 @@ import Animations.Translation;
  * @author clement
  *
  */
+@SuppressWarnings("serial")
 public class VisionneuseAnimation extends JScrollPane{
 
 	private JFrame f;
@@ -144,6 +139,7 @@ public class VisionneuseAnimation extends JScrollPane{
 		HashMap<Integer, Comportement> listComp = GA.getListComportements();
 		//pour faire ce foreach voir :
 		// http://stackoverflow.com/questions/4234985/how-to-for-each-the-hashmap
+		System.out.println("listComp = "+GA.getListComportements().size());
 		childPan.removeAll();//on vide le child pan
 		//on va retailler le childPan en fonction du nombres d'élément qu'il va contenir : 
 		int hauteurChildPan = 0;
@@ -191,6 +187,7 @@ public class VisionneuseAnimation extends JScrollPane{
  * @author clement
  *
  */
+@SuppressWarnings("serial")
 class Tempo extends JPanel{
 	private int maxTime ;
 	Tempo(int maxTime){
@@ -232,6 +229,7 @@ class Tempo extends JPanel{
 
 //TODO : tout les commentaires sont modifier pour la nouvelle version avec AnimAndShape
 
+@SuppressWarnings("serial")
 class BlockAnimation extends JPanel {
 	private Comportement Comp;
 	private CompositeAnimation CA;
@@ -574,6 +572,9 @@ class  BlockMouseListener implements MouseListener,MouseMotionListener {
 	
 	@Override
 	public void mousePressed(MouseEvent e){
+		
+		boolean change = false; // Va nous permettre de savoir si un changement a été realisé sur les animations
+		
 		//on recherche l'animation qui a été cliquée :
 		for(ArrayList<AnimAndShape> list_a : lla){
 			for (AnimAndShape aas : list_a){
@@ -586,20 +587,23 @@ class  BlockMouseListener implements MouseListener,MouseMotionListener {
 					else {
 						if(e.getClickCount() > 1){
 							Animation anim = a.getAnimation();
-							Animation changement = ModifAnimBox.createBoxAndModify(anim, parent.getComp(), (double)parent.getCursorPos(), parent.getFrame());
 							
+							Animation changement = ModifAnimBox.createBoxAndModify(anim, parent.getComp(), (double)parent.getCursorPos(), parent.getFrame());
+
 							if(changement != null) {
 								((CompositeAnimation)parent.getComp().getAnimation()).remove(a.getAnimation());
 								((CompositeAnimation)parent.getComp().getAnimation()).add(changement);
+								change = true;
 							}
-							
-							((CompositeAnimation)parent.getComp().getAnimation()).refreshTime();
-							parent.creationLLA();
-							parent.repaint();
 						}
 					}
 				}
 			}
+		}
+		if (change) {
+			((CompositeAnimation)parent.getComp().getAnimation()).refreshTime();
+			parent.creationLLA();
+			parent.repaint();
 		}
 		this.startDrag = true;
 	}

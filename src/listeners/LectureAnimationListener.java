@@ -36,16 +36,9 @@ public class LectureAnimationListener implements ActionListener {
 		case "arret_lecture":
 			lecteur.stop();
 			lecteur.setTempsLecture(0.); //On se remet au debut
-			this.frame.modeEdition();
-			this.frame.getGestionAnimation().refreshDessin();
-			break;
 		case "pause_lecture":
 			lecteur.stop(); //On demande a notre lecteur de se terminer
-			this.frame.modeEdition();
-			this.frame.getGestionAnimation().refreshDessin();
-			break;
 		case "fin":
-			lecteur.setTempsLecture(0.); //On se remet au debut
 			//On passe la frame en mode edition (va reactiver les menus qu'il faut)
 			this.frame.modeEdition();
 			this.frame.getGestionAnimation().refreshDessin();

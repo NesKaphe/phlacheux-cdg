@@ -3,8 +3,6 @@ package listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JList;
-
 import Animations.Comportement;
 import Animations.GestionAnimation;
 import affichage.Toile;

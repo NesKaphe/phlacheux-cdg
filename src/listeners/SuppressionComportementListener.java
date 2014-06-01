@@ -3,21 +3,16 @@ package listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import Animations.Comportement;
 import affichage.Edition;
-import affichage.Item;
 
 public class SuppressionComportementListener implements ActionListener {
 
 	private Edition frame;
-	private CreateObjGeoListener listener;
-	
-	public SuppressionComportementListener(Edition frame, CreateObjGeoListener listener) {
+	public SuppressionComportementListener(Edition frame) {
 		this.frame = frame;
-		this.listener = listener;
 	}
 	
 	public void actionPerformed(ActionEvent e) {

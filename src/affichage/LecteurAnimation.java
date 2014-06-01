@@ -84,7 +84,7 @@ public class LecteurAnimation implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		double tempsAnimation = this.gestionnaire.getEndAnimations();
-		System.out.println(tempsAnimation);
+		
 		this.gestionnaire.refreshDessin();
 		this.tempsLecture += this.step;
 		

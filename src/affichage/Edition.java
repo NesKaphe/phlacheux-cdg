@@ -6,10 +6,12 @@ import importExport.ImportXML;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -23,14 +25,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+
 import listeners.CreateAnimationListener;
 import listeners.CreateObjGeoListener;
 import listeners.LectureAnimationListener;
 import listeners.ListeObjGeoSelectListener;
 import listeners.MouseToileListener;
 import listeners.SuppressionComportementListener;
-
-
 import Animations.Comportement;
 import Animations.GestionAnimation;
 
@@ -108,6 +109,9 @@ public class Edition extends JFrame {
 		super("Edition");
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//On va definir la taille de la fenetre au maximum de l'écran
+		this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
 		
 		//Creation de la toile
 		this.listenerToile = new MouseToileListener(this);
@@ -212,7 +216,7 @@ public class Edition extends JFrame {
     	//ce listener nous crée une alerte box pour créer un objGeométrique:
     	create_obj_listener = new CreateObjGeoListener(this.toile, this.gestionnaire);
     	
-    	suppressionComportementListener = new SuppressionComportementListener(this, create_obj_listener);
+    	suppressionComportementListener = new SuppressionComportementListener(this);
     	
     	liste.setBackground(Color.lightGray);
     	

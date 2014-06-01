@@ -135,7 +135,10 @@ public class ModifAnimBox {
 	
 	private static Animation modify(Animation selected, Comportement comp, Object[] message, double t_courant, JFrame f) {
 		Animation modifie = null;
+		
+		@SuppressWarnings("unchecked")
 		String select = ((JComboBox<String>) message[message.length-5]).getSelectedItem().toString();
+		
 		int easingType = ModifAnimBox.getEasingType(select);
 		System.out.println("C'est le easing "+ easingType+ "qui est selectionné");
 		

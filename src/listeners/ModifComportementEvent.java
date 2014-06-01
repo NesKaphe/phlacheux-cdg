@@ -4,13 +4,12 @@ import java.awt.event.ActionEvent;
 
 import Animations.Comportement;
 
-import formes.ObjetGeometrique;
-
 /**
  * C'est un action event contenant directement l'objet geometrique
  * @author Alain
  *
  */
+@SuppressWarnings("serial")
 public class ModifComportementEvent extends ActionEvent {
 
 	private Comportement compAModif;

@@ -3,9 +3,6 @@ package Animations;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -36,6 +33,11 @@ public class CompositeAnimation extends Animation{
 	}
 	
 	
+	/**
+	 * Va ajouter une animation a nos animation filles
+	 * @param a l'animation a ajouter
+	 * @return boolean vrai si l'ajout s'est bien deroulée et faux sinon
+	 */
 	public boolean add(Animation a){
 		
 		//modifications de références pour l'enfant :
@@ -51,6 +53,11 @@ public class CompositeAnimation extends Animation{
 	}
 	
 	
+	/**
+	 * Va essayer de voir si l'animation est notre parent
+	 * @param a l'animation à verifier
+	 * @return boolean vrai si l'animation est un parent et faux sinon
+	 */
 	private boolean isMyParent(Animation a) {
 		if(a instanceof CompositeAnimation) {
 			ArrayList<Animation> anims = ((CompositeAnimation) a).getAllChilds();
@@ -66,6 +73,11 @@ public class CompositeAnimation extends Animation{
 	}
 	
 	
+	/**
+	 * Va supprimer une animation parmis nos fils
+	 * @param a l'animation à supprimer
+	 * @return boolean vrai si la suppression s'est bien deroulée et faux sinon
+	 */
 	public boolean remove(Animation a){
 		a.setParent(null);//on lui détruit sa référence sur le parent
 		boolean suppression = this.ChildAnimations.remove(a);

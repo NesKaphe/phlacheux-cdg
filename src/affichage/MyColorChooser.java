@@ -11,6 +11,7 @@ import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+@SuppressWarnings("serial")
 public class MyColorChooser extends JColorChooser{
 
 	public MyColorChooser() {
