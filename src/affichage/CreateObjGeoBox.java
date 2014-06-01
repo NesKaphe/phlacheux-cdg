@@ -181,7 +181,7 @@ public class CreateObjGeoBox{
 				if(this.objGeo == null){//mode création
 					champ_h = new CreateChamp("Hauteur :", default_taille);
 					champ_l = new CreateChamp("Largeur :", default_taille);
-					objGeo = new Rectangle("rectangle", new Point2D.Double(0,0), default_taille, default_taille);
+					objGeo = new Rectangle("Rectangle", new Point2D.Double(0,0), default_taille, default_taille);
 				}
 				else{//mode modification
 					champ_h = new CreateChamp("Hauteur :", ((Rectangle)objGeo).getHeight());

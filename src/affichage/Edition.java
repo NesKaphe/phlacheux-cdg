@@ -100,7 +100,7 @@ public class Edition extends JFrame {
 	JMenuItem mi_Croix = new JMenuItem("Croix");
 	
 	JMenuItem mi_lecture_debut = new JMenuItem("Lecture depuis le debut");
-	JMenuItem mi_arret_lecture = new JMenuItem("Arret lecture");
+	JMenuItem mi_arret_lecture = new JMenuItem("Revenir au debut");
 	JMenuItem mi_pause_lecture = new JMenuItem("Pause");
 	JMenuItem mi_reprendre_lecture = new JMenuItem("Reprendre lecture");
 	JMenuItem mi_changer_fps = new JMenuItem("Changer FPS");
@@ -364,7 +364,7 @@ public class Edition extends JFrame {
 		mi_Croix.setEnabled(true);
 		
 		mi_lecture_debut.setEnabled(true);
-    	mi_arret_lecture.setEnabled(false);
+    	mi_arret_lecture.setEnabled(true);
     	mi_pause_lecture.setEnabled(false);
     	mi_changer_fps.setEnabled(true);
     	
