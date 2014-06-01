@@ -34,7 +34,7 @@ public class ModifAnimBox {
 	public static JComboBox<String> generateComboBoxEasing() {
 		//On crée un vector qui servira a initialiser le JComboBox
 		Vector<String> easings = new Vector<String>();
-		
+
 		//Ajout de toutes les easing function dans le vecteur
 		easings.add("Lineaire");
 		easings.add("Smooth step");
@@ -48,12 +48,11 @@ public class ModifAnimBox {
 		easings.add("Power cube");
 		
 		return new JComboBox<String>(easings);
-				
 	}
 	
 	public static int getEasingType(String selectionEasing) {
 		switch(selectionEasing) {
-		case "Leneaire":
+		case "Lineaire":
 			return EasingFunction.LINEAR;
 		case "Smooth step":
 			return EasingFunction.SMOOTHSTEP;
