@@ -362,6 +362,8 @@ public class Edition extends JFrame {
 		mi_lecture_debut.setEnabled(true);
     	mi_arret_lecture.setEnabled(false);
     	mi_pause_lecture.setEnabled(false);
+    	mi_changer_fps.setEnabled(true);
+    	
     	if(this.lecteur.getTempsCourant()>0. && this.lecteur.getTempsCourant()<this.gestionnaire.getEndAnimations())
     		mi_reprendre_lecture.setEnabled(true);
     	else
@@ -394,6 +396,7 @@ public class Edition extends JFrame {
 		mi_lecture_debut.setEnabled(false);
     	mi_arret_lecture.setEnabled(true);
     	mi_pause_lecture.setEnabled(true);
+    	mi_changer_fps.setEnabled(false);
     	
     	mi_reprendre_lecture.setEnabled(false);
 		

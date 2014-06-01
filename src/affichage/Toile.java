@@ -112,14 +112,15 @@ public class Toile extends JPanel {
 	public void dessineObjet(ObjetGeometrique geo) {		
 		Graphics2D g = (Graphics2D) this.backBuffer.getGraphics();
 
-		g.setStroke(geo.getStroke());
-		g.setColor(geo.getStrokeColor());
-		g.draw(geo.getShape());
-		
 		if(geo.getFillColor() != null) {
 			g.setColor(geo.getFillColor());
 			g.fill(geo.getShape());
 		}
+		
+		g.setStroke(geo.getStroke());
+		g.setColor(geo.getStrokeColor());
+		g.draw(geo.getShape());
+		
 	}
 	
 	/**
