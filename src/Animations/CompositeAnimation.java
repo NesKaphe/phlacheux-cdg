@@ -37,21 +37,36 @@ public class CompositeAnimation extends Animation{
 	
 	
 	public boolean add(Animation a){
-		//TODO : pour l'instant on ajoute sans discrimination à faire plus tard!!!
-		//TODO : PROBLEME :la version actuelle peux boucler add de soit même ou d'un parent a exclure
-		//TODO : solution faire une méthode isMyparent pour empècher qu'il y ait des boucles avec les parents
-		//TODO : tester isMyParent(a)
 		
 		//modifications de références pour l'enfant :
-		a.setParent(this);//modification du parent
-		//modification des temps du parent qui est calé sur le temps min et temps max de ses enfants:
-		this.ChangeTminTmax(a.getT_debut(), a.getT_fin());
+		if(! this.isMyParent(a) ) {
+			a.setParent(this);//modification du parent
+			//modification des temps du parent qui est calé sur le temps min et temps max de ses enfants:
+			this.ChangeTminTmax(a.getT_debut(), a.getT_fin());
+			
+			return this.ChildAnimations.add(a);
+		}
 		
-		return this.ChildAnimations.add(a);
+		return false;
 	}
 	
+	
+	private boolean isMyParent(Animation a) {
+		if(a instanceof CompositeAnimation) {
+			ArrayList<Animation> anims = ((CompositeAnimation) a).getAllChilds();
+			
+			for(Animation anim : anims) {
+				if(anim.equals(this)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	
 	public boolean remove(Animation a){
-		//TODO : éventuellement faire un message contenant tout ce qui à été supprimé
 		a.setParent(null);//on lui détruit sa référence sur le parent
 		boolean suppression = this.ChildAnimations.remove(a);
 		
@@ -133,7 +148,7 @@ public class CompositeAnimation extends Animation{
 		}
 		
 		at_retour.concatenate(rotation); //On ne fait la rotation "concretement" qu'a la fin
-		//setTrans(at_retour);
+		
 		return at_retour;
 	}
 	

@@ -17,10 +17,8 @@ public class Triangle extends ObjetGeometrique {
 
 	private int taille;//taille d'un coté
 	private Point2D.Double translation_centre;//pour sauvegarder position finale ou va se situer le dessin
-										//TODO : voir si c'est l'endroit approprié
 	
 	
-	//TODO faire une taille minimum de 2 ou 3 sinon probable bug (raison : division entière de 1 par 2 = 0)
 	public Triangle(Point2D.Double centre,int taille) {
 		super("Triangle", null, Color.yellow, Color.black);
 		this.translation_centre = centre;//impossible de positionner le centre directement

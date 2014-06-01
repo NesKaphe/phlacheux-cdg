@@ -28,7 +28,6 @@ public abstract class Animation {
 		this.easingFunction = new EasingFunction(easing);
 
 	}
-	//TODO : il serait utile de faire un constructeur par recopie
 	
 	public Animation(Animation anim) {
 		this.t_debut = anim.t_debut;
@@ -202,7 +201,6 @@ public abstract class Animation {
 	 */
 	public void setT_debut(Double t_debut) {
 		this.t_debut = t_debut;
-		//ChangeTminTmax(t_debut , t_fin);//TODO : à faire fonctionner (bug quand on termine une translation)
 	}
 	
 	/**
@@ -211,7 +209,6 @@ public abstract class Animation {
 	 */
 	public void setT_fin(Double t_fin) {
 		this.t_fin = t_fin;
-		//ChangeTminTmax(t_debut , t_fin);//TODO : à faire fonctionner (bug quand on termine une translation)
 	}
 	
 	/*
@@ -234,7 +231,7 @@ public abstract class Animation {
 	
 
 	@Override
-	public String toString() {//TODO : faire une noivelle version
+	public String toString() {
 		return "Animation [id=" + id + ", type=" + type + ", parent=" + parent
 				+ ", t_debut=" + t_debut + ", t_fin=" + t_fin + ", easing="
 				+ easing + "]";
@@ -246,6 +243,21 @@ public abstract class Animation {
 	 * @return un element qui sera ajouté au fichier xml final
 	 */
 	public abstract Element toXml(Document domDocument);
+	
+	
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		
+		if( !(o instanceof Animation) ) {
+			return false;
+		}
+		
+		Animation animation = (Animation) o;
+		
+		return this.getId() == animation.getId(); //L'id etant unique, si l'objet a le même que nous, c'est qu'on parle du même objet
+	}
 }
 
 

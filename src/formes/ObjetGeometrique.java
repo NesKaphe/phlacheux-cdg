@@ -17,7 +17,6 @@ public abstract class ObjetGeometrique {
 	protected Color fillColor;
 	protected Color strokeColor;
 	protected Shape forme;
-	//TODO : rajouter un id qui sera donné par GestionAnimation
 	
 	/**
 	 * constructeur ObjetGeometrique
@@ -122,22 +121,11 @@ public abstract class ObjetGeometrique {
 	public Shape getShape() {
 		return this.forme;
 	}
-	
-	public String getInfos() {//TODO : sert pas à grand chose
-		Class<?> enclosingClass = getClass().getEnclosingClass();
-		String nomclass;
-		if (enclosingClass != null) {
-		  nomclass = enclosingClass.getSimpleName();
-		} else {
-		  nomclass = getClass().getSimpleName();
-		}
-		return ""+this.getNom()+"@"+nomclass;
-	}
+
 	
 	/*
 	 *  setters
 	 */
-	
 	public void setNom(String nom) {
 		this.nom = nom;
 	}

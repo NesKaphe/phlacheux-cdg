@@ -56,7 +56,7 @@ public class CreateObjGeoListener implements ActionListener{
 
 
 	
-	private void __Action(String[] commands){//TODO : recevoir un String 
+	private void __Action(String[] commands){
 		CreateObjGeoBox alert_box = null;
 		switch(commands[0]){
 			case "create":
@@ -65,19 +65,17 @@ public class CreateObjGeoListener implements ActionListener{
 				break ;
 			case "modif" :
 				System.out.println("Alert box modif");
-				alert_box = new CreateObjGeoBox(gestionnaire, this.objGeoAModifier.getObjGeo());//TODO : a finir
+				alert_box = new CreateObjGeoBox(gestionnaire, this.objGeoAModifier.getObjGeo());
 				break;
 			default:
-				System.err.println("\n\ncommande\""+commands[0]+//TODO : une fois modifier changer ça
+				System.err.println("\n\ncommande\""+commands[0]+
 				"...\"non reconnu\nforme attendu :\"create_+nomObj\" ou \"modif_+nomObj\"\n\n");
 		}
 		ObjetGeometrique geo = alert_box.GenerateAndConfigureBox();
-		//TODO : attention rajouter une suppresion si c'est une modification d'objet
 		//si geo est a null c'est que l'action est annulée
 		if (geo != null){
 			if(this.objGeoAModifier == null) {
 				this.toile.modeAjout();
-				//toile.setObjTemporaire(geo);//la toile va se chager de dessiner l'objet
 				this.gestionnaire.setObjGeoEnCreation(geo);
 			}
 			else {

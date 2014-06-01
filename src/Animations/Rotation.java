@@ -44,7 +44,7 @@ public class Rotation extends Animation{
 		//si pu est négatif c'est que notre temps courant n'est pas bon
 		if (pu <0.0)
 			return null;
-		a_courrant = this.angle * pu; //TODO : plustard utiliser les easing functions( ajouter : *easing)
+		a_courrant = this.angle * pu;
 		//System.out.println("angle vaux ="+Math.round(Math.toDegrees(a_courrant))+"°  \tid="+getId());//info dev pour le teste
 		AffineTransform at = new AffineTransform();
 		at.setToRotation(a_courrant,centre.x,centre.y);
@@ -125,7 +125,6 @@ class testeRotation{
 		//teste affichage
 		System.out.println("ca :"+ca+"\nr1"+r1+"\nr2"+r2+"\n\n\n");
 		
-		//teste add (la version actuelle peux boucler add de soit même ou d'un parent)
 		ca.add(r1);
 		ca.add(r2);
 		
@@ -228,7 +227,6 @@ class testeRotation{
 			try {
 				Thread.sleep((long) (5000));
 			} catch (InterruptedException e) {
-				// TODO Bloc catch généré automatiquement
 				e.printStackTrace();
 			}
 		}

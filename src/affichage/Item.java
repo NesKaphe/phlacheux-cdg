@@ -1,5 +1,9 @@
 package affichage;
 
+/**
+ * Classe pour assosier un id a un objet dans une JList
+ * @author Alain
+ */
 public class Item {
 
 	private int id;

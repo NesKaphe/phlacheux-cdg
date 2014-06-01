@@ -53,16 +53,16 @@ public class Comportement {
 	}
 
 	public ObjetGeometrique getEtatObjGeo(Double t_courant) {
-		//TODO: appliquer Animation pour obtenir l'état a l'instant T de l'objet
 		//retourne null si l'objet n'existait pas a l'instant T ???
 		
 		
 		//cas ou il n'y a pas d'animation relier à l'objet
 		if (this.a == null)
-			//TODO : revoyer null plus tard quand isVisible sera implémenté
-			return this.objGeo;//cas particulier (attention il ne faut pas modifer l'objet)
+			return this.objGeo;
 		
-		//ICI : récupération de toutes les animations
+		
+		//Récupération de toutes les animations
+		
 		//AffineTransform
 		AffineTransform at = a.getAffineTransform(t_courant);
 		
@@ -122,9 +122,8 @@ public class Comportement {
 				FillColor = new Color(r, g, b);
 			}
 		}
-		//TODO : récupération couleur stroke ,couleur fill,stroke ...
 
-		return objGeo.AppliqueAnimation(at, FillColor, colorStroke, stroke);//TODO : null parceque pas encore implémenté les autre animations
+		return objGeo.AppliqueAnimation(at, FillColor, colorStroke, stroke);
 	}
 
 	public String toString() {

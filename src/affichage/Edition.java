@@ -102,6 +102,7 @@ public class Edition extends JFrame {
 	JMenuItem mi_arret_lecture = new JMenuItem("Arret lecture");
 	JMenuItem mi_pause_lecture = new JMenuItem("Pause");
 	JMenuItem mi_reprendre_lecture = new JMenuItem("Reprendre lecture");
+	JMenuItem mi_changer_fps = new JMenuItem("Changer FPS");
 	
 	public Edition() {
 		super("Edition");
@@ -153,6 +154,7 @@ public class Edition extends JFrame {
     	menu_L.add(mi_arret_lecture);
     	menu_L.add(mi_pause_lecture);
     	menu_L.add(mi_reprendre_lecture);
+    	menu_L.add(mi_changer_fps);
     	menuBarEditionMode.add(menu_L);
     	
     	//création et ajout du listener des menuItem :
@@ -174,6 +176,7 @@ public class Edition extends JFrame {
     	mi_arret_lecture.setActionCommand("arret_lecture");
     	mi_pause_lecture.setActionCommand("pause_lecture");
     	mi_reprendre_lecture.setActionCommand("reprendre_lecture");
+    	mi_changer_fps.setActionCommand("change_fps");
     	 	
     	//Formes
     	// menu d'ajout d'objet
@@ -213,7 +216,7 @@ public class Edition extends JFrame {
     	
     	liste.setBackground(Color.lightGray);
     	
-    	listenerAnimations = new CreateAnimationListener(liste, this.visionneuse,this);//TODO changer le constructeur pour qu'il ne récupère que l'editions puis que toile contient liste et visioneuse
+    	listenerAnimations = new CreateAnimationListener(this);
     	
     	boutonAjoutAnimation = new JButton("Creer animation");
     	boutonAjoutAnimation.setEnabled(false);
@@ -253,7 +256,6 @@ public class Edition extends JFrame {
     	this.initListeners();
     	this.modeEdition();
     	
-    	//TODO : on va voir si c'est vraiment utile ========================================
     	mi_new.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			gestionnaire.viderComportements();
@@ -271,8 +273,6 @@ public class Edition extends JFrame {
     	
     	mi_export_xml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//creer un objet ExportXML
-					//Lui dire de sauvegarder le fichier xml
 				ExportXML export = new ExportXML(gestionnaire);
 				export.doExport();
 			}
@@ -298,7 +298,6 @@ public class Edition extends JFrame {
 	    });
 
     	this.MAJListeObjGeo();//mettre à jour la liste d'objets Géométriques
-    	//===============================================================================
 	}
 	
 	
@@ -331,6 +330,7 @@ public class Edition extends JFrame {
     	mi_arret_lecture.addActionListener(lectureListener);
     	mi_pause_lecture.addActionListener(lectureListener);
     	mi_reprendre_lecture.addActionListener(lectureListener);
+    	mi_changer_fps.addActionListener(lectureListener);
     	
     	boutonAjoutAnimation.addActionListener(listenerAnimations);
     	boutonSuppressionComportement.addActionListener(suppressionComportementListener);

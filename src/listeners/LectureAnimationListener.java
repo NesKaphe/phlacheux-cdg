@@ -3,6 +3,9 @@ package listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 import affichage.Edition;
 import affichage.LecteurAnimation;
 
@@ -33,12 +36,36 @@ public class LectureAnimationListener implements ActionListener {
 		case "arret_lecture":
 			lecteur.stop();
 			lecteur.setTempsLecture(0.); //On se remet au debut
+			this.frame.modeEdition();
+			this.frame.getGestionAnimation().refreshDessin();
+			break;
 		case "pause_lecture":
 			lecteur.stop(); //On demande a notre lecteur de se terminer
-		case "fin": //TODO: Redondance avec le arret_lecture, peut etre utilisr la même commande
+			this.frame.modeEdition();
+			this.frame.getGestionAnimation().refreshDessin();
+			break;
+		case "fin":
+			lecteur.setTempsLecture(0.); //On se remet au debut
 			//On passe la frame en mode edition (va reactiver les menus qu'il faut)
 			this.frame.modeEdition();
 			this.frame.getGestionAnimation().refreshDessin();
+			break;
+		case "change_fps":
+			JTextField fps = new JTextField(""+lecteur.getFPS());
+			Object[] contenu = {
+				    "FPS :", 
+				    fps
+				};
+			int option = JOptionPane.showConfirmDialog(null, contenu, "Images par seconde", JOptionPane.OK_CANCEL_OPTION);
+			if(option == JOptionPane.OK_OPTION) {
+				try {
+					int frames = Integer.parseInt(fps.getText());
+					lecteur.setFps(frames);
+				}
+				catch(NumberFormatException except) {
+					except.printStackTrace();
+				}
+			}
 			break;
 		}	
 	}

@@ -50,8 +50,6 @@ public class CreateObjGeoBox{
 		this.objGeo = objGeo;
 		this.default_taille = 100;
 		nomBox = "modification :"+type;
-		//TODO : celui qui appel celle métode se charge de supprimer l'objet
-		//si GenerateAndConfigureBox() retourne null on supprime l'ancien objGeo
 	}
 
 	private void initColorChooser(){
@@ -159,7 +157,6 @@ public class CreateObjGeoBox{
 		CreateChamp champ_strokeW = new CreateChamp("Taille du trait :", 1);
 		config_forme.add(champ_strokeW, BorderLayout.SOUTH);
 		
-		//TODO : il y a beaucoup de pseudo-redondance mais bon la flème de tout changer
 		switch(type) {
 			case "Cercle":
 				CreateChamp champ_rayon;
@@ -184,7 +181,7 @@ public class CreateObjGeoBox{
 				if(this.objGeo == null){//mode création
 					champ_h = new CreateChamp("Hauteur :", default_taille);
 					champ_l = new CreateChamp("Largeur :", default_taille);
-					objGeo = new Rectangle("rectangle", new Point2D.Double(0,0), default_taille, default_taille);//TODO : ce constructeur ne sera plus accèssible
+					objGeo = new Rectangle("rectangle", new Point2D.Double(0,0), default_taille, default_taille);
 				}
 				else{//mode modification
 					champ_h = new CreateChamp("Hauteur :", ((Rectangle)objGeo).getHeight());

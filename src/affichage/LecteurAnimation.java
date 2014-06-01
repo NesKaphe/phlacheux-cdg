@@ -54,7 +54,12 @@ public class LecteurAnimation implements ActionListener {
 		if(fps > 0) {
 			this.fps = fps;
 			this.delay = 1000/fps;
+			this.timer = new Timer(delay, this);
 		}
+	}
+	
+	public int getFPS() {
+		return this.fps;
 	}
 	
 	public void setTempsLecture(double tempsLecture) {
