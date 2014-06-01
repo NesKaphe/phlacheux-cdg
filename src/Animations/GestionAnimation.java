@@ -145,15 +145,23 @@ public class GestionAnimation {
 	}
 
 	public Entry<Integer, ObjetGeometrique> getObjectAt(int x, int y, double t_courant) {
+		AbstractMap.SimpleEntry<Integer, ObjetGeometrique> simpleEntry = null;
+		
 		//On va parcourir le hashmap des comportements et voir si le point x, y est contenu dans le shape
 		for(Entry<Integer, Comportement> entry : this.Comportements.entrySet()) {
 			Comportement c = entry.getValue();
 			ObjetGeometrique geo = c.getEtatObjGeo(t_courant);
 			Shape shape = geo.getStroke().createStrokedShape(geo.getShape());
-			if(shape.contains(x,y) || geo.getShape().contains(x,y))
-				return new AbstractMap.SimpleEntry<Integer, ObjetGeometrique>(entry.getKey(), geo);
+			if(shape.contains(x,y) || geo.getShape().contains(x,y)) {
+				if(simpleEntry == null) {
+					simpleEntry = new AbstractMap.SimpleEntry<Integer, ObjetGeometrique>(entry.getKey(), geo);
+				}
+				else if (simpleEntry.getKey() < entry.getKey()) {
+					simpleEntry = new AbstractMap.SimpleEntry<Integer, ObjetGeometrique>(entry.getKey(), geo);
+				}
+			}
 		}
-		return null; //On renvoie null si on n'a pas trouvé d'objet ayant les coordonnées x,y a l'instant t_courant
+		return simpleEntry; //On renvoie null si on n'a pas trouvé d'objet ayant les coordonnées x,y a l'instant t_courant
 	}
 	
 	public ObjetGeometrique getObject(int id, double t_courant) {
