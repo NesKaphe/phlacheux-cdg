@@ -253,25 +253,15 @@ public class Translation extends Animation {
 
 		//on explore tout les pixels environants sauf celui d'où l'on vien:
 		for(int i=0;i<8;i++){
-			//solution pour optimiser la recherche autour du point :
-			switch(i){
-			case 0:break;								//mm dir que la précédente
-			case 1: dir = dir.nextDir();break;						//dir sens horaire +1
-			case 2: dir = dir.prevDir();break;						//dir sens anti-horaire +1
-			case 3: dir = dir.nextDir().nextDir();break;			//dir sens horaire +2
-			case 4: dir = dir.prevDir().prevDir();break;			//dir sens anti-horaire +2
-			case 5: dir = dir.nextDir().nextDir().nextDir();break;	//dir sens horaire +3
-			case 6: dir = dir.prevDir().prevDir().prevDir();break;	//dir sens anti-horaire +3
-			case 7: dir = dir.prevDir().prevDir().prevDir().prevDir();break;
-			}
+			dir = dir.nextDir();//direction suivante
 			nextPts = dir.CorespondPoint(pt);
-			//System.out.println("DEBUG -nextPts ="+nextPts);
+			//System.out.println("DEBUG -nextPts ="+nextPts+" dir ="+dir+" cas ="+i); //info debug
 			if(seg_gp.intersects(nextPts.getX(),nextPts.getY(),1,1)){
 				cur_dir = dir;
 				return true;
 			}
 		}
-		return false;//on a rien trouvé 
+		return false;//on a rien trouvé
 	}
 	
 	
@@ -302,8 +292,9 @@ public class Translation extends Animation {
 			case 3: dir = cur_dir.nextDir().nextDir();break;			//dir sens horaire +2
 			case 4: dir = cur_dir.prevDir().prevDir();break;			//dir sens anti-horaire +2
 			case 5: dir = cur_dir.nextDir().nextDir().nextDir();break;	//dir sens horaire +3
-			case 6: dir = cur_dir.prevDir().prevDir().prevDir();break;	//dir sens anti-horaire +3
+			case 6: dir = cur_dir.nextDir().nextDir().nextDir();break;	//dir sens anti-horaire +3
 			}
+			System.out.println("DEBUG - cur_dir ="+cur_dir);
 			nextPts = dir.CorespondPoint(cur_point);
 			System.out.println("DEBUG -nextPts ="+nextPts+"  cas ="+i);
 			if(seg_gp.intersects(nextPts.getX(),nextPts.getY(),1,1)){
@@ -354,8 +345,8 @@ public class Translation extends Animation {
 				LP.add(listPoint.get(listPoint.size()-2));//avant dernier point
 				LP.add(listPoint.get(listPoint.size()-1));//denier point
 				cur_seg_gp = generateSegmentPath(LP);//généré le chemin
-				initCurDir(cur_seg_gp, cur_start_pt);//initiliser le "cur_dir"
-				
+				boolean init_cur_dir = initCurDir(cur_seg_gp, cur_start_pt);//initiliser le "cur_dir"
+				System.out.println("DEBUG init_cur_dir ="+init_cur_dir);
 			}else{//quadCurve
 				
 				cur_start_pt = listPoint.get((cur_seg*2)  );
@@ -365,11 +356,12 @@ public class Translation extends Animation {
 				LP.add(  listPoint.get((cur_seg*2)+1)  );
 				LP.add(  listPoint.get((cur_seg*2)+2)  );
 				cur_seg_gp = generateSegmentPath(LP);
-				initCurDir(cur_seg_gp, cur_start_pt);
+				boolean init_cur_dir = initCurDir(cur_seg_gp, cur_start_pt);
+				System.out.println("DEBUG init_cur_dir ="+init_cur_dir);
 			}
 		}
 		//============================================
-		
+		System.out.println("DEBUG : cur_point = "+cur_point);
 
 		//on recupère le point suivant dans le segment:
 		Point2D.Double pre_point = cur_point;//sauvegarde du point précédent

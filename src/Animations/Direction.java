@@ -114,7 +114,7 @@ public enum Direction {
 	 * @return
 	 */
 	public Point2D.Double CorespondPoint(Point2D.Double p_org){
-		//COMENT : "swicth case" impossible je ne comprend pas l'erreur
+		//COMMENT : "swicth case" impossible je ne comprend pas l'erreur
 		if 		 (this.chiffreDir == 0){
 			System.err.println("NO_DIR!!!!");
 			return p_org;
@@ -135,7 +135,7 @@ public enum Direction {
 		}else if (this.chiffreDir == 8){
 			return new Point2D.Double(p_org.x-1,p_org.y);
 		}else{
-			System.err.println("Bravo vous avez craqué le système car ce cas est impossible");
+			System.err.println("ce cas est impossible");
 			return null;//problème
 		}
 		
