@@ -1,11 +1,5 @@
 package Animations;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -13,16 +7,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import formes.Rectangle;
-
 import affichage.PointAndShape;
-import affichage.Toile;
+
 
 public class Translation extends Animation {
 	
@@ -41,7 +30,6 @@ public class Translation extends Animation {
 	private GeneralPath cur_seg_gp = null;//le generalPath du segment courant
 	private boolean nb_points_paire = false;//pour savoir si nous finissons par une line
 	private Point2D.Double cur_start_pt = null;
-	private Point2D.Double cur_end_pt = null;//point courant de fin du segment TODO : A supprimer
 	private Set<Point2D.Double> cur_list_points;//pour savoir si nous avons des points en double dans un segment
 	
 	public Translation(double t_debut, double t_fin, int easing,ArrayList<Point2D.Double> listPoint) {
@@ -72,7 +60,6 @@ public class Translation extends Animation {
 		
 		Point2D.Double pt = this.listToutPoint.get((int)distance);//position du point à cette instant
 		AffineTransform at = new AffineTransform();
-		//at.translate(-start_pt.x, -start_pt.y);
 		at.translate(pt.x, pt.y);
 		
 		return at;
@@ -338,7 +325,6 @@ public class Translation extends Animation {
 			//cas pour le dernier segment si c'est une ligne :
 			if((cur_seg == this.nb_seg-1) && nb_points_paire){
 				cur_start_pt = listPoint.get(listPoint.size()-2);
-				//cur_end_pt = listPoint.get(listPoint.size()-1);
 				cur_point = cur_start_pt;
 				LP.add(listPoint.get(listPoint.size()-2));//avant dernier point
 				LP.add(listPoint.get(listPoint.size()-1));//denier point
@@ -348,7 +334,6 @@ public class Translation extends Animation {
 			}else{//quadCurve
 				
 				cur_start_pt = listPoint.get((cur_seg*2)  );
-				//cur_end_pt = listPoint.get((cur_seg*2)+2);
 				cur_point = cur_start_pt;
 				LP.add(  listPoint.get((cur_seg*2)  )  );
 				LP.add(  listPoint.get((cur_seg*2)+1)  );
@@ -430,280 +415,3 @@ public class Translation extends Animation {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//==========================================================================================================
-//==========================================================================================================
-//===================EN DESSOUS PLEIN DE TESTES=============================================================
-//==========================================================================================================
-//==========================================================================================================
-
-
-
-
-
-class testeTranslation{
-
-	public static void main(String[] args) {
-
-		/*
-		 //autre teste :
-		JFrame f = new JFrame("teste");
-		petiteToile t = new petiteToile();
-		f.setSize(500, 500);
-		f.getContentPane().add(t);
-		f.repaint();
-		f.setVisible(true);
-		//boucle pour voir l'animation de façon détourné :
-		
-		
-		while(true){
-			//t.foo();
-			f.repaint();
-			try {
-				//Thread.sleep((long) (1000));
-				Thread.sleep((long) (100));
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		*/
-		JFrame frame = new JFrame("Visionneuse");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Toile t = new Toile(new Dimension(500,500));
-		frame.getContentPane().add(t);
-		frame.pack();
-		frame.setVisible(true);
-		GestionAnimation gest = new GestionAnimation(t);
-		
-		
-		Rectangle rect = new Rectangle("monrectangle", new Point2D.Double(30,30), 70, 40);
-		rect.setStrokeWidth(2);
-		rect.setStrokeColor(Color.red);
-		rect.setFillColor(Color.yellow);
-		
-		
-		//création des points
-		Point2D.Double p1 = new Point2D.Double(30,30);
-		Point2D.Double p2 = new Point2D.Double(260,160);
-		Point2D.Double p3 = new Point2D.Double(30,180);
-		Point2D.Double p4 = new Point2D.Double(260,350);
-		Point2D.Double p5 = new Point2D.Double(100,300);
-		Point2D.Double p6 = new Point2D.Double(260,250);
-		ArrayList<Point2D.Double> LP = new ArrayList<Point2D.Double>();
-		LP.add(p1);
-		LP.add(p2);
-		LP.add(p3);
-		LP.add(p4);
-		LP.add(p5);
-		LP.add(p6);
-		
-		//création de l'animation translation :
-		Translation tr1 = new Translation(0., 500., 0, LP);
-		//création d'une rotation :
-		Rotation r1 = new Rotation(0., 500., 0, Math.toRadians(-720),rect.getCentre());
-		
-		CompositeAnimation ca = new CompositeAnimation(0., 500., 0);
-		
-		
-		ca.add(tr1);
-		ca.add(r1);
-		
-		gest.ajouterComportement(rect, ca);
-		
-		for(int j=0;j<10;j++)
-		{
-			for(double i=0.;i<500.;i+=3.){
-				gest.dessinerToile(i);
-				//System.out.println("main  i ="+i);
-				try {
-					//Thread.sleep((long) (1000));
-					Thread.sleep((long) (50));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-	}
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//====pour le DEBUG 
-//TODO : à retirer pour la version final
-class petiteToile extends JPanel{
-	private static final long serialVersionUID = 1L;
-	private static int compteur = 0;
-	
-
-	
-	public petiteToile() {
-		this.setPreferredSize(new Dimension(500,500));
-	}
-	
-	@Override
-	public void setPreferredSize(Dimension preferredSize) {
-		super.setPreferredSize(preferredSize);
-		this.setBackground(Color.white);
-	}
-	
-	
-	public void foo(){
-		return;
-	}
-	
-	private void desine_point(Graphics2D g2,Point2D p,int taille){
-		//vertical:
-		g2.drawLine((int)p.getX(),(int)p.getY()+taille,(int)p.getX(),(int)p.getY()-taille);
-		//horizontal:
-		g2.drawLine((int)p.getX()+taille,(int)p.getY(),(int)p.getX()-taille,(int)p.getY());
-	}
-	
-	@Override
-	protected void paintComponent(Graphics g) {
-		System.out.println("------------repaint-------------");
-		Graphics2D g2 = (Graphics2D)g;
-		super.paintComponent(g2);
-		g2.setStroke(new BasicStroke(1));
-		
-		//===PREMIERS TESTES=================
-		//Points :
-		Point2D.Double p = new Point2D.Double(30,180);//points de test
-		Point2D.Double p1 = new Point2D.Double(30,30);
-		Point2D.Double p2 = new Point2D.Double(260,160);
-		Point2D.Double p3 = new Point2D.Double(30,180);
-		Point2D.Double p4 = new Point2D.Double(260,350);
-		Point2D.Double p5 = new Point2D.Double(100,300);
-		Point2D.Double p6 = new Point2D.Double(260,250);
-		/*
-		 * 
-		//dessin des points :
-		g2.setColor(Color.green);
-		this.desine_point(g2, p1,5);
-		this.desine_point(g2, p2,5);
-		this.desine_point(g2, p3,5);
-		//dessin point de teste :
-		g2.setColor(Color.lightGray);
-		this.desine_point(g2, p, 5);
-		
-		//General Path (les points sont mis à la main):
-		GeneralPath gp7 = new GeneralPath(GeneralPath.WIND_NON_ZERO);
-		gp7.moveTo(p1.x,p1.y);
-		gp7.quadTo(p2.x, p2.y, p3.x, p3.y);
-		gp7.lineTo(p4.x, p4.y);
-		//chemin inverse
-		gp7.lineTo(p3.x, p3.y);
-		gp7.quadTo( p2.x, p2.y,p1.x,p1.x);
-		
-		gp7.closePath();
-
-	
-		//dessin path :
-		g2.setColor(Color.red);
-		g2.draw(gp7);
-		//g2.fill(gp7);
-		 												*
-		 												*/
-		//infos :
-		//System.out.println("gp.contains(p) = "+gp7.intersects(p.getX(),p.getY(),1,1)+"  p =("+(int)p.getX()+","+(int)p.getY()+")");
-		//===FIN PREMIERS TESTES===========================
-		//===TESTES TRANSLATION============================
-		//dessiner le "chemin"
-		ArrayList<Point2D.Double> LP = new ArrayList<Point2D.Double>();
-		LP.add(p1);
-		LP.add(p2);
-		LP.add(p3);
-		LP.add(p4);
-		LP.add(p5);
-		LP.add(p6);
-		
-		Translation tr = new Translation(0., 0., 0, LP);
-		
-		tr.generatePath();
-		g2.setColor(Color.blue);
-		g2.draw(tr.chemin);
-
-		
-
-		/*
-		//avoir les n-ieme px de la courbe
-		Point2D.Double p_nieme = null;
-		for (int i = 0 ; i<compteur; i++){
-			p_nieme = tr.nextPoint();
-		}
-		compteur++;
-		g2.setColor(Color.green);
-		this.desine_point(g2, p_nieme, 10);
-
-		//avoir les n-ieme+10 px de la courbe
-		Point2D.Double p_nieme2 = null;
-		for (int i = 0 ; i<10; i++){
-			p_nieme2 = tr.nextPoint();
-		}
-		g2.setColor(Color.red);
-		this.desine_point(g2, p_nieme2, 10);
-		*/
-		//=================================================
-		//TEST de la version avec les segments séparés
-		/*
-		Point2D.Double p_nieme = null;
-		for (int i = 0 ; i<compteur; i++){//629 = maximum du chemin
-			//System.out.println("boucle next ="+i);
-			p_nieme = tr.nextPoint();
-		}
-		compteur ++;
-		System.out.println("tr.cur_seg = "+tr.cur_seg+"   tr.cur_point ="+tr.cur_point+"  tr.cur_seg_gp="+tr.cur_seg_gp);
-		
-		g2.setColor(Color.green);
-		if (p_nieme != null){
-			this.desine_point(g2, p_nieme, 10);
-			g2.draw(tr.cur_seg_gp);
-		}
-		else 
-			System.out.println("NOUS SOMMES à la fin de notre trait");
-		
-		
-		*/
-		//System.out.println("chemin.contains(p) = "+tr.chemin.intersects(p.getX(),p.getY(),1,1)+"  p =("+(int)p.getX()+","+(int)p.getY()+")");
-		
-		
-	}
-}
-
