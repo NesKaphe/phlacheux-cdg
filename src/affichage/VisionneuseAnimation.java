@@ -146,7 +146,6 @@ public class VisionneuseAnimation extends JScrollPane{
 		HashMap<Integer, Comportement> listComp = GA.getListComportements();
 		//pour faire ce foreach voir :
 		// http://stackoverflow.com/questions/4234985/how-to-for-each-the-hashmap
-		System.out.println("listComp = "+GA.getListComportements().size());
 		childPan.removeAll();//on vide le child pan
 		//on va retailler le childPan en fonction du nombres d'élément qu'il va contenir : 
 		int hauteurChildPan = 0;
